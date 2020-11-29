@@ -12,11 +12,19 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <!-- Our Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/login_style.css">
 
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+
+    <!-- Mapa Portugal -->
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <script src="https://d3js.org/topojson.v1.js"></script>
+    <script src="https://rawgithub.com/markmarkoh/datamaps/master/dist/datamaps.none.min.js"></script>
+    <script src="https://rawgithub.com/markmarkoh/datamaps/master/dist/datamaps.prt.js"></script>
+
+    <script src="js/homepage.js"></script>
         
 </head>
 
@@ -31,9 +39,9 @@
 
             <ul class="list-unstyled components">
                 <li>
-                    <a href="index.html" >Home</a>
+                    <a href="index.html">Home</a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="info.html" >Info</a>
                 </li>
                 <li>
@@ -42,7 +50,7 @@
                 <li>
                     <a href="about.html">Sobre nós</a>
                 </li>
-                <li  class="active">
+                <li>
                     <a href="login.html">Área profissionais de saúde</a>
                 </li>
             </ul>
@@ -66,34 +74,64 @@
                 </div>
             </nav>
             
-            
             <div class="row">
-                <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-                  <div class="card card-signin my-5">
-                    <div class="card-body">
-                      <h5 class="card-title text-center">Log In</h5>
-                      <form class="form-signin">
-                        <div class="form-label-group">
-                          <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-                          <label for="inputEmail">Código de acesso</label>
+                <div class="col-3">
+                    <div class="card card-signin">
+                        <div style="text-align: center;" class="card-body">
+                            <h3>Casos ativos</h3>
+                            <h4>12828</h4>
                         </div>
-          
-                        <div class="form-label-group">
-                          <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                          <label for="inputPassword">Palavra-passe</label>
-                        </div>
-          
-                        <div class="custom-control custom-checkbox mb-3">
-                          <input type="checkbox" class="custom-control-input" id="customCheck1">
-                          <label class="custom-control-label" for="customCheck1">Lembrar palavra-passe</label>
-                        </div>
-                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Log in</button>
-                        </form>
                     </div>
-                  </div>
                 </div>
-              </div>
+                <div class="col-3">
+                    <div class="card card-signin">
+                        <div style="text-align: center;" class="card-body">
+                            <h3>Casos recuperados</h3>
+                            <h4>40302</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card card-signin">
+                        <div style="text-align: center;" class="card-body">
+                            <h3>Mortos</h3>
+                            <h4>2389</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card card-signin">
+                        <div style="text-align: center;" class="card-body">
+                            <h3>Cuidados Intensivos</h3>
+                            <h4>329</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-8">
+                    <div class="card card-signin">
+                        <div class="card-body">
+                            <!--<div id="map"></div>-->
+                            <h2 style="text-align: center;">Número de casos diários de infeções de covid-19</h2>
+                            <div id="allcasesgraph" style="height: 370px; width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card card-signin">
+                        <div class="card-body">
+                            <div id="mapaportugal" style="position: relative; width: 300px; height: 600px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
 
+                </div>
+            </div>
         </div>
     </div>
 
@@ -106,6 +144,8 @@
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
@@ -115,6 +155,25 @@
         });
     </script>
 
+    <script>
+        // mapa portugal
+        var map = new Datamap({
+            element: document.getElementById('mapaportugal'),
+            geographyConfig: {
+                dataJson: 'https://rawgit.com/markmarkoh/datamaps/master/src/js/data/prt.json'
+            },
+            scope: 'prt',
+            setProjection: function(element, options) {
+                            var projection, path;
+                            projection = d3.geo.mercator()
+                                .center([-8.80, 38.45])
+                                .scale(3000)
+                                .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+                                path = d3.geo.path().projection( projection );
+                                return {path: path, projection: projection};
+                            }
+            });
+    </script>
 </body>
 
 </html>

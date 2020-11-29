@@ -11,7 +11,7 @@
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <!-- Our Custom CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/index.css">
 
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
@@ -22,133 +22,35 @@
     <script src="https://d3js.org/d3.v3.js"></script>
     <script src="https://d3js.org/topojson.v1.js"></script>
     <script src="https://rawgithub.com/markmarkoh/datamaps/master/dist/datamaps.none.min.js"></script>
-    <script src="https://rawgithub.com/markmarkoh/datamaps/master/dist/datamaps.prt.js"></script>
-
-    <script src="js/index.js"></script>
-        
+    <script src="https://rawgithub.com/markmarkoh/datamaps/master/dist/datamaps.prt.js"></script>      
 </head>
 
 <body>
+    <nav id="navbar">
+        
+        <a class="active" href="index.html">Home</a>
+    
+        <a href="info.html" >Info</a>
+    
+        <a href="statistics.html">Estatística</a>
+    
+        <a href="about.html">Sobre nós</a>
+    
+        <a href="login.html">Área profissionais de saúde</a>
+    
+    </nav>
 
-    <div class="wrapper">
-        <!-- Sidebar Holder -->
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <h3>Covinfo</h3>
-            </div>
-
-            <ul class="list-unstyled components">
-                <li class="active">
-                    <a href="index.html" >Home</a>
-                </li>
-                <li>
-                    <a href="statistics.html">Estatística</a>
-                </li>
-                <li>
-                    <a href="about.html">Sobre nós</a>
-                    <!--
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li>
-                            <a href="#">Page 1</a>
-                        </li>
-                        <li>
-                            <a href="#">Page 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Page 3</a>
-                        </li>
-                    </ul>
-                    -->
-                </li>
-                
-                <li>
-                    <a href="login.html">Área profissionais de saúde</a>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Page Content Holder -->
-        <div id="content">
-
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-
-                    <button type="button" id="sidebarCollapse" class="navbar-btn">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-align-justify"></i>
-                    </button>
-
-                </div>
-            </nav>
-            
-            <div class="row">
-                <div class="col-3">
-                    <div class="card card-signin">
-                        <div style="text-align: center;" class="card-body">
-                            <h3>Casos ativos</h3>
-                            <h4>12828</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card card-signin">
-                        <div style="text-align: center;" class="card-body">
-                            <h3>Casos recuperados</h3>
-                            <h4>40302</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card card-signin">
-                        <div style="text-align: center;" class="card-body">
-                            <h3>Mortos</h3>
-                            <h4>2389</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card card-signin">
-                        <div style="text-align: center;" class="card-body">
-                            <h3>Cuidados Intensivos</h3>
-                            <h4>329</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-8">
-                    <div class="card card-signin">
-                        <div class="card-body">
-                            <!--<div id="map"></div>-->
-                            <h2 style="text-align: center;">Número de casos diários de infeções de covid-19</h2>
-                            <div id="allcasesgraph" style="height: 370px; width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="card card-signin">
-                        <div class="card-body">
-                            <div id="mapaportugal" style="position: relative; width: 300px; height: 600px;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-4">
-
-                </div>
-            </div>
-        </div>
+    <div class="leftside">
+        <h1 class="title">Covinfo</h1>
+        <i class="text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</i>
+        <br>
+        <br>
+        <button type="button" class="btn btn-outline-info" onclick="location.href='homepage.html'">Get Started</button>
     </div>
-
-
-
+    <div>
+        <img src="images/background.png" style="background-size: cover;" class="image">
+    </div>
+    
     <!-- jQuery CDN - Slim version (=without AJAX) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <!-- Popper.JS -->
@@ -156,36 +58,6 @@
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
-                $(this).toggleClass('active');
-            });
-        });
-    </script>
-
-    <script>
-        // mapa portugal
-        var map = new Datamap({
-            element: document.getElementById('mapaportugal'),
-            geographyConfig: {
-                dataJson: 'https://rawgit.com/markmarkoh/datamaps/master/src/js/data/prt.json'
-            },
-            scope: 'prt',
-            setProjection: function(element, options) {
-                            var projection, path;
-                            projection = d3.geo.mercator()
-                                .center([-8.80, 38.45])
-                                .scale(3000)
-                                .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
-                                path = d3.geo.path().projection( projection );
-                                return {path: path, projection: projection};
-                            }
-            });
-    </script>
 </body>
 
 </html>
