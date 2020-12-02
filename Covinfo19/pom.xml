@@ -8,11 +8,11 @@
 		<version>2.4.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>ua.ies.23</groupId>
+	<groupId>ua.ies.g23</groupId>
 	<artifactId>Covinfo19</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Covinfo19</name>
-	<description>Spring Boot Project About Covid19</description>
+	<description>Spring Boot Project About Covid-19</description>
 
 	<properties>
 		<java.version>11</java.version>

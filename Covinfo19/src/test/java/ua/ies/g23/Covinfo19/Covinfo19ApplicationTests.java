@@ -1,4 +1,4 @@
-package ua.ies3.Covinfo19;
+package ua.ies.g23.Covinfo19;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
