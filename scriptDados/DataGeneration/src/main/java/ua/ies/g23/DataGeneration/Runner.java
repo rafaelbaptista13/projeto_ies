@@ -1,21 +1,39 @@
+package ua.ies.g23.DataGeneration;
+
 import java.util.*;
 import java.text.*;
 
-public class scriptIES {
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+import org.json.JSONObject;
 
-	public static void main(String[] args) {
-		HashMap<String, Object> mensagem = new HashMap<String, Object>();
+@Component
+public class Runner implements CommandLineRunner {
+
+  private final RabbitTemplate rabbitTemplate;
+
+  public Runner(RabbitTemplate rabbitTemplate) {
+    this.rabbitTemplate = rabbitTemplate;
+  }
+
+  @Override
+  public void run(String... args) throws Exception {
+    HashMap<String, Object> mensagem = new HashMap<String, Object>();
 		for (int i = 0; i<= 10; i++) {
 			mensagem = construcaoMensagem();
 			mensagem.put("time",formatter.format(new Date(System.currentTimeMillis())));
 			System.out.println("\n \n--------- Novo Paciente : ---------");
 			for (String item: mensagem.keySet() ) {
 				System.out.println(item + " -> " + mensagem.get(item));
-			}
+      }
+      JSONObject json = new JSONObject(mensagem);
+      rabbitTemplate.convertAndSend(DataGenerationApplication.topicExchangeName, "foo.bar.baz", json.toString());
 		}
-	}
+  }
 
-	public static int var_paciente_id = 1;
+  //geração de dados
+  public static int var_paciente_id = 1;
 	public static final String[] var_estado = {"Confinamento Domiciliário", "Internamento", "Cuidados Intensivos"};
 	public static final String[] var_genero = {"Masculino", "Feminino"};
 	public static final String[] var_nacionalidade_maior_probabilidade = {"Alemã","Espanhola","Francesa","Italiana","Inglesa","Brasileira"};
@@ -192,27 +210,5 @@ public class scriptIES {
 		}
 
 	}
-	
+
 }
-
-/*
-Mensagem = {
-	'paciente_id': 1,
-	'nome': 'Pedro Miguel Santos',
-	'estado': 'Confinado',
-	'genero': 'Masculino',
-	'idade': 20,
-	'altura': 182,
-	'peso': 70.2,
-	'nacionalidade': 'Portuguesa',
-	'região': 'Centro',
-	'cidade': 'Sever de Vouga',
-	'time': '2020-12-02 at 19:50:52 WET',
-}
-
-
-do {
-  double val = r.nextGaussian() * 100 + 500;
-  delay = (int) Math.round(val);
-} while (delay <= 0);
-*/
