@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Covinfo</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+
+    <!-- Mapa Portugal -->
+    <script src="https://d3js.org/d3.v3.js"></script>
+    <script src="https://d3js.org/topojson.v1.js"></script>
+    <script src="https://rawgithub.com/markmarkoh/datamaps/master/dist/datamaps.none.min.js"></script>
+    <script src="https://rawgithub.com/markmarkoh/datamaps/master/dist/datamaps.prt.js"></script>
+
+    <script src="js/homepage.js"></script>
+        
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Covinfo</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li class="active">
+                    <a href="info.html" >Info</a>
+                </li>
+                <li>
+                    <a href="statistics.html">Estatística</a>
+                </li>
+                <li>
+                    <a href="about.html">Sobre nós</a>
+                </li>
+                <li>
+                    <a href="login.html">Área profissionais de saúde</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content Holder -->
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="navbar-btn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+
+                </div>
+            </nav>
+            
+            <div class="row">
+                <div class="col-3">
+                    <div class="card card-signin">
+                        <div style="text-align: center;" class="card-body">
+                            <h3>Casos ativos</h3>
+                            <h4>12828</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card card-signin">
+                        <div style="text-align: center;" class="card-body">
+                            <h3>Casos recuperados</h3>
+                            <h4>40302</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card card-signin">
+                        <div style="text-align: center;" class="card-body">
+                            <h3>Mortos</h3>
+                            <h4>2389</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card card-signin">
+                        <div style="text-align: center;" class="card-body">
+                            <h3>Cuidados Intensivos</h3>
+                            <h4>329</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-8">
+                    <div class="card card-signin">
+                        <div class="card-body">
+                            <!--<div id="map"></div>-->
+                            <h2 style="text-align: center;">Número de casos diários de infeções de covid-19</h2>
+                            <div id="allcasesgraph" style="height: 370px; width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card card-signin">
+                        <div class="card-body">
+                            <div id="mapaportugal" style="position: relative; width: 300px; height: 600px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
+    </script>
+
+    <script>
+        // mapa portugal
+        var map = new Datamap({
+            element: document.getElementById('mapaportugal'),
+            geographyConfig: {
+                dataJson: 'https://rawgit.com/markmarkoh/datamaps/master/src/js/data/prt.json'
+            },
+            scope: 'prt',
+            setProjection: function(element, options) {
+                            var projection, path;
+                            projection = d3.geo.mercator()
+                                .center([-8.80, 38.45])
+                                .scale(3000)
+                                .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+                                path = d3.geo.path().projection( projection );
+                                return {path: path, projection: projection};
+                            }
+            });
+    </script>
+</body>
+
+</html>
