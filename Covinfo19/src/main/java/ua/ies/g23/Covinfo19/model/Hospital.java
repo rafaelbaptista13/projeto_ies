@@ -31,8 +31,7 @@ public class Hospital {
         
     }
 
-    public Hospital(long id, String nome, String concelho, String regiao, int numero_camas) {
-        this.id = id;
+    public Hospital(String nome, String concelho, String regiao, int numero_camas) {
         this.nome = nome;
         this.concelho = concelho;
         this.regiao = regiao;
@@ -42,9 +41,6 @@ public class Hospital {
     
     public long getId() {
         return id;
-    }
-    public void setId(long id) {
-        this.id = id;
     }
  
     
@@ -81,7 +77,7 @@ public class Hospital {
 
     @Override
     public String toString() {
-        return "Hospital [id=" + id + ", Nome=" + ", Concelho=" + concelho + ", Regiao=" + regiao
+        return "Hospital [id=" + id + ", Nome=" + nome + ", Concelho=" + concelho + ", Regiao=" + regiao
                 + ", Numero_camas=" + numero_camas
                 + "]";
     }
