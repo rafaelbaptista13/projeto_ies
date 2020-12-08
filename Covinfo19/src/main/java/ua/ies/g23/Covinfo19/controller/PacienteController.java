@@ -51,7 +51,8 @@ public class PacienteController {
          @Valid @RequestBody Paciente pacienteDetails) throws ResourceNotFoundException {
         Paciente paciente = pacienteRepository.findById(pacienteID)
         .orElseThrow(() -> new ResourceNotFoundException("Paciente not found for this id :: " + pacienteID));
-
+        
+        paciente.setPaciente_id(pacienteDetails.getPaciente_id());
         paciente.setNome(pacienteDetails.getNome());
         paciente.setGenero(pacienteDetails.getGenero());
         paciente.setIdade(pacienteDetails.getIdade());
