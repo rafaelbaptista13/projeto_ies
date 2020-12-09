@@ -1,0 +1,40 @@
+.image{
+  float: right;
+  width: 29%;
+  height: auto;
+  margin-left: 5%;
+  margin-right: 5%
+}
+
+.leftside{
+  width: 58%;
+  float: left;
+  height: auto;
+  margin-left: 3%;
+  background-color: aliceblue;
+}
+
+.leftside .title{
+  font-size: 150px;
+  text-align: center;
+  margin-top: 10%;
+  font-family: sans-serif;
+  color: white;
+}
+
+.leftside .text{
+  font-size: 20px ;
+  margin-top: 100px;
+}
+
+.btn.btn-outline-info{
+  width: 25%;
+  font-size: 40px;
+  margin-left: 37.5%;
+  margin-right: 37.5%;
+  margin-top: 100px;
+  color: white;
+  border-radius: 40px;
+  height: auto;
+}
+
