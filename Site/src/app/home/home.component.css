@@ -1,3 +1,50 @@
+body{
+  background: #1c92d2; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #1c92d2, #f2fcfe); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #1c92d2, #f2fcfe); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */;
+}
+
+/* --------------------------------------------
+    NAVBAR
+--------------------------------------------- */
+
+#navbar {
+  width: 100%;
+  background: #7386D5;
+  color: #fff;
+  transition: 0.2s;
+  transform-origin: bottom left;
+  display: inline-block;
+}
+
+#navbar .active {
+  font-size: 50px;
+}
+
+#navbar a {
+  padding: 10px;
+  font-size: 1.1em;
+  display: inline-block;
+  margin: 40px;
+}
+#navbar a:hover {
+  color: #7386D5;
+  background: #fff;
+}
+
+#navbar a.active, a[aria-expanded="true"] {
+  color: #fff;
+  background: #6d7fcc;
+}
+
+a {
+  font-size: 0.9em !important;
+  padding-left: 30px !important;
+  background: #6d7fcc;
+  text-decoration: none;
+  color: #fff;
+}
+
 .image{
   float: right;
   width: 29%;
@@ -6,12 +53,15 @@
   margin-right: 5%
 }
 
+.all{
+  height: 100%;
+}
+
 .leftside{
   width: 58%;
+  height: 100%;
   float: left;
-  height: auto;
   margin-left: 3%;
-  background-color: aliceblue;
 }
 
 .leftside .title{

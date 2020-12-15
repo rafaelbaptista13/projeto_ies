@@ -64,16 +64,16 @@
       <div class="col-3">
         <div class="card card-signin">
           <div style="text-align: center;" class="card-body">
-            <h3>Mortos</h3>
-            <h4>2389</h4>
+            <h3>Cuidados Intensivos</h3>
+            <h4>329</h4>
           </div>
         </div>
       </div>
       <div class="col-3">
         <div class="card card-signin">
           <div style="text-align: center;" class="card-body">
-            <h3>Cuidados Intensivos</h3>
-            <h4>329</h4>
+            <h3>Mortos</h3>
+            <h4>2389</h4>
           </div>
         </div>
       </div>
@@ -81,19 +81,12 @@
     <br>
 
     <div class="row">
-      <div class="col-8">
+      <div class="col-12">
         <div class="card card-signin">
           <div class="card-body">
             <!--<div id="map"></div>-->
             <h2 style="text-align: center;">Número de casos diários de infeções de covid-19</h2>
             <div id="allcasesgraph" style="height: 370px; width: 100%;"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="card card-signin">
-          <div class="card-body">
-            <div id="mapaportugal" style="position: relative; width: 300px; height: 600px;"></div>
           </div>
         </div>
       </div>
@@ -132,14 +125,3 @@
     </div>
   </div>
 </div>
-
-<script type="text/javascript">
-  $(document).ready(function () {
-    $('#sidebarCollapse').on('click', function () {
-      $('#sidebar').toggleClass('active');
-      $(this).toggleClass('active');
-    });
-  });
-</script>
-
-<router-outlet></router-outlet>
