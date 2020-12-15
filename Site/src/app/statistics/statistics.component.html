@@ -1,0 +1,127 @@
+<div class="wrapper">
+  <!-- Sidebar Holder -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <h3>Covinfo</h3>
+    </div>
+
+    <ul class="list-unstyled components">
+      <li>
+        <a routerLink="/home" >Home</a>
+      </li>
+      <li>
+        <a href="info.html" >Info</a>
+      </li>
+      <li class="active">
+        <a routerLink="/statistics">Estatística</a>
+      </li>
+      <li>
+        <a href="about.html">Sobre nós</a>
+      </li>
+      <li>
+        <a routerLink="/login">Área profissionais de saúde</a>
+      </li>
+    </ul>
+  </nav>
+
+
+
+  <!-- Page Content Holder -->
+  <div id="content">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+
+        <button type="button" id="sidebarCollapse" class="navbar-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fas fa-align-justify"></i>
+        </button>
+
+      </div>
+    </nav>
+
+    <div class="row">
+      <div class="col-3">
+        <div class="card card-signin">
+          <div style="text-align: center;" class="card-body">
+            <h3>Casos ativos</h3>
+            <h4>12828</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card card-signin">
+          <div style="text-align: center;" class="card-body">
+            <h3>Casos recuperados</h3>
+            <h4>40302</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card card-signin">
+          <div style="text-align: center;" class="card-body">
+            <h3>Cuidados Intensivos</h3>
+            <h4>329</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card card-signin">
+          <div style="text-align: center;" class="card-body">
+            <h3>Mortos</h3>
+            <h4>2389</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card card-signin">
+          <div class="card-body">
+            <!--<div id="map"></div>-->
+            <h2 style="text-align: center;">Número de casos diários de infeções de covid-19</h2>
+            <div id="allcasesgraph" style="height: 370px; width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-4">
+        <div class="card card-signin">
+          <div class="card-body">
+            <h3 style="text-align: center;">Número de casos por idade</h3>
+            <div id="agepiegraph" style="height: 370px; width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card card-signin">
+          <div class="card-body">
+            <h3 style="text-align: center;">Número de casos por regiões</h3>
+            <div id="regionpiegraph" style="height: 370px; width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="card card-signin">
+          <div class="card-body">
+            <h3 style="text-align: center;">Número de casos por género</h3>
+            <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -17,6 +17,10 @@ public class Paciente {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long numero_utente;
 
+    // Mapeamento com os paciente_id que veem do Script. Deve ser -1 para pacientes inseridos pela plataforma web
+    @Column(name = "paciente_id", nullable = true)
+    private long paciente_id;
+
     @Column(name = "nome", nullable = false)
     private String nome;
 
@@ -36,7 +40,7 @@ public class Paciente {
     private String nacionalidade;
 
     @Column(name = "altura", nullable = false)
-    private float altura ;
+    private int altura ;
 
     @Column(name = "peso", nullable = false)
     private float peso;
@@ -50,8 +54,13 @@ public class Paciente {
 
     }
 
-    public Paciente(long numero_utente, String nome, String genero, int idade, String concelho, String regiao, String nacionalidade, float altura, float peso, Medico medico) {
+    public Paciente(long numero_utente, long paciente_id, String nome, String genero, int idade, String concelho, String regiao, String nacionalidade, int altura, float peso, Medico medico) {
         this.numero_utente = numero_utente;
+        if (paciente_id > 0) {
+            this.paciente_id = paciente_id;
+        } else {
+            this.paciente_id = -1;
+        }
         this.nome = nome;
         this.genero = genero;
         this.idade = idade;
@@ -69,6 +78,14 @@ public class Paciente {
     }
     public void setNumero_utente(long numero_utente) {
         this.numero_utente = numero_utente;
+    }
+
+    public long getPaciente_id() {
+        return paciente_id;
+    }
+
+    public void setPaciente_id(long paciente_id) {
+        this.paciente_id = paciente_id;
     }
  
     
@@ -120,10 +137,10 @@ public class Paciente {
     }
     
    
-    public float getAltura() {
+    public int getAltura() {
         return altura;
     }
-    public void setAltura(float altura) {
+    public void setAltura(int altura) {
         this.altura = altura;
     }
     
