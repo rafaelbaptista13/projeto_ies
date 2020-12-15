@@ -49,7 +49,7 @@ public class Covinfo19Application {
   }
 
   public static void main(String[] args) throws InterruptedException {
-    SpringApplication.run(Covinfo19Application.class, args).close();
+    SpringApplication.run(Covinfo19Application.class, args);
   }
 
 }
