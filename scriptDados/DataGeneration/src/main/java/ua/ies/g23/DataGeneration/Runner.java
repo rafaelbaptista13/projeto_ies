@@ -28,7 +28,7 @@ public class Runner implements CommandLineRunner {
 				System.out.println(item + " -> " + mensagem.get(item));
       }
       JSONObject json = new JSONObject(mensagem);
-      rabbitTemplate.convertAndSend(DataGenerationApplication.topicExchangeName, "foo.bar.baz", json.toString());
+      rabbitTemplate.convertAndSend(DataGenerationApplication.topicExchangeName, "filagerar", json.toString());
 		}
   }
 
