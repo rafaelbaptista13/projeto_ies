@@ -1,4 +1,4 @@
-package ua.ies.g23.DataGeneration;
+package ua.ies.g23.DataUpdate;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -11,11 +11,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class DataGenerationApplication {
+public class DataUpdateApplication {
 
-  static final String topicExchangeName = "filagerar-exchange";
+  static final String topicExchangeName = "filaupdate-exchange";
 
-  static final String queueName = "filagerar";
+  static final String queueName = "filaupdate";
 
   @Bean
   Queue queue() {
@@ -41,7 +41,7 @@ public class DataGenerationApplication {
   }
 
   public static void main(String[] args) throws InterruptedException {
-    SpringApplication.run(DataGenerationApplication.class, args).close();
+    SpringApplication.run(DataUpdateApplication.class, args).close();
   }
 
 }
