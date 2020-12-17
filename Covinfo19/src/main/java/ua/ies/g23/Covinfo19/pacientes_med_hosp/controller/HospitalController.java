@@ -56,6 +56,7 @@ public class HospitalController {
         hospital.setConcelho(hospitalDetails.getConcelho());
         hospital.setRegiao(hospitalDetails.getRegiao());
         hospital.setNumero_camas(hospitalDetails.getNumero_camas());
+        hospital.setNumero_camas_ocupadas(hospitalDetails.getNumero_camas_ocupadas());
         final Hospital updatedHospital = hospitalRepository.save(hospital);
         return ResponseEntity.ok(updatedHospital);
     }
