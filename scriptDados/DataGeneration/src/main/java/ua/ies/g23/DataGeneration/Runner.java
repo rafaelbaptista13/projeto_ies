@@ -20,15 +20,16 @@ public class Runner implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     HashMap<String, Object> mensagem = new HashMap<String, Object>();
-		for (int i = 0; i<= 10; i++) {
-			mensagem = construcaoMensagem();
-			mensagem.put("time",formatter.format(new Date(System.currentTimeMillis())));
-			System.out.println("\n \n--------- Novo Paciente : ---------");
-			for (String item: mensagem.keySet() ) {
-				System.out.println(item + " -> " + mensagem.get(item));
-      }
-	  JSONObject json = new JSONObject(mensagem);
-      rabbitTemplate.convertAndSend(DataGenerationApplication.topicExchangeName, "filagerar", json.toString());
+	for (int i = 0; i<= 10; i++) {
+		mensagem = construcaoMensagem();
+		mensagem.put("time",formatter.format(new Date(System.currentTimeMillis())));
+		System.out.println("\n \n--------- Novo Paciente : ---------");
+		for (String item: mensagem.keySet() ) {
+			System.out.println(item + " -> " + mensagem.get(item));
+		}
+		JSONObject json = new JSONObject(mensagem);
+		rabbitTemplate.convertAndSend(DataGenerationApplication.topicExchangeName, "filagerar", json.toString());
+		rabbitTemplate.convertAndSend(DataGenerationApplication.topicExchangeName, "filagerar", json.toString());
 	}
   }
 
