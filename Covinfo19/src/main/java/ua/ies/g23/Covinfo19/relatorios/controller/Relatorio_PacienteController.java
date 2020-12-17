@@ -1,4 +1,4 @@
-package ua.ies.g23.Covinfo19.controller;
+package ua.ies.g23.Covinfo19.relatorios.controller;
 
 import java.text.ParseException;
 import java.util.HashMap;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ua.ies.g23.Covinfo19.model.Relatorio_Paciente;
+import ua.ies.g23.Covinfo19.relatorios.model.Relatorio_Paciente;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
-import ua.ies.g23.Covinfo19.repository.Relatorio_PacienteRepository;
+import ua.ies.g23.Covinfo19.relatorios.repository.Relatorio_PacienteRepository;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -58,7 +58,7 @@ public class Relatorio_PacienteController {
     
             relatorio_Paciente.setEstado(Relatorio_PacienteDetails.getEstado());
             relatorio_Paciente.setData(Relatorio_PacienteDetails.getData());
-            relatorio_Paciente.setPaciente(Relatorio_PacienteDetails.getPaciente());
+            //relatorio_Paciente.setPaciente(Relatorio_PacienteDetails.getPaciente());
             final Relatorio_Paciente updatedRelatorio_Paciente = relatorio_PacienteRepository.save(relatorio_Paciente);
             return ResponseEntity.ok(updatedRelatorio_Paciente);
     }

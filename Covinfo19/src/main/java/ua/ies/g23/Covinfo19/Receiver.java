@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ua.ies.g23.Covinfo19.model.*;
-import ua.ies.g23.Covinfo19.repository.*;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.*;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.*;
 
 @Component
 public class Receiver {
@@ -23,7 +23,6 @@ public class Receiver {
     System.out.println("-------- Novo Paciente -----------");
     System.out.println("Received <" + json.toString() + ">");
     Paciente paciente = new Paciente();
-    paciente.setPaciente_id(Integer.parseInt(json.getString("paciente_id")));
     paciente.setNome(json.getString("nome"));
     paciente.setGenero(json.getString("genero"));
     paciente.setIdade(Integer.parseInt(json.getString("idade")));

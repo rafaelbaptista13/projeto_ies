@@ -1,4 +1,4 @@
-package ua.ies.g23.Covinfo19.controller;
+package ua.ies.g23.Covinfo19.pacientes_med_hosp.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ua.ies.g23.Covinfo19.model.Paciente;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Paciente;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
-import ua.ies.g23.Covinfo19.repository.PacienteRepository;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.PacienteRepository;
 
 
 @RestController
@@ -52,7 +52,6 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.findById(pacienteID)
         .orElseThrow(() -> new ResourceNotFoundException("Paciente not found for this id :: " + pacienteID));
         
-        paciente.setPaciente_id(pacienteDetails.getPaciente_id());
         paciente.setNome(pacienteDetails.getNome());
         paciente.setGenero(pacienteDetails.getGenero());
         paciente.setIdade(pacienteDetails.getIdade());

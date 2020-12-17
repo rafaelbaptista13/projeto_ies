@@ -14,9 +14,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import ua.ies.g23.Covinfo19.model.*;
-import ua.ies.g23.Covinfo19.repository.*;
-
 
 @SpringBootApplication
 public class Covinfo19Application {
@@ -80,6 +77,7 @@ public class Covinfo19Application {
   MessageListenerAdapter listenerAdapter(Receiver receiver) {
     return new MessageListenerAdapter(receiver, "receiveMessage");
   }
+
 
   @Bean
   MessageListenerAdapter listenerAdapter2(ReceiverUpdateData receiver) {

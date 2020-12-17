@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ua.ies.g23.Covinfo19.model.*;
-import ua.ies.g23.Covinfo19.repository.*;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.*;
+import ua.ies.g23.Covinfo19.relatorios.model.*;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.*;
+import ua.ies.g23.Covinfo19.relatorios.repository.*;
 
 @Component
 public class ReceiverUpdateData {

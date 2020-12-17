@@ -1,4 +1,4 @@
-package ua.ies.g23.Covinfo19.model;
+package ua.ies.g23.Covinfo19.pacientes_med_hosp.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,7 +46,7 @@ public class Medico {
     }
  
     
-        public long getNumero_medico() {
+    public long getNumero_medico() {
         return numero_medico;
     }
     public void setNumero_medico(long numero_medico) {

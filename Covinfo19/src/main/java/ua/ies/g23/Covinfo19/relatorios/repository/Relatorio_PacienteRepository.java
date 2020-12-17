@@ -1,9 +1,9 @@
-package ua.ies.g23.Covinfo19.repository;
+package ua.ies.g23.Covinfo19.relatorios.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import ua.ies.g23.Covinfo19.model.Relatorio_Paciente;
+import ua.ies.g23.Covinfo19.relatorios.model.Relatorio_Paciente;
 
 
 @Repository

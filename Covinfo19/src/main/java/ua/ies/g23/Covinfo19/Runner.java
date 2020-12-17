@@ -1,13 +1,9 @@
 package ua.ies.g23.Covinfo19;
 
-import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.text.*;
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.json.JSONObject;
 
 @Component
 public class Runner implements CommandLineRunner {

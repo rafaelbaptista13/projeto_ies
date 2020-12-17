@@ -1,4 +1,4 @@
-package ua.ies.g23.Covinfo19.controller;
+package ua.ies.g23.Covinfo19.pacientes_med_hosp.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ua.ies.g23.Covinfo19.model.Medico;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Medico;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
-import ua.ies.g23.Covinfo19.repository.MedicoRepository;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.MedicoRepository;
 
 
 @RestController
