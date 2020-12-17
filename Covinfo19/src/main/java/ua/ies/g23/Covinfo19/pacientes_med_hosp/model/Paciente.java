@@ -15,7 +15,7 @@ public class Paciente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long numero_utente;
+    private long paciente_id;
 
     @Column(name = "nome", nullable = false)
     private String nome;
@@ -50,8 +50,8 @@ public class Paciente {
 
     }
 
-    public Paciente(long numero_utente, String nome, String genero, int idade, String concelho, String regiao, String nacionalidade, int altura, float peso, Medico medico) {
-        this.numero_utente = numero_utente;
+    public Paciente(long paciente_id, String nome, String genero, int idade, String concelho, String regiao, String nacionalidade, int altura, float peso, Medico medico) {
+        this.paciente_id = paciente_id;
         this.nome = nome;
         this.genero = genero;
         this.idade = idade;
@@ -64,13 +64,10 @@ public class Paciente {
     }
  
     
-    public long getNumero_utente() {
-        return numero_utente;
+    public long getPacienteId() {
+        return paciente_id;
     }
-    public void setNumero_utente(long numero_utente) {
-        this.numero_utente = numero_utente;
-    }
-    
+
     public String getNome() {
         return nome;
     }
@@ -143,7 +140,7 @@ public class Paciente {
 
     @Override
     public String toString() {
-        return "Paciente [numero_utente=" + numero_utente + ", Nome=" + nome + ", Genero=" 
+        return "Paciente [paciente_id=" + paciente_id + ", Nome=" + nome + ", Genero=" 
                 + genero + ", Idade=" + idade + ", Concelho=" + concelho + ", Regiao=" + regiao
                 + ", Nacionalidade=" + nacionalidade + ", Altura=" + altura + ", Peso=" + peso
                 + "]";

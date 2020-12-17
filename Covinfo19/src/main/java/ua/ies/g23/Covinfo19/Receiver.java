@@ -1,5 +1,6 @@
 package ua.ies.g23.Covinfo19;
 
+import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,10 @@ import org.json.JSONObject;
 
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.*;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.*;
+import ua.ies.g23.Covinfo19.relatorios.model.Caso;
+import ua.ies.g23.Covinfo19.relatorios.model.Relatorio_Paciente;
+import ua.ies.g23.Covinfo19.relatorios.repository.CasoRepository;
+import ua.ies.g23.Covinfo19.relatorios.repository.Relatorio_PacienteRepository;
 
 @Component
 public class Receiver {
@@ -17,6 +22,8 @@ public class Receiver {
 
   @Autowired
   private PacienteRepository pacienteRepository;
+  private CasoRepository casoRepository;
+  private Relatorio_PacienteRepository relatorioPacienteRepository;
 
   public void receiveMessage(String message) throws JSONException {
     JSONObject json = new JSONObject(message);
@@ -34,6 +41,16 @@ public class Receiver {
     System.out.println(paciente);
     //paciente.setMedico(pacienteDetails.getMedico());
     pacienteRepository.save(paciente);
+    Caso caso = new Caso();
+    caso.setEstado_atual(json.getString("estado"));
+    caso.setPaciente_id(paciente.getPacienteId());
+    casoRepository.save(caso);
+    System.out.println(caso);
+    Relatorio_Paciente relatorio_paciente = new Relatorio_Paciente();
+    relatorio_paciente.setCaso(caso);
+    relatorioPacienteRepository.save(relatorio_paciente);
+    System.out.println(relatorio_paciente);
+    System.out.println(json.get("time"));
     latch.countDown();
   }
 
