@@ -34,7 +34,7 @@ public class Runner implements CommandLineRunner {
 
   //geração de dados
   public static int var_paciente_id = 1;
-	public static final String[] var_estado = {"Confinamento Domiciliário", "Internamento", "Cuidados Intensivos"};
+	public static final String[] var_estado = {"Confinamento Domiciliário", "Internado", "Cuidados Intensivos"};
 	public static final String[] var_genero = {"Masculino", "Feminino"};
 	public static final String[] var_nacionalidade_maior_probabilidade = {"Alemã","Espanhola","Francesa","Italiana","Inglesa","Brasileira"};
 	public static final String[] var_nacionalidade_media_probabilidade = {"Belga","Russa","Americana","Chinesa","Angolana","Moçambicana","Holandesa","Polaca","Suíca","Cabo-Verdiana"};
