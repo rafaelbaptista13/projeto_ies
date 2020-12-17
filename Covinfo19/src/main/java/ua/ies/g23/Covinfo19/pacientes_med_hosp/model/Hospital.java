@@ -1,4 +1,4 @@
-package ua.ies.g23.Covinfo19.model;
+package ua.ies.g23.Covinfo19.pacientes_med_hosp.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

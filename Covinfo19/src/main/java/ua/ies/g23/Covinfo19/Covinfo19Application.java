@@ -7,13 +7,9 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import ua.ies.g23.Covinfo19.model.*;
-import ua.ies.g23.Covinfo19.repository.*;
 
 
 @SpringBootApplication
@@ -53,7 +49,8 @@ public class Covinfo19Application {
   MessageListenerAdapter listenerAdapter(Receiver receiver) {
     return new MessageListenerAdapter(receiver, "receiveMessage");
   }
-  
+
+
   public static void main(String[] args) throws InterruptedException {
     SpringApplication.run(Covinfo19Application.class, args);
   }
