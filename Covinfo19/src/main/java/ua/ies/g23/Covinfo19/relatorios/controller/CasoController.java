@@ -28,6 +28,36 @@ public class CasoController {
     @Autowired
     private CasoRepository CasoRepository;
 
+    @GetMapping("/casosconfinamento")
+    public int getAllCasosConfinamento() {
+        return (int) CasoRepository.findAllConfinamento().toArray()[0];
+    }
+
+    @GetMapping("/casosinternado")
+    public int getAllCasosInternado() {
+        return (int) CasoRepository.findAllInternado().toArray()[0];
+    }
+
+    @GetMapping("/casosmorto")
+    public int getAllCasosMorto() {
+        return (int) CasoRepository.findAllMorto().toArray()[0];
+    }
+
+    @GetMapping("/casoscuidados")
+    public int getAllCasosCuidados() {
+        return (int) CasoRepository.findAllCuidados().toArray()[0];
+    }
+
+    @GetMapping("/casosativos")
+    public int getAllCasosAtivos() {
+        return (int) CasoRepository.findAllAtivos().toArray()[0];
+    }
+
+    @GetMapping("/casosrecuperados")
+    public int getAllCasosRecuperados() {
+        return (int) CasoRepository.findAllRecuperados().toArray()[0];
+    }
+
     @GetMapping("/casos")
     public List<Caso> getAllCasos() {
         return CasoRepository.findAll();
