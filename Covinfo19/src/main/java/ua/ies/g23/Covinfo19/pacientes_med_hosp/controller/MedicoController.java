@@ -55,7 +55,6 @@ public class MedicoController {
         Medico.setNome(MedicoDetails.getNome());
         Medico.setCodigo_acesso(MedicoDetails.getCodigo_acesso());
         Medico.setIdade(MedicoDetails.getIdade());
-        Medico.setEspecialidade(MedicoDetails.getEspecialidade());
         Medico.setHospital(MedicoDetails.getHospital());
         final Medico updatedMedico = medicoRepository.save(Medico);
         return ResponseEntity.ok(updatedMedico);

@@ -26,8 +26,6 @@ public class Medico {
     @Column(name = "idade", nullable = false)
     private int idade;
 
-    @Column(name = "especialidade", nullable = false)
-    private String especialidade;
 
 
     // Trabalha num hospital
@@ -37,12 +35,11 @@ public class Medico {
     public Medico() {
 
     }
-    public Medico(long numero_medico, String nome, String codigo_acesso, int idade, String especialidade ) {
+    public Medico(long numero_medico, String nome, String codigo_acesso, int idade) {
         this.numero_medico = numero_medico;
         this.nome = nome;
         this.codigo_acesso = codigo_acesso;
         this.idade = idade;
-        this.especialidade = especialidade;
     }
  
     
@@ -76,13 +73,6 @@ public class Medico {
         this.idade = idade;
     }
     
-
-    public String getEspecialidade() {
-        return especialidade;
-    }
-    public void setEspecialidade(String especialidade) {
-        this.especialidade = especialidade;
-    }
     
     public Hospital getHospital() {
         return hospital;
@@ -94,7 +84,7 @@ public class Medico {
     @Override
     public String toString() {
         return "Medico [numero_medico=" + numero_medico + ", Nome=" + nome + ", Codigo de acesso=" 
-                + codigo_acesso + ", Idade=" + idade + ", Especialidade=" + especialidade 
+                + codigo_acesso + ", Idade=" + idade 
                 + "]";
     }
  

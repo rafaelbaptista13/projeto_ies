@@ -27,15 +27,19 @@ public class Hospital {
     @Column(name = "numero_camas", nullable = false)
     private int numero_camas;
 
+    @Column(name = "numero_camas_ocupadas", nullable = false)
+    private int numero_camas_ocupadas;
+
     public Hospital(){
         
     }
 
-    public Hospital(String nome, String concelho, String regiao, int numero_camas) {
+    public Hospital(String nome, String concelho, String regiao, int numero_camas, int numero_camas_ocupadas) {
         this.nome = nome;
         this.concelho = concelho;
         this.regiao = regiao;
         this.numero_camas = numero_camas;
+        this.numero_camas_ocupadas = numero_camas_ocupadas;
     }
  
     
@@ -75,10 +79,17 @@ public class Hospital {
         this.numero_camas = numero_camas;
     }
 
+    public int getNumero_camas_ocupadas() {
+        return numero_camas_ocupadas;
+    }
+    public void setNumero_camas_ocupadas(int numero_camas_ocupadas) {
+        this.numero_camas_ocupadas = numero_camas_ocupadas;
+    }
+
     @Override
     public String toString() {
         return "Hospital [id=" + id + ", Nome=" + nome + ", Concelho=" + concelho + ", Regiao=" + regiao
-                + ", Numero_camas=" + numero_camas
+                + ", Numero_camas=" + numero_camas + ", Numero_camas_ocupadas=" + numero_camas_ocupadas
                 + "]";
     }
  
