@@ -30,6 +30,7 @@ public class Receiver {
   private Relatorio_PacienteRepository relatorioPacienteRepository;
 
   public void receiveMessage(String message) throws JSONException {
+    System.out.println("\n \n NEW MESSAGE:");
     JSONObject json = new JSONObject(message);
     System.out.println("-------- Novo Paciente -----------");
     System.out.println("Received <" + json.toString() + ">");
@@ -51,15 +52,10 @@ public class Receiver {
     System.out.println(caso);
     casoRepository.save(caso);
 
-    System.out.println(json.get("time"));
-
     DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     Date d2;
     try {
       d2 = df2.parse(json.getString("time").split(" ")[0] + " " + json.getString("time").split(" ")[2] );
-      System.out.println("Date: " + d2);
-      System.out.println("Date in yyyy-MM-dd HH:mm:ss format is: "+df2.format(d2));
-
       Relatorio_Paciente relatorio_paciente = new Relatorio_Paciente();
       relatorio_paciente.setCaso(caso);
       relatorio_paciente.setEstado(json.getString("estado"));
@@ -70,9 +66,6 @@ public class Receiver {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    
-    
-   
     
     latch.countDown();
   }

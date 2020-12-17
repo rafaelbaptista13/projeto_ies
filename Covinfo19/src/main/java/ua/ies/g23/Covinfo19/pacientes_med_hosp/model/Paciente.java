@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 public class Paciente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long paciente_id;
 
     @Column(name = "nome", nullable = false)

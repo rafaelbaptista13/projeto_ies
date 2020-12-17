@@ -27,7 +27,7 @@ public interface CasoRepository extends JpaRepository<Caso, Long>{
 	Collection<Integer> findAllAtivos();
 
     @Query(value = "Select count(*) from casos where estado_atual = 'Recuperado'", nativeQuery = true)
-	Collection<Integer> findAllRecuperados();
-   
+    Collection<Integer> findAllRecuperados();
+       
 
 }

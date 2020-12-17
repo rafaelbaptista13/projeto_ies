@@ -64,7 +64,7 @@ public class CasoController {
     }
 
     @GetMapping("/casos/{id}")
-    public ResponseEntity<Caso> getHospitalById(@PathVariable(value = "id") Long CasoId)
+    public ResponseEntity<Caso> getCasoById(@PathVariable(value = "id") Long CasoId)
         throws ResourceNotFoundException {
         Caso Caso = CasoRepository.findById(CasoId)
           .orElseThrow(() -> new ResourceNotFoundException("Caso not found for this id :: " + CasoId));
