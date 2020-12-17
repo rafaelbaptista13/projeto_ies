@@ -47,7 +47,7 @@ public class Runner implements CommandLineRunner {
     String regiao_paciente = getRegiaoValida();
     int idade_paciente = getIdadeValida();
 
-    HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8080/api/v1/casos/1")).setHeader("User-Agent", "Java 11 HttpClient Bot").build();
+    HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8080/api/v1/casos/373")).setHeader("User-Agent", "Java 11 HttpClient Bot").build();
 
     HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     JSONObject myPacient = new JSONObject(response.body());
