@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import ua.ies.g23.Covinfo19.relatorios.model.Caso;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
@@ -28,34 +31,34 @@ public class CasoController {
     @Autowired
     private CasoRepository CasoRepository;
 
-    @GetMapping("/casosconfinamento")
-    public int getAllCasosConfinamento() {
-        return (int) CasoRepository.findAllConfinamento().toArray()[0];
-    }
-
-    @GetMapping("/casosinternado")
-    public int getAllCasosInternado() {
-        return (int) CasoRepository.findAllInternado().toArray()[0];
-    }
-
-    @GetMapping("/casosmorto")
-    public int getAllCasosMorto() {
-        return (int) CasoRepository.findAllMorto().toArray()[0];
-    }
-
-    @GetMapping("/casoscuidados")
-    public int getAllCasosCuidados() {
-        return (int) CasoRepository.findAllCuidados().toArray()[0];
-    }
-
-    @GetMapping("/casosativos")
-    public int getAllCasosAtivos() {
-        return (int) CasoRepository.findAllAtivos().toArray()[0];
-    }
-
-    @GetMapping("/casosrecuperados")
-    public int getAllCasosRecuperados() {
-        return (int) CasoRepository.findAllRecuperados().toArray()[0];
+    @GetMapping("/casos/count")
+    public int getAllCasosCount(@RequestParam String estado) {
+        int number = 0;
+        switch (estado) {
+            case "confinamento":
+                number = (int) CasoRepository.findAllConfinamento().toArray()[0];
+                break;
+            case "internado":
+                number = (int) CasoRepository.findAllInternado().toArray()[0];
+                break;
+            case "morto":
+                number = (int) CasoRepository.findAllMorto().toArray()[0];
+                break;
+            case "cuidadosintensivos":
+                number = (int) CasoRepository.findAllCuidados().toArray()[0];
+                break;
+            case "ativos":
+                number = (int) CasoRepository.findAllAtivos().toArray()[0];
+                break;
+            case "recuperados":
+                number = (int) CasoRepository.findAllRecuperados().toArray()[0];
+                break;
+            default:
+                throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "estado '" + estado + "' doesn't exist"
+                );
+            }
+        return number;
     }
 
     @GetMapping("/casos")
