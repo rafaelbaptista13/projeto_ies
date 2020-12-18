@@ -24,47 +24,123 @@ import org.springframework.web.server.ResponseStatusException;
 import ua.ies.g23.Covinfo19.relatorios.model.Caso;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
 import ua.ies.g23.Covinfo19.relatorios.repository.CasoRepository;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Paciente;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.PacienteRepository;
 
 @RestController
 @RequestMapping("/api/v1")
 public class CasoController {
     @Autowired
     private CasoRepository CasoRepository;
+    private PacienteRepository pacienteRepository;
 
     @GetMapping("/casos/count")
     public int getAllCasosCount(@RequestParam String estado) {
         int number = 0;
+        if (estado.equals("ativos")) {
+            return (int) CasoRepository.findAllAtivos().toArray()[0];
+        }
+        String estado_atual = "";
         switch (estado) {
             case "confinamento":
-                number = (int) CasoRepository.findAllConfinamento().toArray()[0];
+                estado_atual = "Confinamento Domiciliário";
                 break;
             case "internado":
-                number = (int) CasoRepository.findAllInternado().toArray()[0];
+                estado_atual = "Internado";
                 break;
             case "morto":
-                number = (int) CasoRepository.findAllMorto().toArray()[0];
+                estado_atual = "Óbito";
                 break;
             case "cuidadosintensivos":
-                number = (int) CasoRepository.findAllCuidados().toArray()[0];
-                break;
-            case "ativos":
-                number = (int) CasoRepository.findAllAtivos().toArray()[0];
+                estado_atual = "Cuidados Intensivos";
                 break;
             case "recuperados":
-                number = (int) CasoRepository.findAllRecuperados().toArray()[0];
+                estado_atual = "Recuperado";
                 break;
             default:
                 throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "estado '" + estado + "' doesn't exist"
                 );
-            }
-        return number;
+        }
+
+        return (int) CasoRepository.findAllByEstado(estado_atual).toArray()[0];
     }
 
     @GetMapping("/casos")
     public List<Caso> getAllCasos() {
         return CasoRepository.findAll();
     }
+
+    /*
+    @GetMapping("/casos")
+    public List<Caso> getAllCasos(
+        @RequestParam(required = false) String estado,
+        @RequestParam(required = false) String genero,
+        @RequestParam(required = false) Integer idade,
+        @RequestParam(required = false) String concelho,
+        @RequestParam(required = false) String regiao,
+        @RequestParam(required = false) String nacionalidade,
+        @RequestParam(required = false) Integer altura,
+        @RequestParam(required = false) Integer peso ) {
+            if (estado == null && genero == null && idade == null && concelho == null && regiao == null && nacionalidade == null && altura == null && peso == null ) {
+                return CasoRepository.findAll();
+            }
+            
+            String strestado = "";
+            if (estado != null) {
+                strestado = "estado_atual = '" + estado + "'";
+            } else {
+                strestado = "1 = 1 ";
+            }
+
+            String strgenero = "";
+            if (genero != null) {
+                strgenero = "genero = '" + genero + "'";
+            } else {
+                strestado = "1 = 1";
+            }
+
+            String stridade = "";
+            if (idade != null) {
+                stridade = " and idade = " + idade ;
+            }
+
+            String strconcelho = "";
+            if (concelho != null) {
+                strconcelho = " concelho = '" + concelho + "'";
+            }
+
+            String strregiao = "";
+            if (regiao != null) {
+                strregiao = " regiao = '" + regiao + "'";
+            }
+
+            String strnacionalidade = "";
+            if (nacionalidade != null) {
+                strnacionalidade = " nacionalidade = '" + nacionalidade + "'";
+            }
+
+            String straltura = "";
+            if (altura != null) {
+                straltura = " altura = " + altura ;
+            }
+
+            String strpeso = "";
+            if (peso != null) {
+                strpeso = " peso = " + peso ;
+            }
+
+            
+            System.out.println("Select * from pacientes where " + strgenero + stridade + strconcelho + strregiao + strnacionalidade + straltura + strpeso);
+            List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridade, strconcelho, strregiao, strnacionalidade, straltura, strpeso);
+
+            //List<Paciente> pacientes = pacienteRepository.findAllF();
+            System.out.println("AAAAAAA");
+            System.out.println(pacientes);
+            
+            return CasoRepository.findAllFilters(strestado, strgenero, stridade, strconcelho, strregiao, strnacionalidade, straltura, strpeso);
+    }
+    */
 
     @GetMapping("/casos/{id}")
     public ResponseEntity<Caso> getCasoById(@PathVariable(value = "id") Long CasoId)
