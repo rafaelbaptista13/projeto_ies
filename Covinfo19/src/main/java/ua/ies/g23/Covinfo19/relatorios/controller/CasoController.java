@@ -40,34 +40,115 @@ public class CasoController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/casos/count")
-    public int getAllCasosCount(@RequestParam String estado) {
-        if (estado.equals("ativos")) {
-            return (int) CasoRepository.findAllAtivos().toArray()[0];
+    public int getAllCasosCount(
+        @RequestParam(required = false) String estado,
+        @RequestParam(required = false) String genero,
+        @RequestParam(required = false) Integer idademax,
+        @RequestParam(required = false) Integer idademin,
+        @RequestParam(required = false) String concelho,
+        @RequestParam(required = false) String regiao,
+        @RequestParam(required = false) String nacionalidade,
+        @RequestParam(required = false) Integer alturamin,
+        @RequestParam(required = false) Integer alturamax,
+        @RequestParam(required = false) Integer pesomin,
+        @RequestParam(required = false) Integer pesomax ) {
+
+        if (estado == null && genero == null && idademin == null && idademax == null && concelho == null && regiao == null && nacionalidade == null && alturamin == null && alturamax == null && pesomin == null && pesomax == null ) {
+            List<Caso> casos = CasoRepository.findAll();
+            return casos.size();
         }
-        String estado_atual = "";
-        switch (estado) {
-            case "confinamento":
-                estado_atual = "Confinamento Domiciliário";
-                break;
-            case "internado":
-                estado_atual = "Internado";
-                break;
-            case "morto":
-                estado_atual = "Óbito";
-                break;
-            case "cuidadosintensivos":
-                estado_atual = "Cuidados Intensivos";
-                break;
-            case "recuperados":
-                estado_atual = "Recuperado";
-                break;
-            default:
-                throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "estado '" + estado + "' doesn't exist"
-                );
+            
+        String strgenero = "";
+        if (genero != null) {
+            strgenero = genero;
+        } else {
+            strgenero = "%";
         }
 
-        return (int) CasoRepository.findAllByEstado(estado_atual).toArray()[0];
+        String stridademin = "";
+        if (idademin != null) {
+            stridademin = idademin.toString();
+        } else {
+            stridademin = "0";
+        }
+
+        String stridademax = "";
+        if (idademax != null) {
+            stridademax = idademax.toString();
+        } else {
+            stridademax = "300";
+        }
+
+        String strconcelho = "";
+        if (concelho != null) {
+            strconcelho = concelho;
+        } else {
+            strconcelho = "%";
+        }
+
+        String strregiao = "";
+        if (regiao != null) {
+            strregiao = regiao;
+        } else {
+            strregiao = "%";
+        }
+
+        String strnacionalidade = "";
+        if (nacionalidade != null) {
+            strnacionalidade = nacionalidade;
+        } else {
+            strnacionalidade = "%";
+        }
+
+        String stralturamin = "";
+        if (alturamin != null) {
+            stralturamin = alturamin.toString();
+        } else {
+            stralturamin = "0";
+        }
+
+        String stralturamax = "";
+        if (alturamax != null) {
+            stralturamax = alturamax.toString();
+        } else {
+            stralturamax = "300";
+        }
+
+        String strpesomin = "";
+        if (pesomin != null) {
+            strpesomin = pesomin.toString() ;
+        } else {
+            strpesomin = "0";
+        }
+
+        String strpesomax = "";
+        if (pesomax != null) {
+            strpesomax = pesomax.toString() ;
+        } else {
+            strpesomax = "500";
+        }
+
+
+        List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
+        List<Caso> casos = new ArrayList<Caso>();
+        if (estado.equals("ativos")) {
+            for (Paciente paciente : pacientes) {
+                Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos") ) {
+                    casos.add(caso);
+                }
+            }
+            return casos.size();
+        } else {
+            for (Paciente paciente : pacientes) {
+                Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso.getEstado_atual().equals(estado) || estado == null) {
+                    casos.add(caso);
+                }
+            }
+            return casos.size();
+        }
+
     }
 
     
@@ -158,10 +239,8 @@ public class CasoController {
             strpesomax = "500";
         }
 
-        System.out.println("tou aqui");
+        
         List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
-
-        System.out.println(pacientes);
 
         List<Caso> casos = new ArrayList<Caso>();
         
