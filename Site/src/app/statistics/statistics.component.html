@@ -42,63 +42,70 @@
 
     <div class="filters" id="filters">
       <h2 class="filter_title">Filters</h2>
-      <div class="row">
-        <div class="col-2">
-          <h5 class="idade_title">Idade</h5>
-          <div class="idade_div">
-            <input placeholder="min">
-            <input placeholder="max">
+      <form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)">
+        <div class="row">
+          <div class="col-2">
+            <h5 class="idade_title">Idade</h5>
+            <div class="idade_div">
+              <input placeholder="min" id="idade_min" formControlName="idade_min" type="number">
+              <input placeholder="max" id="idade_max" formControlName="idade_max" type="number">
+            </div>
+          </div>
+          <div class="col-2">
+            <h5 class="genero_title">Género</h5>
+            <div class="genero_div">
+              <select name="genero_option" id="g_options" formControlName="genero">
+                <option hidden disabled selected value>Selecionar Opção</option>
+                <option value=""></option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-2">
+            <h5 class="regiao_title">Região</h5>
+            <div class="regiao_div">
+              <select name="regiao_option" id="r_options" formControlName="regiao">
+                <option hidden disabled selected value>Selecionar Opção</option>
+                <option value=""></option>
+                <option *ngFor="let regiao of regioes" value="{{regiao}}">{{regiao}}</option>
+                <!-- NGFOR das regioes -->
+              </select>
+            </div>
+          </div>
+          <div class="col-2">
+            <h5 class="nacionalidade_title">Nacionalidade</h5>
+            <div class="nacionalidade_div">
+              <select name="nacionalidade_option" id="n_options" formControlName="nacionalidade">
+                <option hidden disabled selected value>Selecionar Opção</option>
+                <option value=""></option>
+                <option *ngFor="let nacionalidade of nacionalidades" value="{{nacionalidade}}">{{nacionalidade}}</option>
+                <!-- NGFOR das nacionalidades -->
+              </select>
+            </div>
+          </div>
+          <div class="col-2">
+            <h5 class="altura_title">Altura</h5>
+            <div class="altura_div">
+              <input placeholder="min" formControlName="altura_min" type="number">
+              <input placeholder="max" formControlName="altura_max" type="number">
+            </div>
+          </div>
+          <div class="col-2">
+            <h5 class="peso_title">Peso</h5>
+            <div class="peso_div">
+              <input placeholder="min" formControlName="peso_min" type="number">
+              <input placeholder="max" formControlName="peso_max" type="number">
+            </div>
           </div>
         </div>
-        <div class="col-2">
-          <h5 class="genero_title">Género</h5>
-          <div class="genero_div">
-            <select name="genero_option" id="g_options">
-              <option hidden disabled selected value>Selecionar Opção</option>
-              <option value="masc">Masculino</option>
-              <option value="fem">Feminino</option>
-              <option value="outro">Outro</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-2">
-          <h5 class="regiao_title">Regiao</h5>
-          <div class="regiao_div">
-            <select name="regiao_option" id="r_options">
-              <option hidden disabled selected value>Selecionar Opção</option>
-              <!-- NGFOR das regioes -->
-            </select>
-          </div>
-        </div>
-        <div class="col-2">
-          <h5 class="nacionalidade_title">Nacionalidade</h5>
-          <div class="nacionalidade_div">
-            <select name="nacionalidade_option" id="n_options">
-              <option hidden disabled selected value>Selecionar Opção</option>
-              <!-- NGFOR das nacionalidades -->
-            </select>
-          </div>
-        </div>
-        <div class="col-2">
-          <h5 class="altura_title">Altura</h5>
-          <div class="altura_div">
-            <input placeholder="min">
-            <input placeholder="max">
-          </div>
-        </div>
-        <div class="col-2">
-          <h5 class="peso_title">Peso</h5>
-          <div class="peso_div">
-            <input placeholder="min">
-            <input placeholder="max">
-          </div>
-        </div>
-      </div>
+        <button class="button aplicar" type="submit">Aplicar</button>
+      </form>
     </div>
 
 
     <div class="row">
-      <div class="col-3">
+      <div class="col-2">
         <div class="card card-signin">
           <div style="text-align: center;" class="card-body">
             <h3>Casos ativos</h3>
@@ -114,6 +121,14 @@
           </div>
         </div>
       </div>
+      <div class="col-2">
+        <div class="card card-signin">
+          <div style="text-align: center;" class="card-body">
+            <h3>Internados</h3>
+            <h4>{{casosInternados}}</h4>
+          </div>
+        </div>
+      </div>
       <div class="col-3">
         <div class="card card-signin">
           <div style="text-align: center;" class="card-body">
@@ -122,7 +137,7 @@
           </div>
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-2">
         <div class="card card-signin">
           <div style="text-align: center;" class="card-body">
             <h3>Mortos</h3>

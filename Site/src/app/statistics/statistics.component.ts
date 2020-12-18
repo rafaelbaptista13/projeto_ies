@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {CasosService} from '../casos.service';
+import {FormBuilder} from '@angular/forms';
+import {filter} from 'rxjs/operators';
 
 declare var jQuery: any;
 declare const CanvasJS: any;
@@ -15,8 +17,28 @@ export class StatisticsComponent implements OnInit {
   casosRecuperados: number;
   casosCuidadosIntensivos: number;
   casosMortos: number;
+  casosInternados: number;
+  nacionalidades = ['Alemã', 'Espanhola', 'Francesa', 'Italiana', 'Inglesa', 'Brasileira', 'Belga', 'Russa', 'Americana', 'Chinesa', 'Angolana',
+    'Moçambicana', 'Holandesa', 'Polaca', 'Cabo-Verdiana', 'Albanesa', 'Austríaca', 'Búlgara', 'Croata', 'Dinamarquesa', 'Eslovaca',
+    'Eslovena', 'Finlandesa', 'Grega', 'Húngara', 'Islandesa', 'Irlandesa', 'Lituana', 'Luxemburguesa', 'Norueguesa', 'Romena', 'Sueca',
+    'Suíça', 'Turca', 'Ucraniana', 'Argentina', 'Canadiana', 'Mexicana', 'Japonesa', 'Portuguesa'].sort();
+  regioes = ['Norte', 'Lisboa e Vale do Tejo', 'Centro', 'Alentejo', 'Algarve', 'Açores', 'Madeira'];
+  filterForm;
+  alturaMin: number;
 
-  constructor(private casosService: CasosService) { }
+  constructor(private casosService: CasosService, private formBuilder: FormBuilder) {
+    this.filterForm = this.formBuilder.group({
+      idade_min: '',
+      idade_max: '',
+      genero: '',
+      regiao: '',
+      nacionalidade: '',
+      altura_min: '',
+      altura_max: '',
+      peso_min: '',
+      peso_max: ''
+    });
+  }
 
   ngOnInit(): void {
 
@@ -39,11 +61,36 @@ export class StatisticsComponent implements OnInit {
 
 
     charts();
-    this.casosService.getNumeroCasos('ativos').subscribe(casosAtivos => this.casosAtivos = casosAtivos);
-    this.casosService.getNumeroCasos('recuperados').subscribe(casosRecuperados => this.casosRecuperados = casosRecuperados);
-    this.casosService.getNumeroCasos('cuidadosintensivos')
-      .subscribe(casosCuidadosIntensivos => this.casosCuidadosIntensivos = casosCuidadosIntensivos);
-    this.casosService.getNumeroCasos('morto').subscribe(casosMortos => this.casosMortos = casosMortos);
+    this.casosService.getNumeroCasos('ativos', '', '', '', '', '', '',
+      '', '', '').subscribe(casosAtivos => this.casosAtivos = casosAtivos);
+    this.casosService.getNumeroCasos('Recuperado', '', '', '', '', '', '',
+      '', '', '').subscribe(casosRecuperados => this.casosRecuperados = casosRecuperados);
+    this.casosService.getNumeroCasos('Cuidados+Intensivos', '', '', '', '', '', '',
+      '', '', '').subscribe(casosCuidadosIntensivos => this.casosCuidadosIntensivos = casosCuidadosIntensivos);
+    this.casosService.getNumeroCasos('Óbito', '', '', '', '', '', '',
+      '', '', '').subscribe(casosMortos => this.casosMortos = casosMortos);
+    this.casosService.getNumeroCasos('Internado', '', '', '', '', '', '',
+      '', '', '').subscribe(casosInternados => this.casosInternados = casosInternados);
+  }
+
+  onSubmit(filterData): void {
+    console.log(filterData);
+
+    this.casosService.getNumeroCasos('ativos', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
+      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
+      subscribe(casosAtivos => this.casosAtivos = casosAtivos);
+    this.casosService.getNumeroCasos('Recuperado', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
+      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
+    subscribe(casosRecuperados => this.casosRecuperados = casosRecuperados);
+    this.casosService.getNumeroCasos('Cuidados+Intensivos', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
+      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
+    subscribe(casosCuidadosIntensivos => this.casosCuidadosIntensivos = casosCuidadosIntensivos);
+    this.casosService.getNumeroCasos('Óbito', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
+      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
+    subscribe(casosMortos => this.casosMortos = casosMortos);
+    this.casosService.getNumeroCasos('Internado', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
+      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
+    subscribe(casosInternados => this.casosInternados = casosInternados);
   }
 }
 
