@@ -10,6 +10,7 @@ import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,19 +44,43 @@ public class Runner implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    String estado_paciente = getEstadoValido();
-    String regiao_paciente = getRegiaoValida();
-    int idade_paciente = getIdadeValida();
-    int idademin = idade_paciente-5;
-    int idademax = idade_paciente+5;
-    HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8080/api/v1/casos?estado="+estado_paciente+"&regiao="+regiao_paciente+"&idademin="+idademin+"&idademax="+idademax)).setHeader("User-Agent", "Java 11 HttpClient Bot").build();
+    HttpResponse<String> response;
+    int contador = 0;
+    while (true) {
+      String estado_paciente = getEstadoValido();
+      String regiao_paciente = getRegiaoValida();
+      int idade_paciente = getIdadeValida();
+      int idademin = idade_paciente-5;
+      int idademax = idade_paciente+5;
+      String url = "http://localhost:8080/api/v1/casos?estado="+estado_paciente+"&regiao="+regiao_paciente+"&idademin="+idademin+"&idademax="+idademax;
+      url = url.replace(" ", "+");
+      HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).setHeader("User-Agent", "Java 11 HttpClient Bot").build();
 
-    HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-    System.out.println(response.body());
-    JSONObject myPacient = new JSONObject(response.body());
+      response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+      System.out.println(response);
+      System.out.println(response.body());
 
+      if (response.body().equals("[]")) {
+        contador += 1;
+        if (contador >= 10) {
+          System.exit(1);
+        }
+      } else {
+        break;
+      }
+    } 
+    
+    String[] texto = response.body().split("\\{");
+    ArrayList<JSONObject> jsonPacientes = new ArrayList<JSONObject>();
+    for (int i = 1; i<texto.length; i++) {
+      String novotexto = '{'+texto[i];
+      novotexto = novotexto.substring(0, novotexto.length()-1);
+      JSONObject myPacient = new JSONObject(novotexto);
+      jsonPacientes.add(myPacient);
+    }
+    
     HashMap<String, Object> mensagem = new HashMap<String, Object>();
-    mensagem = construcaoMensagem(myPacient);
+    mensagem = construcaoMensagem(jsonPacientes.get(0));
     mensagem.put("time", formatter.format(new Date(System.currentTimeMillis())));
     System.out.println("\n \n--------- Nova Mensagem : ---------");
     for (String item : mensagem.keySet()) {

@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import ua.ies.g23.Covinfo19.relatorios.repository.*;
 public class Receiver {
 
   private CountDownLatch latch = new CountDownLatch(1);
+  private static Random rand = new Random();
 
   @Autowired
   private PacienteRepository pacienteRepository;
@@ -28,6 +31,8 @@ public class Receiver {
   private CasoRepository casoRepository;
   @Autowired
   private Relatorio_PacienteRepository relatorioPacienteRepository;
+  @Autowired
+  private HospitalRepository hospitalRepository;
 
   public void receiveMessage(String message) throws JSONException {
     System.out.println("\n \n NEW MESSAGE:");
@@ -44,6 +49,12 @@ public class Receiver {
     paciente.setAltura(Integer.parseInt(json.getString("altura")));
     paciente.setPeso((float) Double.parseDouble(json.getString("peso")));
     System.out.println(paciente);
+    List<Hospital> listaHospitais = hospitalRepository.findAllFilters("%", "%", json.getString("regiao"), "0", "5000", "0", "5000");
+    if (json.getString("estado").equals("Confinamento Domiciliário")) {
+      int indexhospital = rand.nextInt((listaHospitais.size()-1 - 0) + 1) + 0;
+      Hospital hospital = listaHospitais.get(indexhospital);
+      System.out.println(hospital);
+    }
     // paciente.setMedico(pacienteDetails.getMedico());
     pacienteRepository.save(paciente);
     Caso caso = new Caso();

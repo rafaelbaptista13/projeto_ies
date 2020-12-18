@@ -43,7 +43,7 @@ public class ReceiverMedicosPacientes {
       medico.setCodigo_acesso(json.getString("codigo"));
       medico.setIdade(json.getInt("idade"));
       medico.setNome(json.getString("nome"));
-      Long id = json.getLong("id");
+      Long id = json.getLong("hospital");
       Hospital hospital = hospitalRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Hospital not found for this id :: " + String.valueOf(id)));
       medico.setHospital(hospital);
       medicoRepository.save(medico);
