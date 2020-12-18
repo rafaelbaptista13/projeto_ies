@@ -29,6 +29,15 @@ export class StatisticsComponent implements OnInit {
       })
     })(jQuery);
 
+    (function($) {
+      $(document).ready(function () {
+        $('#filterCollapse').on('click', function () {
+          $('#filters').toggle(500);
+        });
+      })
+    })(jQuery);
+
+
     charts();
     this.casosService.getNumeroCasos('ativos').subscribe(casosAtivos => this.casosAtivos = casosAtivos);
     this.casosService.getNumeroCasos('recuperados').subscribe(casosRecuperados => this.casosRecuperados = casosRecuperados);
@@ -173,6 +182,59 @@ function charts() {
       dataPoints: [
         { y: 47, label: "Masculino" },
         { y: 53, label: "Feminino" }
+      ]
+    }]
+  });
+  chart.render();
+
+  // Grafico por altura
+  var chart = new CanvasJS.Chart("heightpiegraph", {
+    animationEnabled: true,
+    data: [{
+      type: "doughnut",
+      startAngle: 180,
+      //innerRadius: 60,
+      indexLabelFontSize: 16,
+      indexLabel: "{label} - #percent%",
+      toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+      dataPoints: [
+        { y: 1, label: "1,10-1,20" },
+        { y: 2, label: "1,20-1,30" },
+        { y: 2, label: "1,30-1,40" },
+        { y: 2, label: "1,40-1,50" },
+        { y: 5, label: "1,50-1,60" },
+        { y: 25, label: "1,60-1,70" },
+        { y: 31, label: "1,70-1,80", exploded: true},
+        { y: 23, label: "1,80-1,90" },
+        { y: 8, label: "1,90-2,00" },
+        { y: 1, label: "+2,00" },
+      ]
+    }]
+  });
+  chart.render();
+
+  // Grafico por altura
+  var chart = new CanvasJS.Chart("weightpiegraph", {
+    animationEnabled: true,
+    data: [{
+      type: "doughnut",
+      startAngle: 180,
+      //innerRadius: 60,
+      indexLabelFontSize: 16,
+      indexLabel: "{label} - #percent%",
+      toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+      dataPoints: [
+        { y: 3, label: "0-10" },
+        { y: 2, label: "10-20" },
+        { y: 1, label: "20-30" },
+        { y: 2, label: "30-40" },
+        { y: 10, label: "40-50" },
+        { y: 22, label: "50-60" },
+        { y: 40, label: "70-80", exploded: true},
+        { y: 15, label: "80-90" },
+        { y: 4, label: "90-100" },
+        { y: 0.75, label: "100-110" },
+        { y: 0.25, label: "+110" },
       ]
     }]
   });
