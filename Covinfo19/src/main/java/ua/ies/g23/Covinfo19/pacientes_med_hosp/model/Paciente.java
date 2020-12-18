@@ -143,7 +143,7 @@ public class Paciente {
         return "Paciente [paciente_id=" + paciente_id + ", Nome=" + nome + ", Genero=" 
                 + genero + ", Idade=" + idade + ", Concelho=" + concelho + ", Regiao=" + regiao
                 + ", Nacionalidade=" + nacionalidade + ", Altura=" + altura + ", Peso=" + peso
-                + "]";
+                + ", Medico=" + medico +"]";
     }
  
 }
