@@ -14,6 +14,12 @@ import ua.ies.g23.Covinfo19.relatorios.model.Relatorio_Paciente;
 import ua.ies.g23.Covinfo19.relatorios.repository.CasoRepository;
 import ua.ies.g23.Covinfo19.relatorios.repository.Relatorio_PacienteRepository;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Hospital;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Medico;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Paciente;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.HospitalRepository;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.MedicoRepository;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.PacienteRepository;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +33,12 @@ public class ReceiverUpdateData {
   private CasoRepository casoRepository;
   @Autowired
   private Relatorio_PacienteRepository relatorioPacienteRepository;
+  @Autowired
+  private PacienteRepository pacienteRepository;
+  @Autowired
+  private MedicoRepository medicoRepository;
+  @Autowired
+  private HospitalRepository hospitalRepository;
 
     
   private CountDownLatch latch = new CountDownLatch(1);
@@ -37,6 +49,18 @@ public class ReceiverUpdateData {
     System.out.println("Received <" + json.toString() + ">");
     Long id = json.getLong("id");
     Caso caso = casoRepository.findById(id) .orElseThrow(() -> new ResourceNotFoundException("Caso not found for this id :: " + id));
+    Paciente paciente = pacienteRepository.findById(caso.getPaciente_id()).orElseThrow(() -> new ResourceNotFoundException("Paciente not found for this id :: " + String.valueOf(id)));
+    Medico medico = medicoRepository.findById(paciente.getMedico().getNumero_medico()).orElseThrow(() -> new ResourceNotFoundException("Medico not found for this id :: " + String.valueOf(id)));
+    Hospital hospital = hospitalRepository.findById(medico.getHospital().getId()).orElseThrow(() -> new ResourceNotFoundException("Hospital not found for this id :: " + String.valueOf(id)));
+    
+    if (caso.getEstado_atual().equals("Confinamento Domiciliário") && (json.getString("estado_atual").equals("Internado") || json.getString("estado_atual").equals("Cuidados Intensivos") )  ){
+      hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() + 1);
+      hospitalRepository.save(hospital);
+    } else if ( (caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos") ) && (json.getString("estado_atual").equals("Óbito") || json.getString("estado_atual").equals("Recuperado") || json.getString("estado_atual").equals("Confinamento Domiciliário") )  ) {
+      hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() - 1);
+      hospitalRepository.save(hospital);
+    }
+    
     caso.setEstado_atual(json.getString("estado_atual"));
     System.out.println(caso);
     casoRepository.save(caso);

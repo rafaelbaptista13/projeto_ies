@@ -1,5 +1,6 @@
 package ua.ies.g23.Covinfo19.pacientes_med_hosp.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Hospital;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Medico;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.HospitalRepository;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.MedicoRepository;
 
 
@@ -29,8 +33,44 @@ public class MedicoController {
     private MedicoRepository medicoRepository;
 
     @GetMapping("/medicos")
-    public List<Medico> getAllMedicos() {
-        return medicoRepository.findAll();
+    public List<Medico> getAllMedicos(
+        @RequestParam(required = false) String nome,
+        @RequestParam(required = false) Integer hospital_id,
+        @RequestParam(required = false) Integer idademin,
+        @RequestParam(required = false) Integer idademax ) {
+        if ( nome == null && hospital_id == null && idademin == null && idademax == null) {
+            return medicoRepository.findAll();
+        }
+        
+        String strnome = "";
+        if (nome != null) {
+            strnome = nome + "%";
+        } else {
+            strnome = "%";
+        }
+
+        String strhospital_id = "";
+        if (hospital_id != null) {
+            strhospital_id = hospital_id.toString();
+        } else {
+            strhospital_id = "%";
+        }
+
+        String stridademin = "";
+        if (idademin != null) {
+            stridademin = idademin.toString();
+        } else {
+            stridademin = "0";
+        }
+
+        String stridademax = "";
+        if (idademax != null) {
+            stridademax = idademax.toString();
+        } else {
+            stridademax = "300";
+        }
+        System.out.println(strnome);
+        return medicoRepository.findAllByFilters(strnome, strhospital_id, stridademin, stridademax);
     }
 
     @GetMapping("/medicos/{id}")

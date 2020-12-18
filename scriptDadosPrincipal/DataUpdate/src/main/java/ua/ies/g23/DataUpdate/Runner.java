@@ -57,8 +57,6 @@ public class Runner implements CommandLineRunner {
       HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).setHeader("User-Agent", "Java 11 HttpClient Bot").build();
 
       response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-      System.out.println(response);
-      System.out.println(response.body());
 
       if (response.body().equals("[]")) {
         contador += 1;

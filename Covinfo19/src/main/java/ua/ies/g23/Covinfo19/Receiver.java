@@ -33,6 +33,8 @@ public class Receiver {
   private Relatorio_PacienteRepository relatorioPacienteRepository;
   @Autowired
   private HospitalRepository hospitalRepository;
+  @Autowired
+  private MedicoRepository medicoRepository;
 
   public void receiveMessage(String message) throws JSONException {
     System.out.println("\n \n NEW MESSAGE:");
@@ -48,14 +50,67 @@ public class Receiver {
     paciente.setNacionalidade(json.getString("nacionalidade"));
     paciente.setAltura(Integer.parseInt(json.getString("altura")));
     paciente.setPeso((float) Double.parseDouble(json.getString("peso")));
-    System.out.println(paciente);
+
     List<Hospital> listaHospitais = hospitalRepository.findAllFilters("%", "%", json.getString("regiao"), "0", "5000", "0", "5000");
     if (json.getString("estado").equals("Confinamento Domiciliário")) {
       int indexhospital = rand.nextInt((listaHospitais.size()-1 - 0) + 1) + 0;
       Hospital hospital = listaHospitais.get(indexhospital);
-      System.out.println(hospital);
+      List<Medico> listaMedicos = medicoRepository.findAllByFilters("%", String.valueOf(hospital.getId()), "0", "300");
+      int indexMedico = rand.nextInt((listaMedicos.size()-1 - 0) + 1) + 0;
+      Medico medico = listaMedicos.get(indexMedico);
+      paciente.setMedico(medico);
+    } else {
+      Boolean medicoInserido = false;
+      do {
+        int indexhospital = rand.nextInt((listaHospitais.size()-1 - 0) + 1) + 0;
+        Hospital hospital = listaHospitais.get(indexhospital);
+        if (hospital.getNumero_camas_ocupadas() < hospital.getNumero_camas()) {
+          List<Medico> listaMedicos = medicoRepository.findAllByFilters("%", String.valueOf(hospital.getId()), "0", "300");
+          int indexMedico = rand.nextInt((listaMedicos.size()-1 - 0) + 1) + 0;
+          Medico medico = listaMedicos.get(indexMedico);
+          paciente.setMedico(medico);
+          hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() + 1);
+          hospitalRepository.save(hospital);
+          medicoInserido = true;
+          break;
+        } else {
+          listaHospitais.remove(hospital);
+        }
+      } while (listaHospitais.size() > 0);
+      if (!medicoInserido) {
+        listaHospitais = hospitalRepository.findAll();
+        do {
+          int indexhospital = rand.nextInt((listaHospitais.size()-1 - 0) + 1) + 0;
+          Hospital hospital = listaHospitais.get(indexhospital);
+          if (hospital.getNumero_camas_ocupadas() < hospital.getNumero_camas()) {
+            List<Medico> listaMedicos = medicoRepository.findAllByFilters("%", String.valueOf(hospital.getId()), "0", "300");
+            int indexMedico = rand.nextInt((listaMedicos.size()-1 - 0) + 1) + 0;
+            Medico medico = listaMedicos.get(indexMedico);
+            paciente.setMedico(medico);
+            hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() + 1);
+            hospitalRepository.save(hospital);
+            medicoInserido = true;
+            break;
+          } else {
+            listaHospitais.remove(hospital);
+          }
+        } while (listaHospitais.size() > 0);
+      }
+      if (!medicoInserido) {
+        listaHospitais = hospitalRepository.findAllFilters("%", "%", json.getString("regiao"), "0", "5000", "0", "5000");
+        int indexhospital = rand.nextInt((listaHospitais.size()-1 - 0) + 1) + 0;
+        Hospital hospital = listaHospitais.get(indexhospital);
+        List<Medico> listaMedicos = medicoRepository.findAllByFilters("%", String.valueOf(hospital.getId()), "0", "300");
+        int indexMedico = rand.nextInt((listaMedicos.size()-1 - 0) + 1) + 0;
+        Medico medico = listaMedicos.get(indexMedico);
+        paciente.setMedico(medico);
+        hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() + 1);
+        hospitalRepository.save(hospital);
+        medicoInserido = true;
+      }
     }
     // paciente.setMedico(pacienteDetails.getMedico());
+    System.out.println(paciente);
     pacienteRepository.save(paciente);
     Caso caso = new Caso();
     caso.setEstado_atual(json.getString("estado"));
