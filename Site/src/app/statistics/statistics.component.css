@@ -7,7 +7,6 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #fafafa;
 }
 
 a, a:hover, a:focus {
@@ -293,4 +292,98 @@ ul.CTAs a {
   padding-bottom: calc(var(--input-padding-y) / 3);
   font-size: 12px;
   color: #777;
+}
+
+/* FILTER */
+
+.filters{
+  background-color: lightgray;
+  border-radius: 20px;
+  margin: 4% 0 4% 0;
+}
+
+.filter_title{
+  text-align: center;
+  font-size: 35px;
+}
+
+.idade_title{
+   text-align: center;
+ }
+
+.idade_div{
+  display: inline-block;
+}
+
+.idade_div input{
+  width: 40%;
+  margin: 5%;
+}
+
+.genero_title{
+  text-align: center;
+}
+
+.genero_div{
+  display: inline-block;
+}
+
+.genero_div select{
+  width: 96%;
+  margin: 5% 2% 5% 2%;
+  height: 100%;
+}
+
+.regiao_title{
+  text-align: center;
+}
+
+.regiao_div{
+  display: inline-block;
+}
+
+.regiao_div select{
+  width: 96%;
+  margin: 5% 2% 5% 2%;
+  height: 100%;
+}
+
+.nacionalidade_title{
+  text-align: center;
+}
+
+.nacionalidade_div{
+  display: inline-block;
+}
+
+.nacionalidade_div select{
+  width: 96%;
+  margin: 5% 2% 5% 2%;
+  height: 100%;
+}
+
+.altura_title{
+  text-align: center;
+}
+
+.altura_div{
+  display: inline-block;
+}
+
+.altura_div input{
+  width: 40%;
+  margin: 5%;
+}
+
+.peso_title{
+  text-align: center;
+}
+
+.peso_div{
+  display: inline-block;
+}
+
+.peso_div input{
+  width: 40%;
+  margin: 5%;
 }
