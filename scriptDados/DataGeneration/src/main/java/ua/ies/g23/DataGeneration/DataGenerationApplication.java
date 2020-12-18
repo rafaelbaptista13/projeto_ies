@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class DataGenerationApplication {
 
+  // Nome tópico e fila utiliada para troca mensagens no rabbitMQ
   static final String topicExchangeName = "filagerar-exchange";
-
   static final String queueName = "filagerar";
 
   @Bean

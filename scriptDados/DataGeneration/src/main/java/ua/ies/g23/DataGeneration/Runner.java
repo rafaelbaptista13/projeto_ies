@@ -19,22 +19,28 @@ public class Runner implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    HashMap<String, Object> mensagem = new HashMap<String, Object>();
+	HashMap<String, Object> mensagem = new HashMap<String, Object>();
+	
+	// Construção 10 Mensagens Novos Pacientes Distintos
 	for (int i = 0; i<= 10; i++) {
 		mensagem = construcaoMensagem();
+
+		//Atribuição tempo atual à mensagem inserção paciente
 		mensagem.put("time",formatter.format(new Date(System.currentTimeMillis())));
 		System.out.println("\n \n--------- Novo Paciente : ---------");
 		for (String item: mensagem.keySet() ) {
 			System.out.println(item + " -> " + mensagem.get(item));
 		}
 		JSONObject json = new JSONObject(mensagem);
+
+		//Envio da Mensagem
 		rabbitTemplate.convertAndSend(DataGenerationApplication.topicExchangeName, "filagerar", json.toString());
 		rabbitTemplate.convertAndSend(DataGenerationApplication.topicExchangeName, "filagerar", json.toString());
 	}
   }
 
-  //geração de dados
-  public static int var_paciente_id = 1;
+  	//Conjunto variaveis finais utilizadas para geração aleatória de dados
+  	public static int var_paciente_id = 1;
 	public static final String[] var_estado = {"Confinamento Domiciliário", "Internado", "Cuidados Intensivos"};
 	public static final String[] var_genero = {"Masculino", "Feminino"};
 	public static final String[] var_nacionalidade_maior_probabilidade = {"Alemã","Espanhola","Francesa","Italiana","Inglesa","Brasileira"};
@@ -54,6 +60,10 @@ public class Runner implements CommandLineRunner {
 	public static final SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 	public static Random rand = new Random();
 
+
+	////
+	//	Função Criação Mensagem Novo Paciente. 
+	////
 	public static HashMap<String, Object> construcaoMensagem() {
 		int paciente_id = var_paciente_id;
 		var_paciente_id++;
@@ -80,6 +90,10 @@ public class Runner implements CommandLineRunner {
 		return mensagem;
 	}
 
+
+	////
+	//	Função seleção estado do novo paciente de forma random. Possiveis Estados: "Confinamento Domiciliário", "Internado", "Cuidados Intensivos"
+	////
 	public static String getEstadoValido() {
 		double randomNum = rand.nextDouble();
 		if (randomNum <= 0.92) {
@@ -91,11 +105,17 @@ public class Runner implements CommandLineRunner {
 		}
 	}
 
+	////
+	//	Função seleção genero do novo paciente de forma random. Possiveis Generos: "Masculino", "Feminino"
+	////
 	public static String getGeneroValido() {
 		int randomNum = rand.nextInt((1 - 0) + 1) + 0;
 		return var_genero[randomNum];
 	}
 
+	////
+	//	Função seleção altura do novo paciente de forma random.
+	////
 	public static Integer getAlturaValida(String genero) {
 		if (genero.equals("Masculino")) {
 			return (int) (173f + 15f * (1 + rand.nextGaussian())/2);
@@ -104,6 +124,10 @@ public class Runner implements CommandLineRunner {
 		}
 	}
 
+
+	////
+	//	Função seleção peso do novo paciente de forma random.
+	////
 	public static Double getPesoValido(String genero) {
 		if (genero.equals("Masculino")) {
 			double x =  (75f + 20f * (1 + rand.nextGaussian())/2);
