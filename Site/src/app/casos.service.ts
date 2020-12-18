@@ -32,13 +32,13 @@ export class CasosService {
     }
 
     if (regiao !== '') {
-      url += '&regiao' + regiao;
+      url += '&regiao=' + regiao;
     }
     if (nacionalidade !== '') {
-      url += '&nacionalidade' + nacionalidade;
+      url += '&nacionalidade=' + nacionalidade;
     }
     if (alturaMax !== '') {
-      url += '&alturaMax=' + alturaMax;
+      url += '&alturamax=' + alturaMax;
     }
     if (alturaMin !== '') {
       url += '&alturamin=' + alturaMin;

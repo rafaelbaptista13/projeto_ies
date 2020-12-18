@@ -56,6 +56,7 @@
             <div class="genero_div">
               <select name="genero_option" id="g_options" formControlName="genero">
                 <option hidden disabled selected value>Selecionar Opção</option>
+                <option value=""></option>
                 <option value="Masculino">Masculino</option>
                 <option value="Feminino">Feminino</option>
               </select>
@@ -66,6 +67,7 @@
             <div class="regiao_div">
               <select name="regiao_option" id="r_options" formControlName="regiao">
                 <option hidden disabled selected value>Selecionar Opção</option>
+                <option value=""></option>
                 <option *ngFor="let regiao of regioes" value="{{regiao}}">{{regiao}}</option>
                 <!-- NGFOR das regioes -->
               </select>
@@ -76,6 +78,7 @@
             <div class="nacionalidade_div">
               <select name="nacionalidade_option" id="n_options" formControlName="nacionalidade">
                 <option hidden disabled selected value>Selecionar Opção</option>
+                <option value=""></option>
                 <option *ngFor="let nacionalidade of nacionalidades" value="{{nacionalidade}}">{{nacionalidade}}</option>
                 <!-- NGFOR das nacionalidades -->
               </select>

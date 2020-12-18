@@ -81,16 +81,16 @@ export class StatisticsComponent implements OnInit {
       subscribe(casosAtivos => this.casosAtivos = casosAtivos);
     this.casosService.getNumeroCasos('Recuperado', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
       filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosAtivos => this.casosAtivos = casosAtivos);
+    subscribe(casosRecuperados => this.casosRecuperados = casosRecuperados);
     this.casosService.getNumeroCasos('Cuidados+Intensivos', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
       filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosAtivos => this.casosAtivos = casosAtivos);
+    subscribe(casosCuidadosIntensivos => this.casosCuidadosIntensivos = casosCuidadosIntensivos);
     this.casosService.getNumeroCasos('Óbito', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
       filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosAtivos => this.casosAtivos = casosAtivos);
+    subscribe(casosMortos => this.casosMortos = casosMortos);
     this.casosService.getNumeroCasos('Internado', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
       filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosAtivos => this.casosAtivos = casosAtivos);
+    subscribe(casosInternados => this.casosInternados = casosInternados);
   }
 }
 
