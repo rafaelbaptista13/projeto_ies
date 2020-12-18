@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Paciente;
@@ -29,9 +30,94 @@ public class PacienteController {
     private PacienteRepository pacienteRepository;
 
     @GetMapping("/pacientes")
-    public List<Paciente> getAllPacientes() {
-        return pacienteRepository.findAll();
-    }
+    public List<Paciente> getAllCasos(
+        @RequestParam(required = false) String genero,
+        @RequestParam(required = false) Integer idademax,
+        @RequestParam(required = false) Integer idademin,
+        @RequestParam(required = false) String concelho,
+        @RequestParam(required = false) String regiao,
+        @RequestParam(required = false) String nacionalidade,
+        @RequestParam(required = false) Integer alturamin,
+        @RequestParam(required = false) Integer alturamax,
+        @RequestParam(required = false) Integer pesomin,
+        @RequestParam(required = false) Integer pesomax ) {
+        if ( genero == null && idademin == null && idademax == null && concelho == null && regiao == null && nacionalidade == null && alturamin == null && alturamax == null && pesomin == null && pesomax == null) {
+            return pacienteRepository.findAll();
+        }
+
+
+        String strgenero = "";
+        if (genero != null) {
+            strgenero = genero;
+        } else {
+            strgenero = "%";
+        }
+
+        String stridademin = "";
+        if (idademin != null) {
+            stridademin = idademin.toString();
+        } else {
+            stridademin = "0";
+        }
+
+        String stridademax = "";
+        if (idademax != null) {
+            stridademax = idademax.toString();
+        } else {
+            stridademax = "300";
+        }
+
+        String strconcelho = "";
+        if (concelho != null) {
+            strconcelho = concelho;
+        } else {
+            strconcelho = "%";
+        }
+
+        String strregiao = "";
+        if (regiao != null) {
+            strregiao = regiao;
+        } else {
+            strregiao = "%";
+        }
+
+        String strnacionalidade = "";
+        if (nacionalidade != null) {
+            strnacionalidade = nacionalidade;
+        } else {
+            strnacionalidade = "%";
+        }
+
+        String stralturamin = "";
+        if (alturamin != null) {
+            stralturamin = alturamin.toString();
+        } else {
+            stralturamin = "0";
+        }
+
+        String stralturamax = "";
+        if (alturamax != null) {
+            stralturamax = alturamax.toString();
+        } else {
+            stralturamax = "300";
+        }
+
+        String strpesomin = "";
+        if (pesomin != null) {
+            strpesomin = pesomin.toString() ;
+        } else {
+            strpesomin = "0";
+        }
+
+        String strpesomax = "";
+        if (pesomax != null) {
+            strpesomax = pesomax.toString() ;
+        } else {
+            strpesomax = "500";
+        }
+
+        return pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
+        }   
 
     @GetMapping("/pacientes/{id}")
     public ResponseEntity<Paciente> getPacienteById(@PathVariable(value = "id") Long pacienteID)

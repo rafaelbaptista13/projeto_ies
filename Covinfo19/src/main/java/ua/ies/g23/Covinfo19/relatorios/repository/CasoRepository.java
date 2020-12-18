@@ -19,6 +19,9 @@ public interface CasoRepository extends JpaRepository<Caso, Long>{
     @Query(value = "Select count(*) from casos where estado_atual = :strestado", nativeQuery = true)
 	Collection<Integer> findAllByEstado(@Param("strestado") String estado_atual);
 
+    @Query(value = "Select * from casos where paciente_id = :pacienteId", nativeQuery = true)
+	Caso findByPacienteId(@Param("pacienteId") long pacienteId);
+
     /*
     @Query(value = "Select * from casos where :strestado :strgenero :stridade :strconcelho :strregiao :strnacionalidade :straltura :strpeso", nativeQuery = true)
     //@Query(value = "Select * from casos where " +strestado + strgenero + stridade + strconcelho + strregiao + strnacionalidade + straltura + strpeso, nativeQuery = true)
