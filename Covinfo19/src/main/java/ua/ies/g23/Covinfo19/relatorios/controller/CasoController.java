@@ -1,6 +1,7 @@
 package ua.ies.g23.Covinfo19.relatorios.controller;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import org.w3c.dom.ls.LSInput;
 
 import ua.ies.g23.Covinfo19.relatorios.model.Caso;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
@@ -33,12 +35,12 @@ import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.PacienteRepository;
 public class CasoController {
     @Autowired
     private CasoRepository CasoRepository;
+    @Autowired
     private PacienteRepository pacienteRepository;
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/casos/count")
     public int getAllCasosCount(@RequestParam String estado) {
-        int number = 0;
         if (estado.equals("ativos")) {
             return (int) CasoRepository.findAllAtivos().toArray()[0];
         }
@@ -68,81 +70,110 @@ public class CasoController {
         return (int) CasoRepository.findAllByEstado(estado_atual).toArray()[0];
     }
 
-    @GetMapping("/casos")
-    public List<Caso> getAllCasos() {
-        return CasoRepository.findAll();
-    }
-
-    /*
+    
     @GetMapping("/casos")
     public List<Caso> getAllCasos(
         @RequestParam(required = false) String estado,
         @RequestParam(required = false) String genero,
-        @RequestParam(required = false) Integer idade,
+        @RequestParam(required = false) Integer idademax,
+        @RequestParam(required = false) Integer idademin,
         @RequestParam(required = false) String concelho,
         @RequestParam(required = false) String regiao,
         @RequestParam(required = false) String nacionalidade,
-        @RequestParam(required = false) Integer altura,
-        @RequestParam(required = false) Integer peso ) {
-            if (estado == null && genero == null && idade == null && concelho == null && regiao == null && nacionalidade == null && altura == null && peso == null ) {
-                return CasoRepository.findAll();
-            }
+        @RequestParam(required = false) Integer alturamin,
+        @RequestParam(required = false) Integer alturamax,
+        @RequestParam(required = false) Integer pesomin,
+        @RequestParam(required = false) Integer pesomax ) {
+        if (estado == null && genero == null && idademin == null && idademax == null && concelho == null && regiao == null && nacionalidade == null && alturamin == null && alturamax == null && pesomin == null && pesomax == null ) {
+            return CasoRepository.findAll();
+        }
             
-            String strestado = "";
-            if (estado != null) {
-                strestado = "estado_atual = '" + estado + "'";
-            } else {
-                strestado = "1 = 1 ";
+        String strgenero = "";
+        if (genero != null) {
+            strgenero = genero;
+        } else {
+            strgenero = "%";
+        }
+
+        String stridademin = "";
+        if (idademin != null) {
+            stridademin = idademin.toString();
+        } else {
+            stridademin = "0";
+        }
+
+        String stridademax = "";
+        if (idademax != null) {
+            stridademax = idademax.toString();
+        } else {
+            stridademax = "300";
+        }
+
+        String strconcelho = "";
+        if (concelho != null) {
+            strconcelho = concelho;
+        } else {
+            strconcelho = "%";
+        }
+
+        String strregiao = "";
+        if (regiao != null) {
+            strregiao = regiao;
+        } else {
+            strregiao = "%";
+        }
+
+        String strnacionalidade = "";
+        if (nacionalidade != null) {
+            strnacionalidade = nacionalidade;
+        } else {
+            strnacionalidade = "%";
+        }
+
+        String stralturamin = "";
+        if (alturamin != null) {
+            stralturamin = alturamin.toString();
+        } else {
+            stralturamin = "0";
+        }
+
+        String stralturamax = "";
+        if (alturamax != null) {
+            stralturamax = alturamax.toString();
+        } else {
+            stralturamax = "300";
+        }
+
+        String strpesomin = "";
+        if (pesomin != null) {
+            strpesomin = pesomin.toString() ;
+        } else {
+            strpesomin = "0";
+        }
+
+        String strpesomax = "";
+        if (pesomax != null) {
+            strpesomax = pesomax.toString() ;
+        } else {
+            strpesomax = "500";
+        }
+
+        System.out.println("tou aqui");
+        List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
+
+        System.out.println(pacientes);
+
+        List<Caso> casos = new ArrayList<Caso>();
+        
+        for (Paciente paciente : pacientes) {
+            Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+            if (caso.getEstado_atual().equals(estado) || estado == null) {
+                casos.add(caso);
             }
-
-            String strgenero = "";
-            if (genero != null) {
-                strgenero = "genero = '" + genero + "'";
-            } else {
-                strestado = "1 = 1";
-            }
-
-            String stridade = "";
-            if (idade != null) {
-                stridade = " and idade = " + idade ;
-            }
-
-            String strconcelho = "";
-            if (concelho != null) {
-                strconcelho = " concelho = '" + concelho + "'";
-            }
-
-            String strregiao = "";
-            if (regiao != null) {
-                strregiao = " regiao = '" + regiao + "'";
-            }
-
-            String strnacionalidade = "";
-            if (nacionalidade != null) {
-                strnacionalidade = " nacionalidade = '" + nacionalidade + "'";
-            }
-
-            String straltura = "";
-            if (altura != null) {
-                straltura = " altura = " + altura ;
-            }
-
-            String strpeso = "";
-            if (peso != null) {
-                strpeso = " peso = " + peso ;
-            }
-
-            
-            System.out.println("Select * from pacientes where " + strgenero + stridade + strconcelho + strregiao + strnacionalidade + straltura + strpeso);
-            List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridade, strconcelho, strregiao, strnacionalidade, straltura, strpeso);
-
-            //List<Paciente> pacientes = pacienteRepository.findAllF();
-            System.out.println("AAAAAAA");
-            System.out.println(pacientes);
-            
-            return CasoRepository.findAllFilters(strestado, strgenero, stridade, strconcelho, strregiao, strnacionalidade, straltura, strpeso);
+        }
+        return casos;
     }
-    */
+    
 
     @GetMapping("/casos/{id}")
     public ResponseEntity<Caso> getCasoById(@PathVariable(value = "id") Long CasoId)
