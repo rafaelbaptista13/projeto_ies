@@ -16,10 +16,12 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Covinfo19Application {
 
+  //Nomes tópicos mensagens transmitidas através RabbitMQ
   static final String topicExchangeName = "filagerar-exchange";
   static final String topicExchangeName2 = "filaupdate-exchange";
   static final String topicExchangeName3 = "filamedicospacientes-exchange";
   
+  //Nomes filas mensagens transmitidas através RabbitMQ
   static final String queueName = "filagerar";
   static final String queueName2 = "filaupdate";
   static final String queueName3 = "filamedicospacientes";
@@ -98,7 +100,7 @@ public class Covinfo19Application {
   }
 
   @Bean
-  MessageListenerAdapter listenerAdapter(Receiver receiver) {
+  MessageListenerAdapter listenerAdapter(ReceiverGeracaoDados receiver) {
     return new MessageListenerAdapter(receiver, "receiveMessage");
   }
 
