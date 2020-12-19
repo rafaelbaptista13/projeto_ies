@@ -3,6 +3,7 @@ import { Caso} from './caso';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 
+//Define mensagem em JSON e o URL é de segurança
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json', 'access-control-allow-origin': 'http://localhost:8080/'})
 };
@@ -11,14 +12,17 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class CasosService {
+  //URL inicial da api
   private baseURL = 'http://localhost:8080/api/v1/';
 
   constructor(private http: HttpClient) { }
 
+  //Função que retorna numero de casos de acordo com os filtros (ou sem filtros caso nao sejam especificados)
   getNumeroCasos(estado: string, idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
                  alturaMax: any, pesoMin: any, pesoMax: any): Observable<any> {
     let url = this.baseURL + 'casos/count?estado=' + estado;
 
+    //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
     if (idadeMin !== '') {
       url += '&idademin=' + idadeMin;
     }

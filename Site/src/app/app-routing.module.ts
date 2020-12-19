@@ -5,6 +5,7 @@ import { StatisticsComponent } from './statistics/statistics.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent} from './login/login.component';
 
+//Paths disponiveis
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'statistics', component: StatisticsComponent},

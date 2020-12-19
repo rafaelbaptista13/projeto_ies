@@ -11,6 +11,7 @@ export class LoginComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    //Função para colapsar navbar
     (function($) {
       $(document).ready(function () {
         $('#sidebarCollapse').on('click', function () {
