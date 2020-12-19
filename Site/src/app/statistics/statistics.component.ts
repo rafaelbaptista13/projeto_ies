@@ -19,6 +19,7 @@ export class StatisticsComponent implements OnInit {
   casosCuidadosIntensivos: number;
   casosMortos: number;
   casosInternados: number;
+  probabilidadesGraficoIdades: number[];
   nacionalidades = ['Alemã', 'Espanhola', 'Francesa', 'Italiana', 'Inglesa', 'Brasileira', 'Belga', 'Russa', 'Americana', 'Chinesa', 'Angolana',
     'Moçambicana', 'Holandesa', 'Polaca', 'Cabo-Verdiana', 'Albanesa', 'Austríaca', 'Búlgara', 'Croata', 'Dinamarquesa', 'Eslovaca',
     'Eslovena', 'Finlandesa', 'Grega', 'Húngara', 'Islandesa', 'Irlandesa', 'Lituana', 'Luxemburguesa', 'Norueguesa', 'Romena', 'Sueca',
@@ -61,8 +62,10 @@ export class StatisticsComponent implements OnInit {
       })
     })(jQuery);
 
-    //Chamada da função de criação de charts
-    charts();
+    //Get Probabilidades idades e chamada da função de criação de charts
+    this.casosService.getProbabilidadeGraficoIdades('','','','','',
+    '','','','').subscribe(prob => { this.probabilidadesGraficoIdades = prob; charts(this.probabilidadesGraficoIdades); });
+
 
     //Inicialização do valor das variáveis sem filtros, com chamada á API para obter os valores
     this.casosService.getNumeroCasos('ativos', '', '', '', '', '', '',
@@ -81,6 +84,9 @@ export class StatisticsComponent implements OnInit {
   onSubmit(filterData): void {
     console.log(filterData);
     //Alteração do valor para o diferente tipo de casos, de acordo com os filtros inseridos
+    this.casosService.getProbabilidadeGraficoIdades(filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
+      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
+    subscribe(prob => { this.probabilidadesGraficoIdades = prob; charts(this.probabilidadesGraficoIdades); });
     this.casosService.getNumeroCasos('ativos', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
       filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
       subscribe(casosAtivos => this.casosAtivos = casosAtivos);
@@ -96,11 +102,12 @@ export class StatisticsComponent implements OnInit {
     this.casosService.getNumeroCasos('Internado', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
       filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
     subscribe(casosInternados => this.casosInternados = casosInternados);
+
   }
 }
 
 //Função para especificar valores dos charts
-function charts() {
+function charts(probabilidadesGraficoIdades) {
 
   // grafico todos os casos diarios
   var chart = new CanvasJS.Chart("allcasesgraph", {
@@ -182,14 +189,14 @@ function charts() {
       toolTipContent: "{name} anos: <strong>{y}%</strong>",
       indexLabel: "{name} - {y}%",
       dataPoints: [
-        { y: 11, name: "1-10"},
-        { y: 11, name: "10-20"},
-        { y: 17, name: "20-30" },
-        { y: 7, name: "30-40" },
-        { y: 3, name: "40-50" },
-        { y: 5, name: "50-60" },
-        { y: 20, name: "60-70" },
-        { y: 26, name: "+70", exploded: true }
+        { y: probabilidadesGraficoIdades[0], name: "1-10"},
+        { y: probabilidadesGraficoIdades[1], name: "10-20"},
+        { y: probabilidadesGraficoIdades[2], name: "20-30" },
+        { y: probabilidadesGraficoIdades[3], name: "30-40" },
+        { y: probabilidadesGraficoIdades[4], name: "40-50" },
+        { y: probabilidadesGraficoIdades[5], name: "50-60" },
+        { y: probabilidadesGraficoIdades[6], name: "60-70" },
+        { y: probabilidadesGraficoIdades[7], name: "+70", exploded: true }
       ]
     }]
   });

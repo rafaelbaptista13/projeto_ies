@@ -39,6 +39,134 @@ public class CasoController {
     private PacienteRepository pacienteRepository;
 
     @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("/casos/grafico/idade")
+    public List<Double> getAllCasosGraficoIdade(
+        @RequestParam(required = false) String genero,
+        @RequestParam(required = false) Integer idademax,
+        @RequestParam(required = false) Integer idademin,
+        @RequestParam(required = false) String concelho,
+        @RequestParam(required = false) String regiao,
+        @RequestParam(required = false) String nacionalidade,
+        @RequestParam(required = false) Integer alturamin,
+        @RequestParam(required = false) Integer alturamax,
+        @RequestParam(required = false) Integer pesomin,
+        @RequestParam(required = false) Integer pesomax ) {
+        
+        List<Integer> listaIdades = new ArrayList<Integer>();
+        List<Double> listaIdadesPercentagem = new ArrayList<Double>();
+        int somaCasosTodos = 0;
+
+       
+            
+        String strgenero = "";
+        if (genero != null) {
+            strgenero = genero;
+        } else {
+            strgenero = "%";
+        }
+
+        String stridademin = "";
+        if (idademin != null) {
+            stridademin = idademin.toString();
+        } else {
+            stridademin = "0";
+            idademin = 0;
+        }
+
+        String stridademax = "";
+        if (idademax != null) {
+            stridademax = idademax.toString();
+        } else {
+            stridademax = "300";
+            idademax = 300;
+        }
+
+        String strconcelho = "";
+        if (concelho != null) {
+            strconcelho = concelho;
+        } else {
+            strconcelho = "%";
+        }
+
+        String strregiao = "";
+        if (regiao != null) {
+            strregiao = regiao;
+        } else {
+            strregiao = "%";
+        }
+
+        String strnacionalidade = "";
+        if (nacionalidade != null) {
+            strnacionalidade = nacionalidade;
+        } else {
+            strnacionalidade = "%";
+        }
+
+        String stralturamin = "";
+        if (alturamin != null) {
+            stralturamin = alturamin.toString();
+        } else {
+            stralturamin = "0";
+        }
+
+        String stralturamax = "";
+        if (alturamax != null) {
+            stralturamax = alturamax.toString();
+        } else {
+            stralturamax = "300";
+        }
+
+        String strpesomin = "";
+        if (pesomin != null) {
+            strpesomin = pesomin.toString() ;
+        } else {
+            strpesomin = "0";
+        }
+
+        String strpesomax = "";
+        if (pesomax != null) {
+            strpesomax = pesomax.toString() ;
+        } else {
+            strpesomax = "500";
+        }
+
+
+
+        for (int idademinima = 0; idademinima <= 70; idademinima += 10) {
+            String stridademinima = String.valueOf(idademinima);
+            String stridademaxima = (idademinima == 70) ? "300" : String.valueOf(idademinima + 10); 
+
+            List<Paciente> pacientes;
+            
+            pacientes = pacienteRepository.findAllFilters(strgenero, stridademinima, stridademaxima, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
+            List<Caso> casos = new ArrayList<Caso>();
+            for (Paciente paciente : pacientes) {
+                Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos") ) {
+                    if (paciente.getIdade() >= idademin && paciente.getIdade() <= idademax) {
+                        casos.add(caso);
+                    }
+                }
+            }
+                
+            listaIdades.add(casos.size());
+            somaCasosTodos += casos.size();
+        }
+        
+        if (somaCasosTodos == 0) {
+            for (Integer integer : listaIdades) {
+                listaIdadesPercentagem.add( (double) 0 );
+            }
+        } else {
+            for (Integer integer : listaIdades) {
+                listaIdadesPercentagem.add( (double) integer / somaCasosTodos*100 );
+            }
+        }
+        System.out.println(listaIdadesPercentagem);
+        return listaIdadesPercentagem;
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/casos/count")
     public int getAllCasosCount(
         @RequestParam(required = false) String estado,
