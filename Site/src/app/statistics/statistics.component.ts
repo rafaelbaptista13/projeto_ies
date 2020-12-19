@@ -13,6 +13,7 @@ declare const CanvasJS: any;
   styleUrls: ['./statistics.component.css']
 })
 export class StatisticsComponent implements OnInit {
+  //Declaração de variáveis
   casosAtivos: number;
   casosRecuperados: number;
   casosCuidadosIntensivos: number;
@@ -24,8 +25,8 @@ export class StatisticsComponent implements OnInit {
     'Suíça', 'Turca', 'Ucraniana', 'Argentina', 'Canadiana', 'Mexicana', 'Japonesa', 'Portuguesa'].sort();
   regioes = ['Norte', 'Lisboa e Vale do Tejo', 'Centro', 'Alentejo', 'Algarve', 'Açores', 'Madeira'];
   filterForm;
-  alturaMin: number;
 
+  //Inicialização com todos os filtros vazios
   constructor(private casosService: CasosService, private formBuilder: FormBuilder) {
     this.filterForm = this.formBuilder.group({
       idade_min: '',
@@ -41,7 +42,7 @@ export class StatisticsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    //Função para colapsar navbar
     (function($) {
       $(document).ready(function () {
         $('#sidebarCollapse').on('click', function () {
@@ -51,6 +52,7 @@ export class StatisticsComponent implements OnInit {
       })
     })(jQuery);
 
+    //Função para colapsar aba de filtros
     (function($) {
       $(document).ready(function () {
         $('#filterCollapse').on('click', function () {
@@ -59,8 +61,10 @@ export class StatisticsComponent implements OnInit {
       })
     })(jQuery);
 
-
+    //Chamada da função de criação de charts
     charts();
+
+    //Inicialização do valor das variáveis sem filtros, com chamada á API para obter os valores
     this.casosService.getNumeroCasos('ativos', '', '', '', '', '', '',
       '', '', '').subscribe(casosAtivos => this.casosAtivos = casosAtivos);
     this.casosService.getNumeroCasos('Recuperado', '', '', '', '', '', '',
@@ -73,9 +77,10 @@ export class StatisticsComponent implements OnInit {
       '', '', '').subscribe(casosInternados => this.casosInternados = casosInternados);
   }
 
+  //Função chamada quando é submetido um novo formulário de filtros
   onSubmit(filterData): void {
     console.log(filterData);
-
+    //Alteração do valor para o diferente tipo de casos, de acordo com os filtros inseridos
     this.casosService.getNumeroCasos('ativos', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
       filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
       subscribe(casosAtivos => this.casosAtivos = casosAtivos);
@@ -94,6 +99,7 @@ export class StatisticsComponent implements OnInit {
   }
 }
 
+//Função para especificar valores dos charts
 function charts() {
 
   // grafico todos os casos diarios
@@ -159,7 +165,7 @@ function charts() {
 });
   chart.render();
 
-  // Grafico Pie por idade
+  // Grafico Pie por faixa etaria
   var chart = new CanvasJS.Chart("agepiegraph", {
     exportEnabled: true,
     animationEnabled: true,
@@ -260,7 +266,7 @@ function charts() {
   });
   chart.render();
 
-  // Grafico por altura
+  // Grafico por peso
   var chart = new CanvasJS.Chart("weightpiegraph", {
     animationEnabled: true,
     data: [{

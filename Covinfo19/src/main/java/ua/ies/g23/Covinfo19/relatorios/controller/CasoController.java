@@ -127,8 +127,11 @@ public class CasoController {
         } else {
             strpesomax = "500";
         }
-
-
+        
+        if (estado == null) {
+            estado = "semestado";
+        }
+        
         List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
         List<Caso> casos = new ArrayList<Caso>();
         if (estado.equals("ativos")) {
@@ -142,7 +145,7 @@ public class CasoController {
         } else {
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso.getEstado_atual().equals(estado) || estado == null) {
+                if (caso.getEstado_atual().equals(estado) || estado.equals("semestado")) {
                     casos.add(caso);
                 }
             }

@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class DataUpdateApplication {
 
+  //Nome tópico e fila de troca de mensagens no rabbitMQ
   static final String topicExchangeName = "filaupdate-exchange";
 
   static final String queueName = "filaupdate";
@@ -34,13 +35,18 @@ public class DataUpdateApplication {
   }
 
   @Bean
-  SimpleMessageListenerContainer container(ConnectionFactory connectionFactory) {
+  SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
     SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
     container.setConnectionFactory(connectionFactory);
     container.setQueueNames(queueName);
+    container.setMessageListener(listenerAdapter);
     return container;
   }
 
+  @Bean
+  MessageListenerAdapter listenerAdapter(Receiver receiver) {
+    return new MessageListenerAdapter(receiver, "receiveMessage");
+  }
 
   public static void main(String[] args) throws InterruptedException {
     SpringApplication.run(DataUpdateApplication.class, args).close();

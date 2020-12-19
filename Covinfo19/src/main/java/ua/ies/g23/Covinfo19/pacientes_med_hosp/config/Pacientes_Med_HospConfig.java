@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+//Classe de configuração da base de dados responsável por armazenar Pacientes, Médicos e Hospitais
+
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(

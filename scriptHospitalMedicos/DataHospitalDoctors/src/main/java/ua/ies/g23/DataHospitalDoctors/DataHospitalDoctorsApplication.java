@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class DataHospitalDoctorsApplication {
 
+  //Nome tópico e fila utilizda para troca mensagens rabbitMQ
   static final String topicExchangeName = "filamedicospacientes-exchange";
-
   static final String queueName = "filamedicospacientes";
 
   @Bean
@@ -34,13 +34,18 @@ public class DataHospitalDoctorsApplication {
   }
 
   @Bean
-  SimpleMessageListenerContainer container(ConnectionFactory connectionFactory) {
+  SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
     SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
     container.setConnectionFactory(connectionFactory);
     container.setQueueNames(queueName);
+    container.setMessageListener(listenerAdapter);
     return container;
   }
 
+  @Bean
+  MessageListenerAdapter listenerAdapter(Receiver receiver) {
+    return new MessageListenerAdapter(receiver, "receiveMessage");
+  }
 
   public static void main(String[] args) throws InterruptedException {
     SpringApplication.run(DataHospitalDoctorsApplication.class, args).close();
