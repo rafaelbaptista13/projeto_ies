@@ -8,13 +8,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { HospitalComponent } from './hospital/hospital.component';
+
+import * as $ from 'jquery';
 
 @NgModule({
   declarations: [
     AppComponent,
     StatisticsComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    HospitalComponent
   ],
   imports: [
     BrowserModule,
