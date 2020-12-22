@@ -96,6 +96,201 @@ export class CasosService {
     return this.http.get<number[]>(url);
   }
 
+  getProbabilidadeGraficoRegiao(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
+                                alturaMax: any, pesoMin: any, pesoMax: any): Observable<number[]> {
+    let url = this.baseURL + 'casos/grafico/regiao?';
+
+    //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
+    if (idadeMin !== '' && idadeMin !== null) {
+      url += '&idademin=' + idadeMin;
+    }
+
+    if (idadeMax !== '' && idadeMax !== null) {
+      url += '&idademax=' + idadeMax;
+    }
+
+    if (genero !== '' && genero !== null) {
+      url += '&genero=' + genero;
+    }
+
+    if (regiao !== '' && regiao !== null) {
+      url += '&regiao=' + regiao;
+    }
+    if (nacionalidade !== '' && nacionalidade !== null) {
+      url += '&nacionalidade=' + nacionalidade;
+    }
+    if (alturaMax !== '' && alturaMax !== null) {
+      url += '&alturamax=' + alturaMax;
+    }
+    if (alturaMin !== '' && alturaMin !== null) {
+      url += '&alturamin=' + alturaMin;
+    }
+    if (pesoMax !== '' && pesoMax !== null) {
+      url += '&pesomax=' + pesoMax;
+    }
+    if (pesoMin !== '' && pesoMin !== null) {
+      url += '&pesomin=' + pesoMin;
+    }
+
+    return this.http.get<number[]>(url);
+  }
+
+
+  getProbabilidadeGraficoGenero(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
+                                alturaMax: any, pesoMin: any, pesoMax: any): Observable<number[]> {
+    let url = this.baseURL + 'casos/grafico/genero?';
+
+    //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
+    if (idadeMin !== '' && idadeMin !== null) {
+      url += '&idademin=' + idadeMin;
+    }
+
+    if (idadeMax !== '' && idadeMax !== null) {
+      url += '&idademax=' + idadeMax;
+    }
+
+    if (genero !== '' && genero !== null) {
+      url += '&genero=' + genero;
+    }
+
+    if (regiao !== '' && regiao !== null) {
+      url += '&regiao=' + regiao;
+    }
+    if (nacionalidade !== '' && nacionalidade !== null) {
+      url += '&nacionalidade=' + nacionalidade;
+    }
+    if (alturaMax !== '' && alturaMax !== null) {
+      url += '&alturamax=' + alturaMax;
+    }
+    if (alturaMin !== '' && alturaMin !== null) {
+      url += '&alturamin=' + alturaMin;
+    }
+    if (pesoMax !== '' && pesoMax !== null) {
+      url += '&pesomax=' + pesoMax;
+    }
+    if (pesoMin !== '' && pesoMin !== null) {
+      url += '&pesomin=' + pesoMin;
+    }
+
+    return this.http.get<number[]>(url);
+  }
+
+  getProbabilidadeGraficoAltura(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
+                                alturaMax: any, pesoMin: any, pesoMax: any): Observable<number[]> {
+    let url = this.baseURL + 'casos/grafico/altura?';
+
+    //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
+    if (idadeMin !== '' && idadeMin !== null) {
+      url += '&idademin=' + idadeMin;
+    }
+
+    if (idadeMax !== '' && idadeMax !== null) {
+      url += '&idademax=' + idadeMax;
+    }
+
+    if (genero !== '' && genero !== null) {
+      url += '&genero=' + genero;
+    }
+
+    if (regiao !== '' && regiao !== null) {
+      url += '&regiao=' + regiao;
+    }
+    if (nacionalidade !== '' && nacionalidade !== null) {
+      url += '&nacionalidade=' + nacionalidade;
+    }
+    if (alturaMax !== '' && alturaMax !== null) {
+      url += '&alturamax=' + alturaMax;
+    }
+    if (alturaMin !== '' && alturaMin !== null) {
+      url += '&alturamin=' + alturaMin;
+    }
+    if (pesoMax !== '' && pesoMax !== null) {
+      url += '&pesomax=' + pesoMax;
+    }
+    if (pesoMin !== '' && pesoMin !== null) {
+      url += '&pesomin=' + pesoMin;
+    }
+
+    return this.http.get<number[]>(url);
+  }
+
+  getProbabilidadeGraficoPeso(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
+                                alturaMax: any, pesoMin: any, pesoMax: any): Observable<number[]> {
+    let url = this.baseURL + 'casos/grafico/peso?';
+
+    //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
+    if (idadeMin !== '' && idadeMin !== null) {
+      url += '&idademin=' + idadeMin;
+    }
+
+    if (idadeMax !== '' && idadeMax !== null) {
+      url += '&idademax=' + idadeMax;
+    }
+
+    if (genero !== '' && genero !== null) {
+      url += '&genero=' + genero;
+    }
+
+    if (regiao !== '' && regiao !== null) {
+      url += '&regiao=' + regiao;
+    }
+    if (nacionalidade !== '' && nacionalidade !== null) {
+      url += '&nacionalidade=' + nacionalidade;
+    }
+    if (alturaMax !== '' && alturaMax !== null) {
+      url += '&alturamax=' + alturaMax;
+    }
+    if (alturaMin !== '' && alturaMin !== null) {
+      url += '&alturamin=' + alturaMin;
+    }
+    if (pesoMax !== '' && pesoMax !== null) {
+      url += '&pesomax=' + pesoMax;
+    }
+    if (pesoMin !== '' && pesoMin !== null) {
+      url += '&pesomin=' + pesoMin;
+    }
+
+    return this.http.get<number[]>(url);
+  }
+
+  getProbabilidadeGraficoCurvatura(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
+                              alturaMax: any, pesoMin: any, pesoMax: any): Observable<number[]> {
+    let url = this.baseURL + 'casos/grafico/curva_diaria?';
+
+    //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
+    if (idadeMin !== '' && idadeMin !== null) {
+      url += '&idademin=' + idadeMin;
+    }
+
+    if (idadeMax !== '' && idadeMax !== null) {
+      url += '&idademax=' + idadeMax;
+    }
+
+    if (genero !== '' && genero !== null) {
+      url += '&genero=' + genero;
+    }
+
+    if (regiao !== '' && regiao !== null) {
+      url += '&regiao=' + regiao;
+    }
+    if (nacionalidade !== '' && nacionalidade !== null) {
+      url += '&nacionalidade=' + nacionalidade;
+    }
+    if (alturaMax !== '' && alturaMax !== null) {
+      url += '&alturamax=' + alturaMax;
+    }
+    if (alturaMin !== '' && alturaMin !== null) {
+      url += '&alturamin=' + alturaMin;
+    }
+    if (pesoMax !== '' && pesoMax !== null) {
+      url += '&pesomax=' + pesoMax;
+    }
+    if (pesoMin !== '' && pesoMin !== null) {
+      url += '&pesomin=' + pesoMin;
+    }
+
+    return this.http.get<any>(url);
+  }
   /*
   getCasos(estado: string, idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
            alturaMax: any, pesoMin: any, pesoMax: any): Observable<any> {
