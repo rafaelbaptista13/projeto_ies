@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder} from '@angular/forms';
-import {CasosService} from "../casos.service";
+import { LoginService} from "../login.service";
 
 declare var jQuery: any;
 
@@ -12,6 +12,7 @@ declare var jQuery: any;
 })
 export class LoginComponent implements OnInit {
   loginForm;
+  logged = false;
 
   constructor(private loginService: LoginService, private formBuilder: FormBuilder ) {
     this.loginForm = this.formBuilder.group({
@@ -21,7 +22,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //Função para colapsar navbar
+    // Função para colapsar navbar
     (function($) {
       $(document).ready(function () {
         $('#sidebarCollapse').on('click', function () {
@@ -32,4 +33,11 @@ export class LoginComponent implements OnInit {
     })(jQuery);
   }
 
+  // Função chamada quando é submetido um novo formulário de filtros
+  onSubmit(loginData): void {
+    console.log(loginData);
+    // Alteração do valor para o diferente tipo de casos, de acordo com os filtros inseridos
+    this.loginService.LoginValidation(loginData.numero_medico, loginData.codigo_acesso).
+    subscribe(logged => this.logged = logged);
+  }
 }
