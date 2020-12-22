@@ -123,6 +123,7 @@ public class Runner implements CommandLineRunner {
 
       //Envio Mensagem Introdução do hospital
       rabbitTemplate.convertAndSend(DataHospitalDoctorsApplication.topicExchangeName, "filamedicospacientes", json.toString());
+      rabbitTemplate.convertAndSend(DataHospitalDoctorsApplication.topicExchangeName, "filamedicospacientes", json.toString());
     }
     Thread.sleep(2000);
 
