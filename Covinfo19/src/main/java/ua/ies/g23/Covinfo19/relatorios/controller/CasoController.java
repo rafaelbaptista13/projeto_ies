@@ -33,7 +33,9 @@ import ua.ies.g23.Covinfo19.relatorios.model.Relatorio_Paciente;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
 import ua.ies.g23.Covinfo19.relatorios.repository.CasoRepository;
 import ua.ies.g23.Covinfo19.relatorios.repository.Relatorio_PacienteRepository;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Medico;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Paciente;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.MedicoRepository;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.PacienteRepository;
 
 @RestController
@@ -45,6 +47,8 @@ public class CasoController {
     private PacienteRepository pacienteRepository;
     @Autowired
     private Relatorio_PacienteRepository relatorioRepository;
+    @Autowired
+    private MedicoRepository medicoRepository;
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/casos/grafico/curva_diaria")
@@ -885,9 +889,10 @@ public class CasoController {
         @RequestParam(required = false) Integer alturamin,
         @RequestParam(required = false) Integer alturamax,
         @RequestParam(required = false) Double pesomin,
-        @RequestParam(required = false) Double pesomax ) {
+        @RequestParam(required = false) Double pesomax,
+        @RequestParam(required = false) Long hospital ) {
 
-        if (estado == null && genero == null && idademin == null && idademax == null && concelho == null && regiao == null && nacionalidade == null && alturamin == null && alturamax == null && pesomin == null && pesomax == null ) {
+        if (estado == null && genero == null && idademin == null && idademax == null && concelho == null && regiao == null && nacionalidade == null && alturamin == null && alturamax == null && pesomin == null && pesomax == null && hospital == null ) {
             List<Caso> casos = CasoRepository.findAll();
             return casos.size();
         }
@@ -966,7 +971,21 @@ public class CasoController {
             estado = "semestado";
         }
         
-        List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
+        List<String> strmedicos = new ArrayList<String>();
+        List<Medico> medicos = new ArrayList<Medico>();
+        if (hospital != null) {
+            medicos = medicoRepository.findAllByFilters("%", hospital.toString(), "0", "200");
+            for (Medico m: medicos) {
+                strmedicos.add(String.valueOf(m.getNumero_medico()));
+            }
+        } 
+        
+        List<Paciente> pacientes;
+        if (medicos.size() > 0) {
+            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax, strmedicos);   
+        } else {
+            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
+        }
         List<Caso> casos = new ArrayList<Caso>();
         if (estado.equals("ativos")) {
             for (Paciente paciente : pacientes) {

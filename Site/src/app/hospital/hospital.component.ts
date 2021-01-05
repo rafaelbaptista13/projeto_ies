@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {HospitalService} from '../hospital.service';
 
 @Component({
   selector: 'app-hospital',
@@ -6,8 +8,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./hospital.component.css']
 })
 export class HospitalComponent implements OnInit {
-
-  constructor() { }
+  regioes = ['Norte', 'Lisboa e Vale do Tejo', 'Centro', 'Alentejo', 'Algarve', 'Açores', 'Madeira'];
+  filterForm: FormGroup;
+  hospitais: {};
+  constructor(private hospitalService: HospitalService) { }
 
   ngOnInit(): void {
     //Função para colapsar navbar
@@ -28,7 +32,22 @@ export class HospitalComponent implements OnInit {
         });
       })
     })(jQuery);
-
+    this.initForm();
   }
 
+  initForm(): void {
+    this.filterForm = new FormGroup(
+      {
+        nome: new FormControl(''),
+        regiao: new FormControl(''),
+        taxaocupacao_min: new FormControl(''),
+        taxaocupacao_max: new FormControl(''),
+      }
+    )
+  }
+
+  onSubmit(filterData): void {
+    this.hospitais = this.hospitalService.getHospitaisFilter(filterData.nome, filterData.regiao, filterData.taxaocupacao_max, filterData.taxaocupacao_min);
+    this.ngOnInit();
+  }
 }
