@@ -13,18 +13,11 @@ const httpOptions = {
 export class LoginService {
   // URL inicial da api
   private URL = 'http://localhost:8080/api/v1/loginValidation';
-
+  private httpOptions: { headers: HttpHeaders };
   constructor(private http: HttpClient) { }
 
   // Função que retorna se foi possivel dar login com os dados indicados
-  LoginValidation(numeroutente: any, codigoacesso: any): Observable<any> {
-
-    const loginInfo =
-      {
-        "numero_utente": numeroutente,
-        "codigo_acesso": codigoacesso
-      };
-
+  LoginValidation(loginInfo: any): Observable<any> {
     /*
     var logged = this.http.post(this.URL, loginInfo).toPromise().then((data: any) => {
       console.log(data);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { LoginService} from "../login.service";
 
 declare var jQuery: any;
@@ -11,16 +11,19 @@ declare var jQuery: any;
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  loginForm;
+  loginForm: FormGroup;
   logged = false;
 
   constructor(private loginService: LoginService, private formBuilder: FormBuilder ) {
-    this.loginForm = this.formBuilder.group({
-      codigo : '',
-      numero_medico: ''
-    });
+    this.initForm();
   }
 
+  initForm(): void{
+    this.loginForm = new FormGroup({
+      codigo: new FormControl('', [Validators.required]),
+      numero_medico: new FormControl('', [Validators.required])
+    });
+  }
   ngOnInit(): void {
     // Função para colapsar navbar
     (function($) {
@@ -29,15 +32,16 @@ export class LoginComponent implements OnInit {
           $('#sidebar').toggleClass('active');
           $(this).toggleClass('active');
         });
-      })
+      });
     })(jQuery);
   }
 
   // Função chamada quando é submetido um novo formulário de filtros
-  onSubmit(loginData): void {
-    console.log(loginData);
-    // Alteração do valor para o diferente tipo de casos, de acordo com os filtros inseridos
-    this.loginService.LoginValidation(loginData.numero_medico, loginData.codigo_acesso).
-    subscribe(logged => this.logged = logged);
+  onSubmit(): void {
+    if (this.loginForm.valid){
+      // Alteração do valor para o diferente tipo de casos, de acordo com os filtros inseridos
+      this.loginService.LoginValidation(this.loginForm.value).
+      subscribe(logged => this.logged = logged);
+    }
   }
 }
