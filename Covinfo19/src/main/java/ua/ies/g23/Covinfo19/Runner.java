@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class Runner implements CommandLineRunner {
 
-  private final Receiver receiver;
+  private final ReceiverGeracaoDados receiver;
 
-  public Runner(Receiver receiver) {
+  public Runner(ReceiverGeracaoDados receiver) {
     this.receiver = receiver;
   }
 

@@ -9,6 +9,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,23 +27,22 @@ import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.HospitalRepository;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.MedicoRepository;
 
-
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/private")
 public class MedicoController {
     @Autowired
     private MedicoRepository medicoRepository;
 
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @GetMapping("/medicos")
-    public List<Medico> getAllMedicos(
-        @RequestParam(required = false) String nome,
-        @RequestParam(required = false) Integer hospital_id,
-        @RequestParam(required = false) Integer idademin,
-        @RequestParam(required = false) Integer idademax ) {
-        if ( nome == null && hospital_id == null && idademin == null && idademax == null) {
+    public List<Medico> getAllMedicos(@RequestParam(required = false) String nome,
+            @RequestParam(required = false) Integer hospital_id, @RequestParam(required = false) Integer idademin,
+            @RequestParam(required = false) Integer idademax) {
+        if (nome == null && hospital_id == null && idademin == null && idademax == null) {
             return medicoRepository.findAll();
         }
-        
+
         String strnome = "";
         if (nome != null) {
             strnome = nome + "%";
@@ -75,15 +76,17 @@ public class MedicoController {
 
     @GetMapping("/medicos/{id}")
     public ResponseEntity<Medico> getMedicoById(@PathVariable(value = "id") Long MedicoId)
-        throws ResourceNotFoundException {
+            throws ResourceNotFoundException {
         Medico Medico = medicoRepository.findById(MedicoId)
-          .orElseThrow(() -> new ResourceNotFoundException("Medico not found for this id :: " + MedicoId));
+                .orElseThrow(() -> new ResourceNotFoundException("Medico not found for this id :: " + MedicoId));
         return ResponseEntity.ok().body(Medico);
     }
-    
+
     @PostMapping("/medicos")
-    public Medico createMedico(@Valid @RequestBody Medico Medico) {
-        return medicoRepository.save(Medico);
+    @Transactional(rollbackFor = Exception.class)
+    public Medico createMedico(@Valid @RequestBody Medico medico) {
+        medico.setCodigo_acesso(bCryptPasswordEncoder.encode(medico.getCodigo_acesso()));
+        return medicoRepository.save(medico);
     }
 
     @PutMapping("/medicos/{id}")
@@ -93,7 +96,7 @@ public class MedicoController {
         .orElseThrow(() -> new ResourceNotFoundException("Medico not found for this id :: " + MedicoId));
 
         Medico.setNome(MedicoDetails.getNome());
-        Medico.setCodigo_acesso(MedicoDetails.getCodigo_acesso());
+        Medico.setCodigo_acesso(bCryptPasswordEncoder.encode(MedicoDetails.getCodigo_acesso()));
         Medico.setIdade(MedicoDetails.getIdade());
         Medico.setHospital(MedicoDetails.getHospital());
         final Medico updatedMedico = medicoRepository.save(Medico);

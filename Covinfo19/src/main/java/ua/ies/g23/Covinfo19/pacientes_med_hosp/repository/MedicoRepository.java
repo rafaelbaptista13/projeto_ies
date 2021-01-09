@@ -15,6 +15,8 @@ public interface MedicoRepository extends JpaRepository<Medico, Long>{
     //Seleção de todos os médicos através de filtros pelos seus campos
     @Query(value = "Select * from medicos where nome like :strnome and hospital_id like :strhospital_id and idade between :stridademin and :stridademax", nativeQuery = true)
 	List<Medico> findAllByFilters(@Param("strnome") String strnome,@Param("strhospital_id") String strhospital_id,@Param("stridademin") String stridademin,@Param("stridademax") String stridademax);
-	
+
+    @Query(value = "Select * from medicos where numero_medico like :numeromedico", nativeQuery = true)
+    Medico findByNumeroMedico(@Param("numeromedico") String numeromedico);
 
 }

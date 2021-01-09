@@ -39,7 +39,7 @@ public class CasoController {
     private PacienteRepository pacienteRepository;
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("/casos/count")
+    @GetMapping("/public/casos/count")
     public int getAllCasosCount(
         @RequestParam(required = false) String estado,
         @RequestParam(required = false) String genero,
@@ -155,7 +155,7 @@ public class CasoController {
     }
 
     
-    @GetMapping("/casos")
+    @GetMapping("/public/casos")
     public List<Caso> getAllCasos(
         @RequestParam(required = false) String estado,
         @RequestParam(required = false) String genero,
@@ -257,7 +257,7 @@ public class CasoController {
     }
     
 
-    @GetMapping("/casos/{id}")
+    @GetMapping("/public/casos/{id}")
     public ResponseEntity<Caso> getCasoById(@PathVariable(value = "id") Long CasoId)
         throws ResourceNotFoundException {
         Caso Caso = CasoRepository.findById(CasoId)
@@ -266,13 +266,13 @@ public class CasoController {
         return ResponseEntity.ok().body(Caso);
     }
 
-    @PostMapping("/casos")
+    @PostMapping("/private/casos")
     public Caso createCaso(@Valid @RequestBody Caso caso)
             throws ResourceNotFoundException {
         return CasoRepository.save(caso);
     }
 
-    @PutMapping("/casos/{id}")
+    @PutMapping("/private/casos/{id}")
     public ResponseEntity<Caso> updateCaso(@PathVariable(value = "id") Long CasoID,
             @Valid @RequestBody Caso CasoDetails) throws ResourceNotFoundException {
 
@@ -285,7 +285,7 @@ public class CasoController {
             return ResponseEntity.ok(updatedCaso);
     }
 
-    @DeleteMapping("/casos/{id}")
+    @DeleteMapping("/private/casos/{id}")
     public Map<String, Boolean> deleteCaso(@PathVariable(value = "id") Long CasoID) 
             throws ResourceNotFoundException, ParseException {
 
