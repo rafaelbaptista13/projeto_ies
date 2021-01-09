@@ -33,6 +33,7 @@ export class HospitalComponent implements OnInit {
       })
     })(jQuery);
     this.initForm();
+    this.hospitais = this.hospitalService.getHospitaisFilter('','','','');
   }
 
   initForm(): void {
@@ -47,7 +48,7 @@ export class HospitalComponent implements OnInit {
   }
 
   onSubmit(filterData): void {
-    this.hospitais = this.hospitalService.getHospitaisFilter(filterData.nome, filterData.regiao, filterData.taxaocupacao_max, filterData.taxaocupacao_min);
-    this.ngOnInit();
+    this.hospitais = this.hospitalService.getHospitaisFilter(filterData.nome, filterData.regiao, filterData.taxaocupacao_min, filterData.taxaocupacao_max);
+    this.initForm();
   }
 }
