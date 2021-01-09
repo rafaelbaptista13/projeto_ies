@@ -124,10 +124,10 @@ public class Runner implements CommandLineRunner {
       //Envio Mensagem Introdução do hospital
       rabbitTemplate.convertAndSend(DataHospitalDoctorsApplication.topicExchangeName, "filamedicospacientes", json.toString());
     }
-    Thread.sleep(2000);
+    Thread.sleep(10000);
 
     //HTTP Request para obtenção de todos os hospitais inseridos na aplicação (Hospitais enviados anteriormente)
-    HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8080/api/v1/hospitais")).setHeader("User-Agent", "Java 11 HttpClient Bot").build();
+    HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8080/api/v1/public/hospitais")).setHeader("User-Agent", "Java 11 HttpClient Bot").build();
 
     HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     

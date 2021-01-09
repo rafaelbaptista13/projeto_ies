@@ -54,7 +54,7 @@ export class CasosService {
       url += '&pesomin=' + pesoMin;
     }
 
-    return this.http.get(url);
+    return this.http.get(url, httpOptions);
   }
 
   /*

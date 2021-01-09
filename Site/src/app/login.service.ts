@@ -30,7 +30,7 @@ export class LoginService {
 
     // return logged;
 
-    return this.http.post(this.URL, loginInfo);
+    return this.http.post(this.URL, loginInfo, httpOptions);
   }
 
 }
