@@ -28,6 +28,16 @@ export class HospitalService {
     if (nome !== '' && nome !== null) {
       url += '&nome=' + nome;
     }
+    if (taxaocupacao_min === '' || taxaocupacao_min === null) {
+      taxaocupacao_min = -1;
+    } else {
+      taxaocupacao_min = parseFloat(taxaocupacao_min);
+    }
+    if (taxaocupacao_max === '' || taxaocupacao_max === null) {
+      taxaocupacao_max = 101;
+    } else {
+      taxaocupacao_max = parseFloat(taxaocupacao_max);
+    }
     let retorno = {};
     let hospitais;
     this.http.get(url).subscribe(result => {hospitais = result;
@@ -37,7 +47,12 @@ export class HospitalService {
         let urlint = this.baseURL + 'casos/count?estado=Internado';
         urlint += '&hospital=' + element.id;
         this.http.get(urlci).subscribe(result1 => {
-          this.http.get(urlint).subscribe(result2 => {retorno[element.nome] = [result1, result2, (element.numero_camas_ocupadas / element.numero_camas) * 100];})
+          this.http.get(urlint).subscribe(result2 => {
+            let taxaocupacao: number = (element.numero_camas_ocupadas / element.numero_camas) * 100;
+            if (taxaocupacao_min < taxaocupacao && taxaocupacao < taxaocupacao_max) {
+              retorno[element.nome] = [result1, result2, (element.numero_camas_ocupadas / element.numero_camas) * 100];
+            }
+          })
         })
       } )
     });
