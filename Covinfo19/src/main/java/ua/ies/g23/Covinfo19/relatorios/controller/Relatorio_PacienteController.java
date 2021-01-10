@@ -23,7 +23,7 @@ import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
 import ua.ies.g23.Covinfo19.relatorios.repository.Relatorio_PacienteRepository;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/private")
 public class Relatorio_PacienteController {
     @Autowired
     private Relatorio_PacienteRepository relatorio_PacienteRepository;

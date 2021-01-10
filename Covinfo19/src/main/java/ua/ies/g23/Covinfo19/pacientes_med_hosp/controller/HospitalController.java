@@ -29,9 +29,9 @@ import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.HospitalRepository;
 public class HospitalController {
     @Autowired
     private HospitalRepository hospitalRepository;
-    
+
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("/hospitais")
+    @GetMapping("/public/hospitais")
     public List<Hospital> getAllHospitals(
         @RequestParam(required = false) String nome,
         @RequestParam(required = false) String concelho,
@@ -96,7 +96,7 @@ public class HospitalController {
         return hospitalRepository.findAllFilters(strnome, strconcelho, strregiao, strnumero_camasmin, strnumero_camasmax, strnumero_camas_ocupadasmin, strnumero_camas_ocupadasmax);
     }
 
-    @GetMapping("/hospitais/{id}")
+    @GetMapping("/public/hospitais/{id}")
     public ResponseEntity<Hospital> getHospitalById(@PathVariable(value = "id") Long hospitalId)
         throws ResourceNotFoundException {
         Hospital hospital = hospitalRepository.findById(hospitalId)
@@ -104,12 +104,12 @@ public class HospitalController {
         return ResponseEntity.ok().body(hospital);
     }
     
-    @PostMapping("/hospitais")
+    @PostMapping("/private/hospitais")
     public Hospital createHospital(@Valid @RequestBody Hospital hospital) {
         return hospitalRepository.save(hospital);
     }
 
-    @PutMapping("/hospitais/{id}")
+    @PutMapping("/private/hospitais/{id}")
     public ResponseEntity<Hospital> updateHospital(@PathVariable(value = "id") Long hospitalId,
          @Valid @RequestBody Hospital hospitalDetails) throws ResourceNotFoundException {
         Hospital hospital = hospitalRepository.findById(hospitalId)
@@ -124,7 +124,7 @@ public class HospitalController {
         return ResponseEntity.ok(updatedHospital);
     }
 
-    @DeleteMapping("/hospitais/{id}")
+    @DeleteMapping("/private/hospitais/{id}")
     public Map<String, Boolean> deleteHospital(@PathVariable(value = "id") Long hospitalId)
          throws ResourceNotFoundException {
         Hospital hospital = hospitalRepository.findById(hospitalId)

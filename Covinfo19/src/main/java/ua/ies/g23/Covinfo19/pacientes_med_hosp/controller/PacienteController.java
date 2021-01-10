@@ -24,7 +24,7 @@ import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.PacienteRepository;
 
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/private")
 public class PacienteController {
     @Autowired
     private PacienteRepository pacienteRepository;

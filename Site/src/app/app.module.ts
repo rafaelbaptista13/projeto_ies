@@ -10,13 +10,15 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HospitalComponent } from './hospital/hospital.component';
 
 import * as $ from 'jquery';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     StatisticsComponent,
     HomeComponent,
-    HospitalComponent
+    HospitalComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
