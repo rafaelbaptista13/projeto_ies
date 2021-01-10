@@ -13,13 +13,14 @@ import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Paciente;
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente, Long>{
     
-    /*
-    //@Query(value = "Select * from demo.pacientes where :strgenero :stridade :strconcelho :strregiao :strnacionalidade :straltura :strpeso", nativeQuery = true)
-    @Query(value = "Select * from pacientes", nativeQuery = true)
-    List<Paciente> findAllFilters(@Param("strgenero") String strgenero,@Param("stridade") String stridade,@Param("strconcelho") String strconcelho,@Param("strregiao") String strregiao,
-            @Param("strnacionalidade") String strnacionalidade,@Param("straltura") String straltura,@Param("strpeso") String strpeso);
-          
-    @Query(value = "Select * from pacientes", nativeQuery = true)
-    List<Paciente> findAllF();
-    */
+    //Seleção de pacientes através filtros por todos os seus campos
+    @Query(value = "Select * from pacientes where genero like :strgenero and idade between :stridademin and :stridademax and concelho like :strconcelho and regiao like :strregiao and nacionalidade like :strnacionalidade and altura between :stralturamin and :stralturamax and peso between :strpesomin and :strpesomax", nativeQuery = true)
+    List<Paciente> findAllFilters(@Param("strgenero") String strgenero,@Param("stridademin") String stridademin, @Param("stridademax") String stridademax ,@Param("strconcelho") String strconcelho,@Param("strregiao") String strregiao,
+            @Param("strnacionalidade") String strnacionalidade,@Param("stralturamin") String stralturamin,@Param("stralturamax") String stralturamax,@Param("strpesomin") String strpesomin,@Param("strpesomax") String strpesomax);
+    
+            //Seleção de pacientes através filtros por todos os seus campos
+    @Query(value = "Select * from pacientes where genero like :strgenero and idade between :stridademin and :stridademax and concelho like :strconcelho and regiao like :strregiao and nacionalidade like :strnacionalidade and altura between :stralturamin and :stralturamax and peso between :strpesomin and :strpesomax and medico_numero_medico in (:strmedico) ", nativeQuery = true)
+    List<Paciente> findAllFilters(@Param("strgenero") String strgenero,@Param("stridademin") String stridademin, @Param("stridademax") String stridademax ,@Param("strconcelho") String strconcelho,@Param("strregiao") String strregiao,
+            @Param("strnacionalidade") String strnacionalidade,@Param("stralturamin") String stralturamin,@Param("stralturamax") String stralturamax,@Param("strpesomin") String strpesomin,@Param("strpesomax") String strpesomax,@Param("strmedico") List<String> strmedico);
+    
 }

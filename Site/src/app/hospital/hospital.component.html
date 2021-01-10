@@ -1,0 +1,103 @@
+<div class="wrapper">
+  <!-- Sidebar Holder -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <h3>Covinfo</h3>
+    </div>
+
+    <ul class="list-unstyled components">
+      <li>
+        <a routerLink="/home" >Home</a>
+      </li>
+      <li>
+        <a routerLink="/statistics">Estatística</a>
+      </li>
+      <li class="active">
+        <a routerLink="/hospital" >Hospitais</a>
+      </li>
+      <li>
+        <a href="about.html">Sobre nós</a>
+      </li>
+      <li>
+        <a routerLink="/login">Área profissionais de saúde</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Page Content Holder -->
+  <div id="content">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+
+        <button type="button" id="sidebarCollapse" class="navbar-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <button class="search" id="filterCollapse">Search<i class="fas fa-search"></i></button>
+
+
+      </div>
+    </nav>
+
+    <div class="filters" id="filters" style="display: none">
+      <h2 class="filter_title">Filters</h2>
+      <form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)">
+        <div class="row">
+          <div class="col-4">
+            <h5 class="nome_title">Nome</h5>
+            <div class="nome_div">
+              <input id="nome" formControlName="nome">
+            </div>
+          </div>
+          <div class="col-4">
+            <h5 class="regiao_title">Região</h5>
+            <div class="regiao_div">
+              <select name="regiao_option" id="r_options" formControlName="regiao">
+                <option hidden disabled selected value>Selecionar Opção</option>
+                <option value=""></option>
+                <option *ngFor="let regiao of regioes" value="{{regiao}}">{{regiao}}</option>
+                <!-- NGFOR das regioes -->
+              </select>
+            </div>
+          </div>
+          <div class="col-4">
+            <h5 class="taxaocupacao_title">Taxa Ocupação</h5>
+            <div class="taxaocupacao_div">
+              <input placeholder="min" min="0" id="taxaocupacao_min" formControlName="taxaocupacao_min" type="number">
+              <input placeholder="max" min="0" id="taxaocupacao_max" formControlName="taxaocupacao_max" type="number">
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-light" type="submit">Aplicar</button>
+      </form>
+    </div>
+
+    <div *ngIf="(hospitais | json) != ('{}'); then thenBlock4 else elseBlock4"> </div>
+    <ng-template #thenBlock4>
+      <table class="table table-borderless">
+        <thead>
+        <tr>
+          <th scope="col">Nome</th>
+          <th scope="col">Internados</th>
+          <th scope="col">Cuidados Intensivos</th>
+          <th scope="col">Taxa Ocupação</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of hospitais | keyvalue">
+          <th scope="row">{{ hospitais[item.key][0] }}</th>
+          <td>{{ hospitais[item.key][1] }}</td>
+          <td>{{ hospitais[item.key][2] }}</td>
+          <td>{{ hospitais[item.key][3] }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </ng-template>
+    <ng-template #elseBlock4>
+      <p>Não foram encontrados hospitais.</p>
+    </ng-template>
+  </div>
+</div>
