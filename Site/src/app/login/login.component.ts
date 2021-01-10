@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { LoginService} from "../login.service";
+import {Router} from '@angular/router';
 
 declare var jQuery: any;
 
@@ -14,13 +15,13 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   logged = false;
 
-  constructor(private loginService: LoginService, private formBuilder: FormBuilder ) {
-    this.initForm();
+  constructor(private loginService: LoginService, private formBuilder: FormBuilder, private router: Router ) {
+
   }
 
   initForm(): void{
     this.loginForm = new FormGroup({
-      codigo: new FormControl('', [Validators.required]),
+      codigo_acesso: new FormControl('', [Validators.required]),
       numero_medico: new FormControl('', [Validators.required])
     });
   }
@@ -34,6 +35,7 @@ export class LoginComponent implements OnInit {
         });
       });
     })(jQuery);
+    this.initForm();
   }
 
   // Função chamada quando é submetido um novo formulário de filtros
@@ -41,7 +43,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid){
       // Alteração do valor para o diferente tipo de casos, de acordo com os filtros inseridos
       this.loginService.LoginValidation(this.loginForm.value).
-      subscribe(logged => this.logged = logged);
+      subscribe(logged => {console.log(logged); this.router.navigate(['/home']);  }, error => { this.ngOnInit(); } );
     }
   }
 }

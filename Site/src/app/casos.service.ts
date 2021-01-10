@@ -20,7 +20,7 @@ export class CasosService {
   //Função que retorna numero de casos de acordo com os filtros (ou sem filtros caso nao sejam especificados)
   getNumeroCasos(estado: string, idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
                  alturaMax: any, pesoMin: any, pesoMax: any): Observable<any> {
-    let url = this.baseURL + 'casos/count?estado=' + estado;
+    let url = this.baseURL + 'public/casos/count?estado=' + estado;
 
     //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
     if (idadeMin !== '' && idadeMin !== null) {
@@ -59,7 +59,7 @@ export class CasosService {
 
   getProbabilidadeGraficoIdades(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
                                 alturaMax: any, pesoMin: any, pesoMax: any): Observable<number[]> {
-    let url = this.baseURL + 'casos/grafico/idade?';
+    let url = this.baseURL + 'public/casos/grafico/idade?';
 
     //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
     if (idadeMin !== '' && idadeMin !== null) {
@@ -98,7 +98,7 @@ export class CasosService {
 
   getProbabilidadeGraficoRegiao(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
                                 alturaMax: any, pesoMin: any, pesoMax: any): Observable<number[]> {
-    let url = this.baseURL + 'casos/grafico/regiao?';
+    let url = this.baseURL + 'public/casos/grafico/regiao?';
 
     //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
     if (idadeMin !== '' && idadeMin !== null) {
@@ -138,7 +138,7 @@ export class CasosService {
 
   getProbabilidadeGraficoGenero(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
                                 alturaMax: any, pesoMin: any, pesoMax: any): Observable<number[]> {
-    let url = this.baseURL + 'casos/grafico/genero?';
+    let url = this.baseURL + 'public/casos/grafico/genero?';
 
     //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
     if (idadeMin !== '' && idadeMin !== null) {
@@ -177,7 +177,7 @@ export class CasosService {
 
   getProbabilidadeGraficoAltura(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
                                 alturaMax: any, pesoMin: any, pesoMax: any): Observable<number[]> {
-    let url = this.baseURL + 'casos/grafico/altura?';
+    let url = this.baseURL + 'public/casos/grafico/altura?';
 
     //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
     if (idadeMin !== '' && idadeMin !== null) {
@@ -216,7 +216,7 @@ export class CasosService {
 
   getProbabilidadeGraficoPeso(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
                                 alturaMax: any, pesoMin: any, pesoMax: any): Observable<number[]> {
-    let url = this.baseURL + 'casos/grafico/peso?';
+    let url = this.baseURL + 'public/casos/grafico/peso?';
 
     //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
     if (idadeMin !== '' && idadeMin !== null) {
@@ -255,7 +255,7 @@ export class CasosService {
 
   getProbabilidadeGraficoCurvatura(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
                               alturaMax: any, pesoMin: any, pesoMax: any): Observable<number[]> {
-    let url = this.baseURL + 'casos/grafico/curva_diaria?';
+    let url = this.baseURL + 'public/casos/grafico/curva_diaria?';
 
     //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
     if (idadeMin !== '' && idadeMin !== null) {

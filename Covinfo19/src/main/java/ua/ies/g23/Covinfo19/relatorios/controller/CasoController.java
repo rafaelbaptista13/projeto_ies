@@ -51,7 +51,7 @@ public class CasoController {
     private MedicoRepository medicoRepository;
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("/casos/grafico/curva_diaria")
+    @GetMapping("/public/casos/grafico/curva_diaria")
     public Map<String,Integer> getAllCasosGraficoCurvaEvolucao(
         @RequestParam(required = false) String genero,
         @RequestParam(required = false) Integer idademax,
@@ -222,7 +222,7 @@ public class CasoController {
 
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("/casos/grafico/peso")
+    @GetMapping("/public/casos/grafico/peso")
     public List<Double> getAllCasosGraficoPeso(
         @RequestParam(required = false) String genero,
         @RequestParam(required = false) Integer idademax,
@@ -354,7 +354,7 @@ public class CasoController {
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("/casos/grafico/altura")
+    @GetMapping("/public/casos/grafico/altura")
     public List<Double> getAllCasosGraficoAltura(
         @RequestParam(required = false) String genero,
         @RequestParam(required = false) Integer idademax,
@@ -485,7 +485,7 @@ public class CasoController {
 
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("/casos/grafico/genero")
+    @GetMapping("/public/casos/grafico/genero")
     public List<Double> getAllCasosGraficoGenero(
         @RequestParam(required = false) String genero,
         @RequestParam(required = false) Integer idademax,
@@ -615,7 +615,7 @@ public class CasoController {
 
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("/casos/grafico/regiao")
+    @GetMapping("/public/casos/grafico/regiao")
     public List<Double> getAllCasosGraficoRegiao(
         @RequestParam(required = false) String genero,
         @RequestParam(required = false) Integer idademax,
@@ -747,9 +747,9 @@ public class CasoController {
         System.out.println(listaCasosRegioesPercentagem);
         return listaCasosRegioesPercentagem;
     }
-
+    
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("/casos/grafico/idade")
+    @GetMapping("/public/casos/grafico/idade")
     public List<Double> getAllCasosGraficoIdade(
         @RequestParam(required = false) String genero,
         @RequestParam(required = false) Integer idademax,
@@ -761,7 +761,7 @@ public class CasoController {
         @RequestParam(required = false) Integer alturamax,
         @RequestParam(required = false) Double pesomin,
         @RequestParam(required = false) Double pesomax ) {
-        
+        System.out.println("Estou aqui\n\n");
         List<Integer> listaIdades = new ArrayList<Integer>();
         List<Double> listaIdadesPercentagem = new ArrayList<Double>();
         int somaCasosTodos = 0;

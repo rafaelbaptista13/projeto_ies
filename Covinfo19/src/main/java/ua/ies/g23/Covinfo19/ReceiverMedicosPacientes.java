@@ -3,6 +3,7 @@ package ua.ies.g23.Covinfo19;
 import java.util.concurrent.CountDownLatch;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
@@ -25,6 +26,7 @@ public class ReceiverMedicosPacientes {
 
   private CountDownLatch latch = new CountDownLatch(1);
 
+  private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
   //Receiver utilizado na recepção das mensagens enviadãs pelo script inserção hospitais e médicos.
   public void receiveMessage(String message) throws JSONException, ResourceNotFoundException {
@@ -46,7 +48,7 @@ public class ReceiverMedicosPacientes {
     } else {
       //Criação novo médico e atribuição dos valores aos seus campos.
       Medico medico = new Medico();
-      medico.setCodigo_acesso(json.getString("codigo"));
+      medico.setCodigo_acesso(bCryptPasswordEncoder.encode(json.getString("codigo")));
       medico.setIdade(json.getInt("idade"));
       medico.setNome(json.getString("nome"));
       Long id = json.getLong("hospital");

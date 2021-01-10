@@ -33,7 +33,7 @@ public class MedicoController {
     @Autowired
     private MedicoRepository medicoRepository;
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @GetMapping("/medicos")
     public List<Medico> getAllMedicos(@RequestParam(required = false) String nome,

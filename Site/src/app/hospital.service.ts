@@ -20,7 +20,7 @@ export class HospitalService {
   constructor(private http: HttpClient, private casosService: CasosService) { }
 
   getHospitaisFilter(nome: string, regiao: string, taxaocupacao_min: any, taxaocupacao_max: any): any {
-    let url = this.baseURL + 'hospitais?';
+    let url = this.baseURL + 'public/hospitais?';
 
     if (regiao !== '' && regiao !== null) {
       url += '&regiao=' + regiao;
@@ -42,9 +42,9 @@ export class HospitalService {
     let hospitais;
     this.http.get(url).subscribe(result => {hospitais = result;
       hospitais.forEach((element) => {
-        let urlci = this.baseURL + 'casos/count?estado=Cuidados Intensivos';
+        let urlci = this.baseURL + 'public/casos/count?estado=Cuidados Intensivos';
         urlci += '&hospital=' + element.id;
-        let urlint = this.baseURL + 'casos/count?estado=Internado';
+        let urlint = this.baseURL + 'public/casos/count?estado=Internado';
         urlint += '&hospital=' + element.id;
         this.http.get(urlci).subscribe(result1 => {
           this.http.get(urlint).subscribe(result2 => {

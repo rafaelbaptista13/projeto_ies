@@ -18,21 +18,22 @@ import ua.ies.g23.Covinfo19.SecurityConstants;
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public WebSecurity(UserDetailsService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public WebSecurity(UserDetailsServiceImpl userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userDetailsService = userService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http.cors().and().authorizeRequests()
-                .antMatchers(HttpMethod.GET, SecurityConstants.PUBLIC_URL+"/*").permitAll()
-                .antMatchers(HttpMethod.POST, SecurityConstants.PUBLIC_URL+"/*").permitAll()
-                .antMatchers(HttpMethod.PUT, SecurityConstants.PUBLIC_URL+"/*").permitAll()
-                .antMatchers(HttpMethod.DELETE, SecurityConstants.PUBLIC_URL+"/*").permitAll()
+                .antMatchers(HttpMethod.GET, SecurityConstants.PUBLIC_URL+"/**").permitAll()
+                .antMatchers(HttpMethod.POST, SecurityConstants.PUBLIC_URL+"/**").permitAll()
+                .antMatchers(HttpMethod.PUT, SecurityConstants.PUBLIC_URL+"/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, SecurityConstants.PUBLIC_URL+"/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
