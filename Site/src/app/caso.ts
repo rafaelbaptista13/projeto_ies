@@ -1,3 +1,4 @@
+//Model Caso
 export class Caso {
   id: number;
   estadoAtual: string;

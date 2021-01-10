@@ -11,15 +11,18 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @SpringBootApplication
 public class Covinfo19Application {
 
+  //Nomes tópicos mensagens transmitidas através RabbitMQ
   static final String topicExchangeName = "filagerar-exchange";
   static final String topicExchangeName2 = "filaupdate-exchange";
   static final String topicExchangeName3 = "filamedicospacientes-exchange";
   
+  //Nomes filas mensagens transmitidas através RabbitMQ
   static final String queueName = "filagerar";
   static final String queueName2 = "filaupdate";
   static final String queueName3 = "filamedicospacientes";
@@ -98,7 +101,7 @@ public class Covinfo19Application {
   }
 
   @Bean
-  MessageListenerAdapter listenerAdapter(Receiver receiver) {
+  MessageListenerAdapter listenerAdapter(ReceiverGeracaoDados receiver) {
     return new MessageListenerAdapter(receiver, "receiveMessage");
   }
 
@@ -111,6 +114,11 @@ public class Covinfo19Application {
   @Bean
   MessageListenerAdapter listenerAdapter3(ReceiverMedicosPacientes receiver) {
     return new MessageListenerAdapter(receiver, "receiveMessage");
+  }
+
+  @Bean
+  public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 
   public static void main(String[] args) throws InterruptedException {

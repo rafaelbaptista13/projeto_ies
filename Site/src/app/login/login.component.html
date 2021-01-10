@@ -10,10 +10,10 @@
         <a routerLink="/home" >Home</a>
       </li>
       <li>
-        <a href="info.html" >Info</a>
+        <a routerLink="/statistics">Estatística</a>
       </li>
       <li>
-        <a routerLink="/statistics">Estatística</a>
+        <a href="/hospital" >Hospitals</a>
       </li>
       <li>
         <a href="about.html">Sobre nós</a>
@@ -35,9 +35,6 @@
           <span></span>
           <span></span>
         </button>
-        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <i class="fas fa-align-justify"></i>
-        </button>
 
       </div>
     </nav>
@@ -48,20 +45,14 @@
         <div class="card card-signin my-5">
           <div class="card-body">
             <h5 class="card-title text-center">Log In</h5>
-            <form class="form-signin" action="index_logged.html" method="GET">
+            <form class="form-signin" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
               <div class="form-label-group">
-                <input type="text" id="inputCode" class="form-control" placeholder="Codigo de acesso" required autofocus>
+                <input type="text" id="inputNumero" formControlName="numero_medico" class="form-control" placeholder="Numero médico" required>
+                <label for="inputNumero">Numero Médico</label>
+              </div>
+              <div class="form-label-group">
+                <input type="password" id="inputCode" formControlName="codigo_acesso" class="form-control" placeholder="Codigo de acesso" required autofocus>
                 <label for="inputCode">Código de acesso</label>
-              </div>
-
-              <div class="form-label-group">
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                <label for="inputPassword">Palavra-passe</label>
-              </div>
-
-              <div class="custom-control custom-checkbox mb-3">
-                <input type="checkbox" class="custom-control-input" id="customCheck1">
-                <label class="custom-control-label" for="customCheck1">Lembrar palavra-passe</label>
               </div>
               <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Log in</button>
             </form>
@@ -72,14 +63,5 @@
 
   </div>
 </div>
-
-<script type="text/javascript">
-  $(document).ready(function () {
-    $('#sidebarCollapse').on('click', function () {
-      $('#sidebar').toggleClass('active');
-      $(this).toggleClass('active');
-    });
-  });
-</script>
 
 <router-outlet></router-outlet>
