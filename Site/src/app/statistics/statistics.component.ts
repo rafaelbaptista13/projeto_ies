@@ -101,7 +101,6 @@ export class StatisticsComponent implements OnInit {
 
   //Função chamada quando é submetido um novo formulário de filtros
   onSubmit(filterData): void {
-    console.log(filterData);
     //Alteração do valor para o diferente tipo de casos, de acordo com os filtros inseridos
     this.casosService.getProbabilidadeGraficoIdades(filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
       filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
