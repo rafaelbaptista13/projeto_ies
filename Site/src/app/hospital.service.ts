@@ -21,7 +21,6 @@ export class HospitalService {
 
   getHospitaisFilter(nome: string, regiao: string, taxaocupacao_min: any, taxaocupacao_max: any): any {
     let url = this.baseURL + 'public/hospitais?';
-
     if (regiao !== '' && regiao !== null) {
       url += '&regiao=' + regiao;
     }
@@ -50,13 +49,12 @@ export class HospitalService {
           this.http.get(urlint).subscribe(result2 => {
             let taxaocupacao: number = (element.numero_camas_ocupadas / element.numero_camas) * 100;
             if (taxaocupacao_min < taxaocupacao && taxaocupacao < taxaocupacao_max) {
-              retorno[element.nome] = [result1, result2, (element.numero_camas_ocupadas / element.numero_camas) * 100];
+              retorno[element.id] = [element.nome, result1, result2, ((element.numero_camas_ocupadas / element.numero_camas) * 100).toFixed(2)];
             }
           })
         })
       } )
     });
-    console.log(retorno);
     return retorno;
   }
 }
