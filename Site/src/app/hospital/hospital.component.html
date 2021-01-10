@@ -13,7 +13,7 @@
         <a routerLink="/statistics">Estatística</a>
       </li>
       <li class="active">
-        <a href="/hospital" >Hospitals</a>
+        <a routerLink="/hospital" >Hospitais</a>
       </li>
       <li>
         <a href="about.html">Sobre nós</a>
@@ -42,17 +42,17 @@
       </div>
     </nav>
 
-    <div class="filters" id="filters">
+    <div class="filters" id="filters" style="display: none">
       <h2 class="filter_title">Filters</h2>
       <form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)">
         <div class="row">
-          <div class="col-2">
+          <div class="col-4">
             <h5 class="nome_title">Nome</h5>
             <div class="nome_div">
               <input id="nome" formControlName="nome">
             </div>
           </div>
-          <div class="col-2">
+          <div class="col-4">
             <h5 class="regiao_title">Região</h5>
             <div class="regiao_div">
               <select name="regiao_option" id="r_options" formControlName="regiao">
@@ -63,15 +63,15 @@
               </select>
             </div>
           </div>
-          <div class="col-2">
+          <div class="col-4">
             <h5 class="taxaocupacao_title">Taxa Ocupação</h5>
             <div class="taxaocupacao_div">
-              <input placeholder="min" id="taxaocupacao_min" formControlName="taxaocupacao_min" type="number">
-              <input placeholder="max" id="taxaocupacao_max" formControlName="taxaocupacao_max" type="number">
+              <input placeholder="min" min="0" id="taxaocupacao_min" formControlName="taxaocupacao_min" type="number">
+              <input placeholder="max" min="0" id="taxaocupacao_max" formControlName="taxaocupacao_max" type="number">
             </div>
           </div>
         </div>
-        <button class="button aplicar" type="submit">Aplicar</button>
+        <button class="btn btn-light" type="submit">Aplicar</button>
       </form>
     </div>
 

@@ -1,14 +1,23 @@
 <nav id="navbar">
-
-  <a class="active" routerLink="/home">Home</a>
-
-  <a routerLink="/statistics">Estatística</a>
-
-  <a routerLink="/hospital" >Hospitals</a>
-
-  <a href="about.html">Sobre nós</a>
-
-  <a routerLink="/login">Área profissionais de saúde</a>
+  <div class="container" style="width: 100%; max-width: 100%">
+    <div class="row">
+      <div class="col-md-2">
+        <a class="active" routerLink="/home">Home</a>
+      </div>
+      <div class="col-md-2">
+        <a routerLink="/statistics">Estatística</a>
+      </div>
+      <div class="col-md-2">
+        <a routerLink="/hospital" >Hospitais</a>
+      </div>
+      <div class="col-md-2">
+        <a href="about.html">Sobre nós</a>
+      </div>
+      <div class="col-md-4">
+        <a routerLink="/login">Área profissionais de saúde</a>
+      </div>
+    </div>
+  </div>
 </nav>
 
 <div class="all">
@@ -17,7 +26,7 @@
     <i class="text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</i>
     <br>
     <br>
-    <button type="button" class="btn btn-outline-info" onclick="location.href='/statistics'">Get Started</button>
+    <button type="button" class="btn btn-info" routerLink="statistics">Get Started</button>
   </div>
   <div style="height: 100%">
     <img src="assets/Static/images/background.png" style="background-size: cover;" class="image">

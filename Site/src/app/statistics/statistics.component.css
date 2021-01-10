@@ -297,18 +297,23 @@ ul.CTAs a {
 /* FILTER */
 
 .filters{
-  background-color: lightgray;
-  border-radius: 20px;
   margin: 4% 0 4% 0;
+  border: 0;
+  background: #F7F7F7;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
 }
 
 .filter_title{
   text-align: center;
-  font-size: 35px;
+  font-size: 40px;
+  font-weight: bold;
+  margin: 3%;
 }
 
 .idade_title{
    text-align: center;
+   font-weight: bold;
  }
 
 .idade_div{
@@ -321,7 +326,9 @@ ul.CTAs a {
 }
 
 .genero_title{
-  text-align: center;
+  text-align: left;
+  margin-left: 2%;
+  font-weight: bold;
 }
 
 .genero_div{
@@ -335,7 +342,9 @@ ul.CTAs a {
 }
 
 .regiao_title{
-  text-align: center;
+  text-align: left;
+  margin-left: 2%;
+  font-weight: bold;
 }
 
 .regiao_div{
@@ -349,7 +358,9 @@ ul.CTAs a {
 }
 
 .nacionalidade_title{
-  text-align: center;
+  text-align: left;
+  margin-left: 2%;
+  font-weight: bold;
 }
 
 .nacionalidade_div{
@@ -364,6 +375,7 @@ ul.CTAs a {
 
 .altura_title{
   text-align: center;
+  font-weight: bold;
 }
 
 .altura_div{
@@ -377,6 +389,7 @@ ul.CTAs a {
 
 .peso_title{
   text-align: center;
+  font-weight: bold;
 }
 
 .peso_div{
@@ -386,4 +399,28 @@ ul.CTAs a {
 .peso_div input{
   width: 40%;
   margin: 5%;
+}
+
+.btn.btn-light{
+  width: 10%;
+  margin: 1% 45% 1% 45%;
+  font-weight: bold;
+  font-size: 100%;
+  background: #DEDEDE;
+}
+
+.search{
+  width: 10%;
+  height: auto;
+  font-weight: bold;
+  font-size: 20px;
+  background: #DEDEDE;
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+
+.search:hover{
+  transform: scale(1.1);
+  -webkit-transition: transform 0.2s ease;
 }
