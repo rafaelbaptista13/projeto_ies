@@ -10,10 +10,11 @@ declare var jQuery: any;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
   loginForm;
 
-  constructor(private loginService: LoginService, private formBuilder: FormBuilder ) {
+  constructor(private formBuilder: FormBuilder ) {
     this.loginForm = this.formBuilder.group({
       codigo : '',
       numero_medico: ''
@@ -21,15 +22,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //Função para colapsar navbar
-    (function($) {
-      $(document).ready(function () {
-        $('#sidebarCollapse').on('click', function () {
-          $('#sidebar').toggleClass('active');
-          $(this).toggleClass('active');
-        });
-      })
-    })(jQuery);
   }
 
 }

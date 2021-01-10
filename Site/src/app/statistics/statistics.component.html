@@ -35,20 +35,20 @@
           <span></span>
           <span></span>
         </button>
-        <button class="search" id="filterCollapse">Search<i class="fas fa-search"></i></button>
+        <button class="search" id="filterCollapse">Filters <i class="fas fa-search"></i></button>
 
       </div>
     </nav>
 
-    <div class="filters" id="filters">
+    <div class="filters" id="filters" style="display: none">
       <h2 class="filter_title">Filters</h2>
       <form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)">
         <div class="row">
           <div class="col-2">
             <h5 class="idade_title">Idade</h5>
             <div class="idade_div">
-              <input placeholder="min" id="idade_min" formControlName="idade_min" type="number">
-              <input placeholder="max" id="idade_max" formControlName="idade_max" type="number">
+              <input placeholder="min" min="0" id="idade_min" formControlName="idade_min" type="number">
+              <input placeholder="max" min="0" id="idade_max" formControlName="idade_max" type="number">
             </div>
           </div>
           <div class="col-2">
@@ -87,19 +87,19 @@
           <div class="col-2">
             <h5 class="altura_title">Altura</h5>
             <div class="altura_div">
-              <input placeholder="min" formControlName="altura_min" type="number">
-              <input placeholder="max" formControlName="altura_max" type="number">
+              <input placeholder="min" min="0" formControlName="altura_min" type="number">
+              <input placeholder="max" min="0" formControlName="altura_max" type="number">
             </div>
           </div>
           <div class="col-2">
             <h5 class="peso_title">Peso</h5>
             <div class="peso_div">
-              <input placeholder="min" formControlName="peso_min" type="number">
-              <input placeholder="max" formControlName="peso_max" type="number">
+              <input placeholder="min" min="0" formControlName="peso_min" type="number">
+              <input placeholder="max" min="0" formControlName="peso_max" type="number">
             </div>
           </div>
         </div>
-        <button class="button aplicar" type="submit">Aplicar</button>
+        <button class="btn btn-light" type="submit">Aplicar</button>
       </form>
     </div>
 
