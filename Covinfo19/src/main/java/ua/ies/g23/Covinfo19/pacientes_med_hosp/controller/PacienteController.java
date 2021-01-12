@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Paciente;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.MedicoRepository;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.PacienteRepository;
 
 
@@ -128,7 +129,18 @@ public class PacienteController {
     }
     
     @PostMapping("/pacientes")
-    public Paciente createPaciente(@Valid @RequestBody Paciente paciente) {
+    public Paciente createPaciente(@Valid @RequestBody Map<String, String> pacient_info) {
+        Paciente paciente = new Paciente();
+        paciente.setNome(pacient_info.get("nome"));
+        paciente.setGenero(pacient_info.get("genero"));
+        paciente.setIdade(paciente_info.get("idade"));
+        paciente.setConcelho(paciente_info.get("concelho"));
+        paciete.setRegiao(pacient_info.get("regiao"));
+        paciente.setNacionalidade(paciente_info.get("nacionalidade"));
+        paciente.setAltura(paciente_info.get("altura"));
+        paciente.setPeso(Float.parseFloat(get("peso")));
+        Medico medico = MedicoRepository.findById(pacient_info.get("medico_id"));
+        paciente.setMedico(medico);
         return pacienteRepository.save(paciente);
     }
 

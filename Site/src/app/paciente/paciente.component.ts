@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {MedicService} from "../medic.service";
 
 @Component({
   selector: 'app-paciente',
@@ -15,7 +16,8 @@ export class PacienteComponent implements OnInit {
     'Eslovena', 'Finlandesa', 'Grega', 'Húngara', 'Islandesa', 'Irlandesa', 'Lituana', 'Luxemburguesa', 'Norueguesa', 'Romena', 'Sueca',
     'Suíça', 'Turca', 'Ucraniana', 'Argentina', 'Canadiana', 'Mexicana', 'Japonesa', 'Portuguesa'].sort();
   regioes = ['Norte', 'Lisboa e Vale do Tejo', 'Centro', 'Alentejo', 'Algarve', 'Açores', 'Madeira'];
-  formdic = {nome: 0, idade: 1, nacionalidade: 2, regiao: 3, peso: 4, altura: 5, estado: 6  };
+  concelhos = {'Norte': ["Caminha","Melgaço","Ponte de Lima","Viana do Castelo","Vila Nova de Cerveira","Monção","Barcelos","Braga","Esposende","Fafe","Guimarães","Vizela","Vila Nova de Famalicão","Arouca","Espinho","Gondomar","Maia","Matosinhos","Porto","Póvoa de Varzim","Santa Maria da Feira","Oliveira de Azeméis","Santo Tirso","São João da Madeira","Trofa","Vila Nova de Gaia","Chaves","Montalegre","Amarante","Celorico de Basto","Lousada","Paços de Ferreira","Penafiel","Lamego","Peso da Régua","Vila Real","Bragança","Miranda do Douro","Mirandela"]}
+  estados = ['atvio', 'recuperado', 'internado', 'intensivo', 'obito'];
   private b_nome: HTMLElement;
   private b_idade: HTMLElement;
   private b_nacionalidade: HTMLElement;
@@ -23,15 +25,9 @@ export class PacienteComponent implements OnInit {
   private b_peso: HTMLElement;
   private b_altura: HTMLElement;
   private b_estado: HTMLElement;
-  private i_nome: HTMLElement;
-  private i_idade: HTMLElement;
-  private i_nacionalidade: HTMLElement;
-  private i_regiao: HTMLElement;
-  private i_peso: HTMLElement;
-  private i_altura: HTMLElement;
-  private i_estado: HTMLElement;
-
-  constructor(private route: ActivatedRoute) {}
+  private add: boolean;
+  private update: boolean;
+  constructor(private route: ActivatedRoute, private medicService: MedicService) {}
 
   ngOnInit(): void {
     //Função para colapsar navbar
@@ -69,6 +65,8 @@ export class PacienteComponent implements OnInit {
   }
 
   editPaciente(): void{
+    this.add = false;
+    this.update = true;
     this.b_nome.style.display = 'block';
     this.b_idade.style.display = 'block';
     this.b_regiao.style.display = 'block';
@@ -88,9 +86,18 @@ export class PacienteComponent implements OnInit {
         estado: new FormControl('', [Validators.required]),
       }
     );
+    this.formPaciente.get('nome').disable();
+    this.formPaciente.get('idade').disable();
+    this.formPaciente.get('nacionalidade').disable();
+    this.formPaciente.get('regiao').disable();
+    this.formPaciente.get('peso').disable();
+    this.formPaciente.get('altura').disable();
+    this.formPaciente.get('estado').disable();
   }
 
   addPaciente(): void{
+    this.add = true;
+    this.update = false;
     this.b_nome.style.display = 'none';
     this.b_idade.style.display = 'none';
     this.b_regiao.style.display = 'none';
@@ -102,8 +109,10 @@ export class PacienteComponent implements OnInit {
       {
         nome: new FormControl('', [Validators.required]),
         idade: new FormControl('', [Validators.required]),
+        genero: new FormControl('', [Validators.required]),
         nacionalidade: new FormControl('', [Validators.required]),
         regiao: new FormControl('', [Validators.required]),
+        concelho: new FormControl('', [Validators.required]),
         peso: new FormControl('', [Validators.required]),
         altura: new FormControl('', [Validators.required]),
         estado: new FormControl('', [Validators.required]),
@@ -112,6 +121,25 @@ export class PacienteComponent implements OnInit {
   }
 
   enableinput(input_name: string): void{
-    this.formPaciente.controls[this.formdic[input_name]].enable();
+    this.formPaciente.get(input_name).enable();
+  }
+
+  setPacient(): void{
+    if (this.formPaciente.valid){
+      if (this.add){
+        const medico_id = localStorage.getItem('codigo_acesso');
+        const data = {nome: this.formPaciente.value.nome, idade: this.formPaciente.value.idade, genero: this.formPaciente.value.genero,
+        concelho: this.formPaciente.value.concelho, regiao: this.formPaciente.value.regiao, nacionalidade: this.formPaciente.value.nacionalidade,
+        altura: this.formPaciente.value.altura, peso: this.formPaciente.value.peso, estado: this.formPaciente.value.estado, medico: medico_id};
+        this.medicService.addPacient(data);
+      }
+      else if (this.update){
+        // Falta fazer este
+        const data = {nome: this.formPaciente.value.nome, idade: this.formPaciente.value.idade, genero: this.formPaciente.value.genero,
+          concelho: this.formPaciente.value.concelho, regiao: this.formPaciente.value.regiao, nacionalidade: this.formPaciente.value.nacionalidade,
+          altura: this.formPaciente.value.altura, peso: this.formPaciente.value.peso, estado: this.formPaciente.value.estado};
+        this.medicService.updatePacient(this.formPaciente.value);
+      }
+    }
   }
 }
