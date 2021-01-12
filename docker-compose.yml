@@ -1,0 +1,71 @@
+version: '3.3'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  mysql5_1:
+    image: mysql/mysql-server:5.7
+    ports:
+      - "3306:3306"
+    environment:
+        MYSQL_DATABASE: 'demo'
+        # So you don't have to use root, but you can if you like
+        MYSQL_USER: 'demo'
+        # You can use whatever password you like
+        MYSQL_PASSWORD: 'password'
+        # Password for root access
+        MYSQL_ROOT_PASSWORD: 'password'
+    networks:
+        default: 
+          aliases: 
+            - dbname
+
+  mysql5_2:
+    image: mysql/mysql-server:5.7
+    ports:
+      - "3307:3306"
+    environment:
+        MYSQL_DATABASE: 'demo'
+        # So you don't have to use root, but you can if you like
+        MYSQL_USER: 'demo'
+        # You can use whatever password you like
+        MYSQL_PASSWORD: 'password'
+        # Password for root access
+        MYSQL_ROOT_PASSWORD: 'password'
+    networks:
+        default:
+          aliases:
+            - dbname
+
+#service 3: definition of your spring-boot app 
+  covinfo-service:                        #it is just a name, which will be used only in this file.
+    image: covinfo-service               #name of the image after dockerfile executes
+    container_name: covinfo-service-app  #name of the container created from docker image
+    build:
+      context: .                          #docker file path (. means root directory)
+      dockerfile: Dockerfile              #docker file name
+    ports:
+      - "8080:8080"                       #docker containter port with your os port
+    restart: always
+    depends_on:                           #define dependencies of this app
+      - mysql5_1                                #dependency name (which is defined with this name 'db' in this file earlier)
+      - mysql5_2
+      - rabbitmq
+    environment:
+      DBNAME_PORT_3306_TCP_ADDR: dbname
+      DBNAME_PORT_3306_TCP_PORT: 3306
+      DBNAME_ENV_MYSQL_DATABASE: yourbd
+      SPRING_RABBITMQ_HOST: rabbitmq
+
+#service 4: angular webpage
+  webpage-service:
+    image: av-app-image
+    container_name: webpage-service-app
+    build:
+      context: ./Site
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    restart: always

@@ -5,7 +5,7 @@ import {map} from 'rxjs/operators';
 
 // Define mensagem em JSON e o URL é de segurança
 const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json', 'access-control-allow-origin': 'http://localhost:8080/'})
+  headers: new HttpHeaders({'Content-Type': 'application/json', 'access-control-allow-origin': 'http://192.168.160.215:8080/'})
 };
 
 @Injectable({
@@ -13,7 +13,7 @@ const httpOptions = {
 })
 export class LoginService {
   // URL inicial da api
-  private URL = 'http://localhost:8080/api/v1/';
+  private URL = 'http://192.168.160.215:8080/api/v1/';
   private httpOptions: { headers: HttpHeaders };
   constructor(private http: HttpClient) { }
 

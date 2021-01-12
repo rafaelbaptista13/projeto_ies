@@ -30,11 +30,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.cors().and().authorizeRequests()
-                .antMatchers(HttpMethod.GET, SecurityConstants.PUBLIC_URL+"/**").permitAll()
-                .antMatchers(HttpMethod.POST, SecurityConstants.PUBLIC_URL+"/**").permitAll()
-                .antMatchers(HttpMethod.PUT, SecurityConstants.PUBLIC_URL+"/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, SecurityConstants.PUBLIC_URL+"/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers(HttpMethod.GET, SecurityConstants.PRIVATE_URL+"/**").authenticated()
+                .antMatchers(HttpMethod.POST, SecurityConstants.PRIVATE_URL+"/**").authenticated()
+                .antMatchers(HttpMethod.PUT, SecurityConstants.PRIVATE_URL+"/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, SecurityConstants.PRIVATE_URL+"/**").authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
