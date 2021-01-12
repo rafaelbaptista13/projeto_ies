@@ -82,6 +82,12 @@ public class MedicoController {
         return ResponseEntity.ok().body(Medico);
     }
 
+    @GetMapping("/pacientesbymedic")
+    public List<Paciente> getAllByMedico(
+        @RequestParam(required = true) Integer medico ) {
+            return pacienteRepository.findByMedico(String.valueOf(medico));
+        }
+        
     @PostMapping("/medicos")
     @Transactional(rollbackFor = Exception.class)
     public Medico createMedico(@Valid @RequestBody Medico medico) {
