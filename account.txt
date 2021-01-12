@@ -1,0 +1,8 @@
+--------- Nova Mensagem : ---------
+idade -> 42
+tipo -> medico
+codigo -> fpqZUiPf
+nome -> Margarida Ana Lia Soares
+hospital -> 4
+id -> 57
+
