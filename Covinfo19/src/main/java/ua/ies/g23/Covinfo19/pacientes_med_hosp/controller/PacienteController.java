@@ -1,5 +1,6 @@
 package ua.ies.g23.Covinfo19.pacientes_med_hosp.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,8 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +33,7 @@ public class PacienteController {
     private PacienteRepository pacienteRepository;
 
     @GetMapping("/pacientes")
-    public List<Paciente> getAllCasos(
+    public Page<Paciente> getAllCasos(
         @RequestParam(required = false) String genero,
         @RequestParam(required = false) Integer idademax,
         @RequestParam(required = false) Integer idademin,
@@ -40,9 +43,16 @@ public class PacienteController {
         @RequestParam(required = false) Integer alturamin,
         @RequestParam(required = false) Integer alturamax,
         @RequestParam(required = false) Integer pesomin,
-        @RequestParam(required = false) Integer pesomax ) {
+        @RequestParam(required = false) Integer pesomax,
+        @RequestParam(required = false) Integer page,
+        @RequestParam(required = false) Integer size) {
+        
+        if (page==null) page=0;
+        if (size==null) size=30;
+        PageRequest pageRequest = PageRequest.of(page, size);
+
         if ( genero == null && idademin == null && idademax == null && concelho == null && regiao == null && nacionalidade == null && alturamin == null && alturamax == null && pesomin == null && pesomax == null) {
-            return pacienteRepository.findAll();
+            return pacienteRepository.findAll(pageRequest);
         }
 
 
@@ -116,7 +126,7 @@ public class PacienteController {
             strpesomax = "500";
         }
 
-        return pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
+        return pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax, pageRequest);
         }   
 
     @GetMapping("/pacientes/{id}")

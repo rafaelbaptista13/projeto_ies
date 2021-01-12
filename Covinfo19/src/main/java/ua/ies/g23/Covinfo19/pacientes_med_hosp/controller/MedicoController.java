@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,9 +39,18 @@ public class MedicoController {
     @GetMapping("/medicos")
     public List<Medico> getAllMedicos(@RequestParam(required = false) String nome,
             @RequestParam(required = false) Integer hospital_id, @RequestParam(required = false) Integer idademin,
-            @RequestParam(required = false) Integer idademax) {
+            @RequestParam(required = false) Integer idademax, @RequestParam(required=false) Integer page, @RequestParam(required=false) Integer size) {
+        
+        if (page==null) page=0;
+        if (size==null) size=30;
+        PageRequest pageRequest = PageRequest.of(page, size);
+
         if (nome == null && hospital_id == null && idademin == null && idademax == null) {
-            return medicoRepository.findAll();
+            List<Medico> l = new ArrayList<>();
+            for (Medico m: medicoRepository.findAll(pageRequest)) {
+                l.add(m);
+            }
+            return l;
         }
 
         String strnome = "";
@@ -71,7 +81,7 @@ public class MedicoController {
             stridademax = "300";
         }
         System.out.println(strnome);
-        return medicoRepository.findAllByFilters(strnome, strhospital_id, stridademin, stridademax);
+        return medicoRepository.findAllByFilters(strnome, strhospital_id, stridademin, stridademax, pageRequest);
     }
 
     @GetMapping("/medicos/{id}")
