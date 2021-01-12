@@ -155,6 +155,7 @@ public class Runner implements CommandLineRunner {
         json = new JSONObject(mensagem);
         //Envio mensagem introdução novo médico.
         rabbitTemplate.convertAndSend(DataHospitalDoctorsApplication.topicExchangeName, "filamedicospacientes", json.toString());
+        rabbitTemplate.convertAndSend(DataHospitalDoctorsApplication.topicExchangeName, "filamedicospacientes", json.toString());
       }
     }
   }
