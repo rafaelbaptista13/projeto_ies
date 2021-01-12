@@ -51,9 +51,9 @@ export class HospitalService {
             if (taxaocupacao_min < taxaocupacao && taxaocupacao < taxaocupacao_max) {
               retorno[element.id] = [element.nome, result1, result2, ((element.numero_camas_ocupadas / element.numero_camas) * 100).toFixed(2)];
             }
-          })
-        })
-      } )
+          });
+        });
+      } );
     });
     return retorno;
   }

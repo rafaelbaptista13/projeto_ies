@@ -1,7 +1,7 @@
 <div class="wrapper">
   <!-- Sidebar Holder -->
   <nav id="sidebar">
-    <h1>Numero Medico</h1>
+    <h1>Numero medico</h1>
     <div class="sidebar-header">
       <h3>Covinfo</h3>
     </div>
@@ -40,7 +40,8 @@
           <span></span>
         </button>
 
-        <button class="search" id="filterCollapse">Search<i class="fas fa-search"></i></button>
+        <button type="button" class="add">Adicionar Paciente <i class="fas fa-plus"></i></button>
+        <button class="search" id="filterCollapse">Search <i class="fas fa-search"></i></button>
 
 
       </div>
@@ -51,27 +52,26 @@
       <form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)">
         <div class="row">
           <div class="col-4">
+            <h5 class="num_title">Número Paciente</h5>
+            <div class="num_div">
+              <input id="num" formControlName="num_paciente">
+            </div>
+          </div>
+          <div class="col-4">
             <h5 class="nome_title">Nome</h5>
             <div class="nome_div">
-              <input id="nome" formControlName="nome">
+              <input  id="nome" formControlName="nome" type="text">
             </div>
           </div>
           <div class="col-4">
-            <h5 class="regiao_title">Região</h5>
-            <div class="regiao_div">
-              <select name="regiao_option" id="r_options" formControlName="regiao">
+            <h5 class="estado_title">Estado</h5>
+            <div class="estado_div">
+              <select name="estado_option" id="s_options" formControlName="estado">
                 <option hidden disabled selected value>Selecionar Opção</option>
                 <option value=""></option>
-                <option *ngFor="let regiao of regioes" value="{{regiao}}">{{regiao}}</option>
-                <!-- NGFOR das regioes -->
+                <option *ngFor="let estado of estados" value="{{estado}}">{{estado}}</option>
+                <!-- NGFOR dos estados -->
               </select>
-            </div>
-          </div>
-          <div class="col-4">
-            <h5 class="taxaocupacao_title">Taxa Ocupação</h5>
-            <div class="taxaocupacao_div">
-              <input placeholder="min" min="0" id="taxaocupacao_min" formControlName="taxaocupacao_min" type="number">
-              <input placeholder="max" min="0" id="taxaocupacao_max" formControlName="taxaocupacao_max" type="number">
             </div>
           </div>
         </div>
@@ -79,29 +79,31 @@
       </form>
     </div>
 
-    <div *ngIf="(hospitais | json) != ('{}'); then thenBlock4 else elseBlock4"> </div>
+    <div *ngIf="(pacientes | json) != ('{}'); then thenBlock4 else elseBlock4"> </div>
     <ng-template #thenBlock4>
       <table class="table table-borderless">
         <thead>
         <tr>
+          <th scope="col">Número Paciente</th>
           <th scope="col">Nome</th>
-          <th scope="col">Internados</th>
-          <th scope="col">Cuidados Intensivos</th>
-          <th scope="col">Taxa Ocupação</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Ações</th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let item of hospitais | keyvalue">
-          <th scope="row">{{ hospitais[item.key][0] }}</th>
-          <td>{{ hospitais[item.key][1] }}</td>
-          <td>{{ hospitais[item.key][2] }}</td>
-          <td>{{ hospitais[item.key][3] }}</td>
+        <tr *ngFor="let item of pacientes | keyvalue">
+          <th scope="row">{{ pacientes[item.key][0] }}</th>
+          <td>{{ pacientes[item.key][1] }}</td>
+          <td>{{ pacientes[item.key][2] }}</td>
+          <td>{{ pacientes[item.key][3] }}</td>
+          <td><a routerLink="/home"><i class="fas fa-user-edit"></i>></a><a routerLink="/home"><i class="fas fa-trash"></i></a></td>
         </tr>
         </tbody>
       </table>
     </ng-template>
     <ng-template #elseBlock4>
-      <p>Não foram encontrados hospitais.</p>
+      <p>Não foram encontrados pacientes.</p>
     </ng-template>
   </div>
 </div>
+

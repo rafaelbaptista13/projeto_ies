@@ -11,6 +11,8 @@ import { HospitalComponent } from './hospital/hospital.component';
 
 import * as $ from 'jquery';
 import { LoginComponent } from './login/login.component';
+import { HomeMedicComponent } from './home-medic/home-medic.component';
+import { PacienteComponent } from './paciente/paciente.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { LoginComponent } from './login/login.component';
     StatisticsComponent,
     HomeComponent,
     HospitalComponent,
-    LoginComponent
+    LoginComponent,
+    HomeMedicComponent,
+    PacienteComponent
   ],
   imports: [
     BrowserModule,
