@@ -17,7 +17,7 @@ export class MedicService {
   constructor(private http: HttpClient) { }
 
   getPacientsFilter(num?: string, nome?: string, estado?: string): any {
-    let url = this.baseURL + 'public/pacientesbymedic?';
+    let url = this.baseURL + 'private/pacientesbymedic?';
     if (num !== '' && num !== null) {
       url += '&num_paciente=' + num;
     }

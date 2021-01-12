@@ -124,9 +124,17 @@ export class PacienteComponent implements OnInit {
   setPacient(): void{
     if (this.formPaciente.valid){
       if (this.add){
-        this.medicService.addPacient(this.formPaciente.value);
+        const medico_id = localStorage.getItem('codigo_acesso');
+        const data = {nome: this.formPaciente.value.nome, idade: this.formPaciente.value.idade, genero: this.formPaciente.value.genero,
+        concelho: this.formPaciente.value.concelho, regiao: this.formPaciente.value.regiao, nacionalidade: this.formPaciente.value.nacionalidade,
+        altura: this.formPaciente.value.altura, peso: this.formPaciente.value.peso, estado: this.formPaciente.value.estado, medico: medico_id};
+        this.medicService.addPacient(data);
       }
       else if (this.update){
+        // Falta fazer este
+        const data = {nome: this.formPaciente.value.nome, idade: this.formPaciente.value.idade, genero: this.formPaciente.value.genero,
+          concelho: this.formPaciente.value.concelho, regiao: this.formPaciente.value.regiao, nacionalidade: this.formPaciente.value.nacionalidade,
+          altura: this.formPaciente.value.altura, peso: this.formPaciente.value.peso, estado: this.formPaciente.value.estado};
         this.medicService.updatePacient(this.formPaciente.value);
       }
     }
