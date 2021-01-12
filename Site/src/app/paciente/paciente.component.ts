@@ -16,6 +16,7 @@ export class PacienteComponent implements OnInit {
     'Eslovena', 'Finlandesa', 'Grega', 'Húngara', 'Islandesa', 'Irlandesa', 'Lituana', 'Luxemburguesa', 'Norueguesa', 'Romena', 'Sueca',
     'Suíça', 'Turca', 'Ucraniana', 'Argentina', 'Canadiana', 'Mexicana', 'Japonesa', 'Portuguesa'].sort();
   regioes = ['Norte', 'Lisboa e Vale do Tejo', 'Centro', 'Alentejo', 'Algarve', 'Açores', 'Madeira'];
+  concelhos = {'Norte': ["Caminha","Melgaço","Ponte de Lima","Viana do Castelo","Vila Nova de Cerveira","Monção","Barcelos","Braga","Esposende","Fafe","Guimarães","Vizela","Vila Nova de Famalicão","Arouca","Espinho","Gondomar","Maia","Matosinhos","Porto","Póvoa de Varzim","Santa Maria da Feira","Oliveira de Azeméis","Santo Tirso","São João da Madeira","Trofa","Vila Nova de Gaia","Chaves","Montalegre","Amarante","Celorico de Basto","Lousada","Paços de Ferreira","Penafiel","Lamego","Peso da Régua","Vila Real","Bragança","Miranda do Douro","Mirandela"]}
   estados = ['atvio', 'recuperado', 'internado', 'intensivo', 'obito'];
   private b_nome: HTMLElement;
   private b_idade: HTMLElement;
@@ -108,8 +109,10 @@ export class PacienteComponent implements OnInit {
       {
         nome: new FormControl('', [Validators.required]),
         idade: new FormControl('', [Validators.required]),
+        genero: new FormControl('', [Validators.required]),
         nacionalidade: new FormControl('', [Validators.required]),
         regiao: new FormControl('', [Validators.required]),
+        concelho: new FormControl('', [Validators.required]),
         peso: new FormControl('', [Validators.required]),
         altura: new FormControl('', [Validators.required]),
         estado: new FormControl('', [Validators.required]),
