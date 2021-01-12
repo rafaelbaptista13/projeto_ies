@@ -13,6 +13,8 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -52,23 +54,18 @@ public class CasoController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/public/casos/grafico/curva_diaria")
-    public Map<String,Integer> getAllCasosGraficoCurvaEvolucao(
-        @RequestParam(required = false) String genero,
-        @RequestParam(required = false) Integer idademax,
-        @RequestParam(required = false) Integer idademin,
-        @RequestParam(required = false) String concelho,
-        @RequestParam(required = false) String regiao,
-        @RequestParam(required = false) String nacionalidade,
-        @RequestParam(required = false) Integer alturamin,
-        @RequestParam(required = false) Integer alturamax,
-        @RequestParam(required = false) Double pesomin,
-        @RequestParam(required = false) Double pesomax ) {
-        
-        Map<String,Integer> dicionarioCasos = new HashMap<String, Integer>();
-        Map<Date,Date> dicionarioDias = new HashMap<Date,Date>();
+    public Map<String, Integer> getAllCasosGraficoCurvaEvolucao(@RequestParam(required = false) String genero,
+            @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
+            @RequestParam(required = false) String concelho, @RequestParam(required = false) String regiao,
+            @RequestParam(required = false) String nacionalidade, @RequestParam(required = false) Integer alturamin,
+            @RequestParam(required = false) Integer alturamax, @RequestParam(required = false) Double pesomin,
+            @RequestParam(required = false) Double pesomax) {
+
+        Map<String, Integer> dicionarioCasos = new HashMap<String, Integer>();
+        Map<Date, Date> dicionarioDias = new HashMap<Date, Date>();
         int somaCasosTodos = 0;
 
-        //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        // DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         Calendar cal = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
@@ -90,7 +87,7 @@ public class CasoController {
             date_fim = cal2.getTime();
             dicionarioDias.put(date, date_fim);
         }
-            
+
         String strgenero = "";
         if (genero != null) {
             strgenero = genero;
@@ -153,7 +150,7 @@ public class CasoController {
 
         String strpesomin = "";
         if (pesomin != null) {
-            strpesomin = pesomin.toString() ;
+            strpesomin = pesomin.toString();
         } else {
             strpesomin = "0";
             pesomin = Double.valueOf(0);
@@ -161,30 +158,32 @@ public class CasoController {
 
         String strpesomax = "";
         if (pesomax != null) {
-            strpesomax = pesomax.toString() ;
+            strpesomax = pesomax.toString();
         } else {
             strpesomax = "500";
             pesomax = Double.valueOf(500);
         }
 
-        
-        for (Date dia: dicionarioDias.keySet()) {
+        for (Date dia : dicionarioDias.keySet()) {
             List<Paciente> pacientes;
             Date data_fim_dia = dicionarioDias.get(dia);
-            
-            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
+
+            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
+                    strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos") ) {
+                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
+                        || caso.getEstado_atual().equals("Internado")
+                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
                     Relatorio_Paciente relatorio = relatorioRepository.findRecentByCaso(caso.getId());
                     if (relatorio.getData().after(dia) && relatorio.getData().before(data_fim_dia)) {
                         casos.add(caso);
                     }
                 }
             }
-            
-            String mes =  dia.toString().split(" ")[1];
+
+            String mes = dia.toString().split(" ")[1];
             if (mes.equals("Jan")) {
                 mes = "1";
             } else if (mes.equals("Feb")) {
@@ -211,36 +210,29 @@ public class CasoController {
                 mes = "12";
             }
 
-            String chave = dia.toString().split(" ")[5] + "-" + mes + "-" + dia.toString().split(" ")[2] ;
+            String chave = dia.toString().split(" ")[5] + "-" + mes + "-" + dia.toString().split(" ")[2];
 
             dicionarioCasos.put(chave, casos.size());
-            
-               
-        }
-        return dicionarioCasos ;
-    }
 
+        }
+        return dicionarioCasos;
+    }
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/public/casos/grafico/peso")
-    public List<Double> getAllCasosGraficoPeso(
-        @RequestParam(required = false) String genero,
-        @RequestParam(required = false) Integer idademax,
-        @RequestParam(required = false) Integer idademin,
-        @RequestParam(required = false) String concelho,
-        @RequestParam(required = false) String regiao,
-        @RequestParam(required = false) String nacionalidade,
-        @RequestParam(required = false) Integer alturamin,
-        @RequestParam(required = false) Integer alturamax,
-        @RequestParam(required = false) Double pesomin,
-        @RequestParam(required = false) Double pesomax ) {
-        
+    public List<Double> getAllCasosGraficoPeso(@RequestParam(required = false) String genero,
+            @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
+            @RequestParam(required = false) String concelho, @RequestParam(required = false) String regiao,
+            @RequestParam(required = false) String nacionalidade, @RequestParam(required = false) Integer alturamin,
+            @RequestParam(required = false) Integer alturamax, @RequestParam(required = false) Double pesomin,
+            @RequestParam(required = false) Double pesomax) {
+
         List<Integer> listaPesos = new ArrayList<Integer>();
         List<Double> listaPesosPercentagem = new ArrayList<Double>();
         int somaCasosTodos = 0;
 
-       System.out.println();
-            
+        System.out.println();
+
         String strgenero = "";
         if (genero != null) {
             strgenero = genero;
@@ -303,7 +295,7 @@ public class CasoController {
 
         String strpesomin = "";
         if (pesomin != null) {
-            strpesomin = pesomin.toString() ;
+            strpesomin = pesomin.toString();
         } else {
             strpesomin = "0";
             pesomin = Double.valueOf(0);
@@ -311,42 +303,43 @@ public class CasoController {
 
         String strpesomax = "";
         if (pesomax != null) {
-            strpesomax = pesomax.toString() ;
+            strpesomax = pesomax.toString();
         } else {
             strpesomax = "500";
             pesomax = Double.valueOf(500);
         }
 
-
-
         for (int pesominima = 11; pesominima <= 91; pesominima += 10) {
-            String strpesominima = (pesominima == 11) ? "0" : String.valueOf(pesominima); 
-            String strpesomaxima = (pesominima == 91) ? "300" : String.valueOf(pesominima + 9); 
+            String strpesominima = (pesominima == 11) ? "0" : String.valueOf(pesominima);
+            String strpesomaxima = (pesominima == 91) ? "300" : String.valueOf(pesominima + 9);
 
             List<Paciente> pacientes;
-            
-            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesominima, strpesomaxima);   
+
+            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
+                    strnacionalidade, stralturamin, stralturamax, strpesominima, strpesomaxima);
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos") ) {
+                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
+                        || caso.getEstado_atual().equals("Internado")
+                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
                     if (paciente.getPeso() >= pesomin && paciente.getPeso() <= pesomax) {
                         casos.add(caso);
                     }
                 }
             }
-                
+
             listaPesos.add(casos.size());
             somaCasosTodos += casos.size();
         }
-        
+
         if (somaCasosTodos == 0) {
             for (Integer integer : listaPesos) {
-                listaPesosPercentagem.add( (double) 0 );
+                listaPesosPercentagem.add((double) 0);
             }
         } else {
             for (Integer integer : listaPesos) {
-                listaPesosPercentagem.add( (double) integer / somaCasosTodos*100 );
+                listaPesosPercentagem.add((double) integer / somaCasosTodos * 100);
             }
         }
         System.out.println(listaPesosPercentagem);
@@ -355,24 +348,17 @@ public class CasoController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/public/casos/grafico/altura")
-    public List<Double> getAllCasosGraficoAltura(
-        @RequestParam(required = false) String genero,
-        @RequestParam(required = false) Integer idademax,
-        @RequestParam(required = false) Integer idademin,
-        @RequestParam(required = false) String concelho,
-        @RequestParam(required = false) String regiao,
-        @RequestParam(required = false) String nacionalidade,
-        @RequestParam(required = false) Integer alturamin,
-        @RequestParam(required = false) Integer alturamax,
-        @RequestParam(required = false) Double pesomin,
-        @RequestParam(required = false) Double pesomax ) {
-        
+    public List<Double> getAllCasosGraficoAltura(@RequestParam(required = false) String genero,
+            @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
+            @RequestParam(required = false) String concelho, @RequestParam(required = false) String regiao,
+            @RequestParam(required = false) String nacionalidade, @RequestParam(required = false) Integer alturamin,
+            @RequestParam(required = false) Integer alturamax, @RequestParam(required = false) Double pesomin,
+            @RequestParam(required = false) Double pesomax) {
+
         List<Integer> listaAlturas = new ArrayList<Integer>();
         List<Double> listaAlturasPercentagem = new ArrayList<Double>();
         int somaCasosTodos = 0;
 
-       
-            
         String strgenero = "";
         if (genero != null) {
             strgenero = genero;
@@ -435,75 +421,68 @@ public class CasoController {
 
         String strpesomin = "";
         if (pesomin != null) {
-            strpesomin = pesomin.toString() ;
+            strpesomin = pesomin.toString();
         } else {
             strpesomin = "0";
         }
 
         String strpesomax = "";
         if (pesomax != null) {
-            strpesomax = pesomax.toString() ;
+            strpesomax = pesomax.toString();
         } else {
             strpesomax = "500";
         }
 
-
-
         for (int alturaminima = 141; alturaminima <= 201; alturaminima += 10) {
-            String stralturaminima = (alturaminima == 141) ? "0" : String.valueOf(alturaminima); 
-            String stralturamaxima = (alturaminima == 201) ? "300" : String.valueOf(alturaminima + 9); 
+            String stralturaminima = (alturaminima == 141) ? "0" : String.valueOf(alturaminima);
+            String stralturamaxima = (alturaminima == 201) ? "300" : String.valueOf(alturaminima + 9);
 
             List<Paciente> pacientes;
-            
-            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturaminima, stralturamaxima, strpesomin, strpesomax);   
+
+            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
+                    strnacionalidade, stralturaminima, stralturamaxima, strpesomin, strpesomax);
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos") ) {
+                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
+                        || caso.getEstado_atual().equals("Internado")
+                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
                     if (paciente.getAltura() >= alturamin && paciente.getAltura() <= alturamax) {
                         casos.add(caso);
                     }
                 }
             }
-                
+
             listaAlturas.add(casos.size());
             somaCasosTodos += casos.size();
         }
-        
+
         if (somaCasosTodos == 0) {
             for (Integer integer : listaAlturas) {
-                listaAlturasPercentagem.add( (double) 0 );
+                listaAlturasPercentagem.add((double) 0);
             }
         } else {
             for (Integer integer : listaAlturas) {
-                listaAlturasPercentagem.add( (double) integer / somaCasosTodos*100 );
+                listaAlturasPercentagem.add((double) integer / somaCasosTodos * 100);
             }
         }
         System.out.println(listaAlturasPercentagem);
         return listaAlturasPercentagem;
     }
 
-
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/public/casos/grafico/genero")
-    public List<Double> getAllCasosGraficoGenero(
-        @RequestParam(required = false) String genero,
-        @RequestParam(required = false) Integer idademax,
-        @RequestParam(required = false) Integer idademin,
-        @RequestParam(required = false) String concelho,
-        @RequestParam(required = false) String regiao,
-        @RequestParam(required = false) String nacionalidade,
-        @RequestParam(required = false) Integer alturamin,
-        @RequestParam(required = false) Integer alturamax,
-        @RequestParam(required = false) Double pesomin,
-        @RequestParam(required = false) Double pesomax ) {
-        
+    public List<Double> getAllCasosGraficoGenero(@RequestParam(required = false) String genero,
+            @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
+            @RequestParam(required = false) String concelho, @RequestParam(required = false) String regiao,
+            @RequestParam(required = false) String nacionalidade, @RequestParam(required = false) Integer alturamin,
+            @RequestParam(required = false) Integer alturamax, @RequestParam(required = false) Double pesomin,
+            @RequestParam(required = false) Double pesomax) {
+
         List<Integer> listaCasosGenero = new ArrayList<Integer>();
         List<Double> listaCasosGeneroPercentagem = new ArrayList<Double>();
         int somaCasosTodos = 0;
 
-       
-            
         String strgenero = "";
         if (genero != null) {
             strgenero = genero;
@@ -564,76 +543,69 @@ public class CasoController {
 
         String strpesomin = "";
         if (pesomin != null) {
-            strpesomin = pesomin.toString() ;
+            strpesomin = pesomin.toString();
         } else {
             strpesomin = "0";
         }
 
         String strpesomax = "";
         if (pesomax != null) {
-            strpesomax = pesomax.toString() ;
+            strpesomax = pesomax.toString();
         } else {
             strpesomax = "500";
         }
 
-        ArrayList<String> generos = new ArrayList<String>(); 
+        ArrayList<String> generos = new ArrayList<String>();
         generos.add("Masculino");
         generos.add("Feminino");
 
         for (String genero_nome : generos) {
             List<Paciente> pacientes;
-            
-            pacientes = pacienteRepository.findAllFilters(genero_nome, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
+
+            pacientes = pacienteRepository.findAllFilters(genero_nome, stridademin, stridademax, strconcelho, strregiao,
+                    strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos") ) {
-                    if (strgenero.equals("%") || strgenero.equals(genero_nome)) { 
-                       casos.add(caso);
+                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
+                        || caso.getEstado_atual().equals("Internado")
+                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
+                    if (strgenero.equals("%") || strgenero.equals(genero_nome)) {
+                        casos.add(caso);
                     }
                 }
             }
-                
+
             listaCasosGenero.add(casos.size());
             somaCasosTodos += casos.size();
         }
 
-        
-        
         if (somaCasosTodos == 0) {
             for (Integer integer : listaCasosGenero) {
-                listaCasosGeneroPercentagem.add( (double) 0 );
+                listaCasosGeneroPercentagem.add((double) 0);
             }
         } else {
             for (Integer integer : listaCasosGenero) {
-                listaCasosGeneroPercentagem.add( (double) integer / somaCasosTodos*100 );
+                listaCasosGeneroPercentagem.add((double) integer / somaCasosTodos * 100);
             }
         }
         System.out.println(listaCasosGeneroPercentagem);
         return listaCasosGeneroPercentagem;
     }
 
-
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/public/casos/grafico/regiao")
-    public List<Double> getAllCasosGraficoRegiao(
-        @RequestParam(required = false) String genero,
-        @RequestParam(required = false) Integer idademax,
-        @RequestParam(required = false) Integer idademin,
-        @RequestParam(required = false) String concelho,
-        @RequestParam(required = false) String regiao,
-        @RequestParam(required = false) String nacionalidade,
-        @RequestParam(required = false) Integer alturamin,
-        @RequestParam(required = false) Integer alturamax,
-        @RequestParam(required = false) Double pesomin,
-        @RequestParam(required = false) Double pesomax ) {
-        
+    public List<Double> getAllCasosGraficoRegiao(@RequestParam(required = false) String genero,
+            @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
+            @RequestParam(required = false) String concelho, @RequestParam(required = false) String regiao,
+            @RequestParam(required = false) String nacionalidade, @RequestParam(required = false) Integer alturamin,
+            @RequestParam(required = false) Integer alturamax, @RequestParam(required = false) Double pesomin,
+            @RequestParam(required = false) Double pesomax) {
+
         List<Integer> listaCasosRegioes = new ArrayList<Integer>();
         List<Double> listaCasosRegioesPercentagem = new ArrayList<Double>();
         int somaCasosTodos = 0;
 
-       
-            
         String strgenero = "";
         if (genero != null) {
             strgenero = genero;
@@ -694,19 +666,19 @@ public class CasoController {
 
         String strpesomin = "";
         if (pesomin != null) {
-            strpesomin = pesomin.toString() ;
+            strpesomin = pesomin.toString();
         } else {
             strpesomin = "0";
         }
 
         String strpesomax = "";
         if (pesomax != null) {
-            strpesomax = pesomax.toString() ;
+            strpesomax = pesomax.toString();
         } else {
             strpesomax = "500";
         }
 
-        ArrayList<String> regioes = new ArrayList<String>(); 
+        ArrayList<String> regioes = new ArrayList<String>();
         regioes.add("Norte");
         regioes.add("Centro");
         regioes.add("Lisboa e Vale do Tejo");
@@ -717,57 +689,51 @@ public class CasoController {
 
         for (String regiao_nome : regioes) {
             List<Paciente> pacientes;
-            
-            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, regiao_nome, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
+
+            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, regiao_nome,
+                    strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos") ) {
-                    if (strregiao.equals("%") || strregiao.equals(regiao_nome)) { 
-                       casos.add(caso);
+                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
+                        || caso.getEstado_atual().equals("Internado")
+                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
+                    if (strregiao.equals("%") || strregiao.equals(regiao_nome)) {
+                        casos.add(caso);
                     }
                 }
             }
-                
+
             listaCasosRegioes.add(casos.size());
             somaCasosTodos += casos.size();
         }
 
-        
-        
         if (somaCasosTodos == 0) {
             for (Integer integer : listaCasosRegioes) {
-                listaCasosRegioesPercentagem.add( (double) 0 );
+                listaCasosRegioesPercentagem.add((double) 0);
             }
         } else {
             for (Integer integer : listaCasosRegioes) {
-                listaCasosRegioesPercentagem.add( (double) integer / somaCasosTodos*100 );
+                listaCasosRegioesPercentagem.add((double) integer / somaCasosTodos * 100);
             }
         }
         System.out.println(listaCasosRegioesPercentagem);
         return listaCasosRegioesPercentagem;
     }
-    
+
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/public/casos/grafico/idade")
-    public List<Double> getAllCasosGraficoIdade(
-        @RequestParam(required = false) String genero,
-        @RequestParam(required = false) Integer idademax,
-        @RequestParam(required = false) Integer idademin,
-        @RequestParam(required = false) String concelho,
-        @RequestParam(required = false) String regiao,
-        @RequestParam(required = false) String nacionalidade,
-        @RequestParam(required = false) Integer alturamin,
-        @RequestParam(required = false) Integer alturamax,
-        @RequestParam(required = false) Double pesomin,
-        @RequestParam(required = false) Double pesomax ) {
+    public List<Double> getAllCasosGraficoIdade(@RequestParam(required = false) String genero,
+            @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
+            @RequestParam(required = false) String concelho, @RequestParam(required = false) String regiao,
+            @RequestParam(required = false) String nacionalidade, @RequestParam(required = false) Integer alturamin,
+            @RequestParam(required = false) Integer alturamax, @RequestParam(required = false) Double pesomin,
+            @RequestParam(required = false) Double pesomax) {
         System.out.println("Estou aqui\n\n");
         List<Integer> listaIdades = new ArrayList<Integer>();
         List<Double> listaIdadesPercentagem = new ArrayList<Double>();
         int somaCasosTodos = 0;
 
-       
-            
         String strgenero = "";
         if (genero != null) {
             strgenero = genero;
@@ -828,48 +794,49 @@ public class CasoController {
 
         String strpesomin = "";
         if (pesomin != null) {
-            strpesomin = pesomin.toString() ;
+            strpesomin = pesomin.toString();
         } else {
             strpesomin = "0";
         }
 
         String strpesomax = "";
         if (pesomax != null) {
-            strpesomax = pesomax.toString() ;
+            strpesomax = pesomax.toString();
         } else {
             strpesomax = "500";
         }
 
-
-
         for (int idademinima = 1; idademinima <= 81; idademinima += 10) {
             String stridademinima = String.valueOf(idademinima);
-            String stridademaxima = (idademinima == 81) ? "300" : String.valueOf(idademinima + 9); 
+            String stridademaxima = (idademinima == 81) ? "300" : String.valueOf(idademinima + 9);
 
             List<Paciente> pacientes;
-            
-            pacientes = pacienteRepository.findAllFilters(strgenero, stridademinima, stridademaxima, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
+
+            pacientes = pacienteRepository.findAllFilters(strgenero, stridademinima, stridademaxima, strconcelho,
+                    strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos") ) {
+                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
+                        || caso.getEstado_atual().equals("Internado")
+                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
                     if (paciente.getIdade() >= idademin && paciente.getIdade() <= idademax) {
                         casos.add(caso);
                     }
                 }
             }
-                
+
             listaIdades.add(casos.size());
             somaCasosTodos += casos.size();
         }
-        
+
         if (somaCasosTodos == 0) {
             for (Integer integer : listaIdades) {
-                listaIdadesPercentagem.add( (double) 0 );
+                listaIdadesPercentagem.add((double) 0);
             }
         } else {
             for (Integer integer : listaIdades) {
-                listaIdadesPercentagem.add( (double) integer / somaCasosTodos*100 );
+                listaIdadesPercentagem.add((double) integer / somaCasosTodos * 100);
             }
         }
         System.out.println(listaIdadesPercentagem);
@@ -878,25 +845,21 @@ public class CasoController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/public/casos/count")
-    public int getAllCasosCount(
-        @RequestParam(required = false) String estado,
-        @RequestParam(required = false) String genero,
-        @RequestParam(required = false) Integer idademax,
-        @RequestParam(required = false) Integer idademin,
-        @RequestParam(required = false) String concelho,
-        @RequestParam(required = false) String regiao,
-        @RequestParam(required = false) String nacionalidade,
-        @RequestParam(required = false) Integer alturamin,
-        @RequestParam(required = false) Integer alturamax,
-        @RequestParam(required = false) Double pesomin,
-        @RequestParam(required = false) Double pesomax,
-        @RequestParam(required = false) Long hospital ) {
+    public int getAllCasosCount(@RequestParam(required = false) String estado,
+            @RequestParam(required = false) String genero, @RequestParam(required = false) Integer idademax,
+            @RequestParam(required = false) Integer idademin, @RequestParam(required = false) String concelho,
+            @RequestParam(required = false) String regiao, @RequestParam(required = false) String nacionalidade,
+            @RequestParam(required = false) Integer alturamin, @RequestParam(required = false) Integer alturamax,
+            @RequestParam(required = false) Double pesomin, @RequestParam(required = false) Double pesomax,
+            @RequestParam(required = false) Long hospital) {
 
-        if (estado == null && genero == null && idademin == null && idademax == null && concelho == null && regiao == null && nacionalidade == null && alturamin == null && alturamax == null && pesomin == null && pesomax == null && hospital == null ) {
+        if (estado == null && genero == null && idademin == null && idademax == null && concelho == null
+                && regiao == null && nacionalidade == null && alturamin == null && alturamax == null && pesomin == null
+                && pesomax == null && hospital == null) {
             List<Caso> casos = CasoRepository.findAll();
             return casos.size();
         }
-            
+
         String strgenero = "";
         if (genero != null) {
             strgenero = genero;
@@ -955,42 +918,46 @@ public class CasoController {
 
         String strpesomin = "";
         if (pesomin != null) {
-            strpesomin = pesomin.toString() ;
+            strpesomin = pesomin.toString();
         } else {
             strpesomin = "0";
         }
 
         String strpesomax = "";
         if (pesomax != null) {
-            strpesomax = pesomax.toString() ;
+            strpesomax = pesomax.toString();
         } else {
             strpesomax = "500";
         }
-        
+
         if (estado == null) {
             estado = "semestado";
         }
-        
+
         List<String> strmedicos = new ArrayList<String>();
         List<Medico> medicos = new ArrayList<Medico>();
         if (hospital != null) {
             medicos = medicoRepository.findAllByFilters("%", hospital.toString(), "0", "200");
-            for (Medico m: medicos) {
+            for (Medico m : medicos) {
                 strmedicos.add(String.valueOf(m.getNumero_medico()));
             }
-        } 
-        
+        }
+
         List<Paciente> pacientes;
         if (medicos.size() > 0) {
-            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax, strmedicos);   
+            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
+                    strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax, strmedicos);
         } else {
-            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
+            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
+                    strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
         }
         List<Caso> casos = new ArrayList<Caso>();
         if (estado.equals("ativos")) {
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos") ) {
+                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
+                        || caso.getEstado_atual().equals("Internado")
+                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
                     casos.add(caso);
                 }
             }
@@ -1007,24 +974,26 @@ public class CasoController {
 
     }
 
-    
     @GetMapping("/public/casos")
-    public List<Caso> getAllCasos(
-        @RequestParam(required = false) String estado,
-        @RequestParam(required = false) String genero,
-        @RequestParam(required = false) Integer idademax,
-        @RequestParam(required = false) Integer idademin,
-        @RequestParam(required = false) String concelho,
-        @RequestParam(required = false) String regiao,
-        @RequestParam(required = false) String nacionalidade,
-        @RequestParam(required = false) Integer alturamin,
-        @RequestParam(required = false) Integer alturamax,
-        @RequestParam(required = false) Double pesomin,
-        @RequestParam(required = false) Double pesomax ) {
-        if (estado == null && genero == null && idademin == null && idademax == null && concelho == null && regiao == null && nacionalidade == null && alturamin == null && alturamax == null && pesomin == null && pesomax == null ) {
-            return CasoRepository.findAll();
+    public List<Caso> getAllCasos(@RequestParam(required = false) String estado,
+            @RequestParam(required = false) String genero, @RequestParam(required = false) Integer idademax,
+            @RequestParam(required = false) Integer idademin, @RequestParam(required = false) String concelho,
+            @RequestParam(required = false) String regiao, @RequestParam(required = false) String nacionalidade,
+            @RequestParam(required = false) Integer alturamin, @RequestParam(required = false) Integer alturamax,
+            @RequestParam(required = false) Double pesomin, @RequestParam(required = false) Double pesomax,
+            @RequestParam(required = false) Integer page, @RequestParam(required=false) Integer size) {
+        
+        if (page==null) page=0;
+        if (size==null) size=30;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        if (estado == null && genero == null && idademin == null && idademax == null && concelho == null
+                && regiao == null && nacionalidade == null && alturamin == null && alturamax == null && pesomin == null
+                && pesomax == null) {
+            List<Caso> l = new ArrayList<Caso>();
+            for (Caso c: CasoRepository.findAll(pageRequest)) l.add(c);
+            return l;
         }
-            
+
         String strgenero = "";
         if (genero != null) {
             strgenero = genero;
@@ -1083,23 +1052,23 @@ public class CasoController {
 
         String strpesomin = "";
         if (pesomin != null) {
-            strpesomin = pesomin.toString() ;
+            strpesomin = pesomin.toString();
         } else {
             strpesomin = "0";
         }
 
         String strpesomax = "";
         if (pesomax != null) {
-            strpesomax = pesomax.toString() ;
+            strpesomax = pesomax.toString();
         } else {
             strpesomax = "500";
         }
 
-        
-        List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);   
+        Page<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho,
+                strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax, pageRequest);
 
         List<Caso> casos = new ArrayList<Caso>();
-        
+
         for (Paciente paciente : pacientes) {
             Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
             if (caso.getEstado_atual().equals(estado) || estado == null) {
@@ -1108,20 +1077,17 @@ public class CasoController {
         }
         return casos;
     }
-    
 
     @GetMapping("/public/casos/{id}")
-    public ResponseEntity<Caso> getCasoById(@PathVariable(value = "id") Long CasoId)
-        throws ResourceNotFoundException {
+    public ResponseEntity<Caso> getCasoById(@PathVariable(value = "id") Long CasoId) throws ResourceNotFoundException {
         Caso Caso = CasoRepository.findById(CasoId)
-          .orElseThrow(() -> new ResourceNotFoundException("Caso not found for this id :: " + CasoId));
+                .orElseThrow(() -> new ResourceNotFoundException("Caso not found for this id :: " + CasoId));
 
         return ResponseEntity.ok().body(Caso);
     }
 
     @PostMapping("/private/casos")
-    public Caso createCaso(@Valid @RequestBody Caso caso)
-            throws ResourceNotFoundException {
+    public Caso createCaso(@Valid @RequestBody Caso caso) throws ResourceNotFoundException {
         return CasoRepository.save(caso);
     }
 
@@ -1129,22 +1095,22 @@ public class CasoController {
     public ResponseEntity<Caso> updateCaso(@PathVariable(value = "id") Long CasoID,
             @Valid @RequestBody Caso CasoDetails) throws ResourceNotFoundException {
 
-            Caso Caso = CasoRepository.findById(CasoID)
-            .orElseThrow(() -> new ResourceNotFoundException("Caso not found for this id :: " + CasoID));
-                
-            Caso.setEstado_atual(CasoDetails.getEstado_atual());
-            Caso.setPaciente_id(CasoDetails.getPaciente_id());
-            final Caso updatedCaso = CasoRepository.save(Caso);
-            return ResponseEntity.ok(updatedCaso);
+        Caso Caso = CasoRepository.findById(CasoID)
+                .orElseThrow(() -> new ResourceNotFoundException("Caso not found for this id :: " + CasoID));
+
+        Caso.setEstado_atual(CasoDetails.getEstado_atual());
+        Caso.setPaciente_id(CasoDetails.getPaciente_id());
+        final Caso updatedCaso = CasoRepository.save(Caso);
+        return ResponseEntity.ok(updatedCaso);
     }
 
     @DeleteMapping("/private/casos/{id}")
-    public Map<String, Boolean> deleteCaso(@PathVariable(value = "id") Long CasoID) 
+    public Map<String, Boolean> deleteCaso(@PathVariable(value = "id") Long CasoID)
             throws ResourceNotFoundException, ParseException {
 
         Caso Caso = CasoRepository.findById(CasoID)
-        .orElseThrow(() -> new ResourceNotFoundException("Caso not found for this id :: " + CasoID));
-    
+                .orElseThrow(() -> new ResourceNotFoundException("Caso not found for this id :: " + CasoID));
+
         CasoRepository.delete(Caso);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);

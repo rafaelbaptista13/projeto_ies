@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.ies.g23.Covinfo19.relatorios.model.Relatorio_Paciente;
@@ -30,8 +33,12 @@ public class Relatorio_PacienteController {
 
 
     @GetMapping("/relatorio_pacientes")
-    public List<Relatorio_Paciente> getAllRelatorio_Pacientes() {
-        return relatorio_PacienteRepository.findAll();
+    public Page<Relatorio_Paciente> getAllRelatorio_Pacientes(@RequestParam(required = false) Integer page,
+        @RequestParam(required=false) Integer size) {
+        if (page==null) page=0;
+        if (size==null) size=30;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return relatorio_PacienteRepository.findAll(pageRequest);
     }
 
     @GetMapping("/relatorio_pacientes/{id}")
