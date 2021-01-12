@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {MedicService} from "../medic.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home-medic',
@@ -11,7 +12,7 @@ export class HomeMedicComponent implements OnInit {
   filterForm: FormGroup;
   estados = ['Ativo', 'Óbito', 'Internado', 'Intesivo', 'Recuperado'];
   public pacientes: {};
-  constructor(private medicService: MedicService) { }
+  constructor(private medicService: MedicService, private router: Router) { }
 
   ngOnInit(): void {
     //Função para colapsar navbar
@@ -49,5 +50,9 @@ export class HomeMedicComponent implements OnInit {
       this.medicService.getPacientsFilter(filterData.num_paciente, filterData.nome, filterData.estado).subscribe(pacientes => this.pacientes = pacientes);
       this.initForm();
     }
+  }
+
+  addPacient(): void{
+    this.router.navigate(['/pacient']);
   }
 }
