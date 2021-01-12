@@ -150,7 +150,32 @@
                     <hr>
                     <div class="row">
                       <div class="col-sm-2">
+                        </div>
+                        <div class="col-sm-3">
+                          <h6 class="mb-0">Estado</h6>
+                        </div>
+                        <div class="col-sm-5 text-secondary">
+                          <!-- select com ngfor -->
+                          <select class="custom-select" formControlName="estado">
+                            <option selected>Choose...</option>
+                            <option *ngFor="let estado of estados" value="{{estado}}">{{estado}}</option>
+                          </select>
+                        </div>
+                        <div class="col-sm-1">
+                          <button type="button" id="b_estado" style="display: none" (click)="enableinput('estado')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-5">
 
+                        </div>
+                        <div class="col-sm-6">
+                          <button type="submit" class="btn btn-success">Confirm</button>
+                        </div>
+                        <div class="col-sm-1">
+
+                        </div>
                       </div>
                       <div class="col-sm-3">
                         <h6 class="mb-0">Estado</h6>
@@ -162,7 +187,6 @@
                       <div class="col-sm-1">
                         <button type="button" id="b_estado" style="display: none" (click)="enableinput('estado')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
                       </div>
-                    </div>
                   </form>
                 </div>
             </div>

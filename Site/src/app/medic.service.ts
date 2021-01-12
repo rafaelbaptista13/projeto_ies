@@ -34,4 +34,14 @@ export class MedicService {
 
     return this.http.get(url, httpOptions);
   }
+
+  addPacient(data: any): Observable<any>{
+    const url = this.baseURL;
+    return this.http.post(url, data, httpOptions);
+  }
+
+  updatePacient(data: any): Observable<any>{
+    const url = this.baseURL;
+    return this.http.put(url, data, httpOptions);
+  }
 }

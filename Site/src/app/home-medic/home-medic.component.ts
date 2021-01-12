@@ -15,7 +15,8 @@ export class HomeMedicComponent implements OnInit {
   constructor(private medicService: MedicService, private router: Router) { }
 
   ngOnInit(): void {
-    //Função para colapsar navbar
+    this.medicService.getPacientsFilter().subscribe(pacientes => this.pacientes = pacientes);
+    // Função para colapsar navbar
     (function($) {
       $(document).ready(function () {
         $('#sidebarCollapse').on('click', function () {
@@ -25,7 +26,7 @@ export class HomeMedicComponent implements OnInit {
       });
     })(jQuery);
 
-    //Função para colapsar aba de filtros
+    // Função para colapsar aba de filtros
     (function($) {
       $(document).ready(function () {
         $('#filterCollapse').on('click', function () {
