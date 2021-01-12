@@ -54,7 +54,7 @@
           <div class="col-4">
             <h5 class="num_title">Número Paciente</h5>
             <div class="num_div">
-              <input id="num" formControlName="num_paciente">
+              <input type="number" id="num" formControlName="num_paciente">
             </div>
           </div>
           <div class="col-4">
@@ -67,8 +67,7 @@
             <h5 class="estado_title">Estado</h5>
             <div class="estado_div">
               <select name="estado_option" id="s_options" formControlName="estado">
-                <option hidden disabled selected value>Selecionar Opção</option>
-                <option value=""></option>
+                <option disabled selected value>Selecionar Opção</option>
                 <option *ngFor="let estado of estados" value="{{estado}}">{{estado}}</option>
                 <!-- NGFOR dos estados -->
               </select>
@@ -92,11 +91,12 @@
         </thead>
         <tbody>
         <tr *ngFor="let item of pacientes | keyvalue">
-          <th scope="row">{{ pacientes[item.key][0] }}</th>
-          <td>{{ pacientes[item.key][1] }}</td>
-          <td>{{ pacientes[item.key][2] }}</td>
-          <td>{{ pacientes[item.key][3] }}</td>
-          <td><a routerLink="/home"><i class="fas fa-user-edit"></i>></a><a routerLink="/home"><i class="fas fa-trash"></i></a></td>
+          <th scope="row">{{ item.key }}</th>
+          <td>{{ pacientes[item.key][0].nome }}</td>
+          <td>{{ pacientes[item.key][1].estado_atual }}</td>
+          <td>
+            <a [routerLink]="['/pacient/', item.key]"><i class="fas fa-user-edit"></i></a>&nbsp;&nbsp;&nbsp;
+            <a routerLink="/home"><i class="fas fa-trash"></i></a></td>
         </tr>
         </tbody>
       </table>

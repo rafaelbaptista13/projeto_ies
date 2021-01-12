@@ -1,7 +1,5 @@
-/*
-----old code, needs review-------
 export class Paciente {
-  numeroUtente: number;
+  paciente_id: number;
   genero: string;
   idade: number;
   nome: string;
@@ -10,5 +8,5 @@ export class Paciente {
   nacionalidade: string;
   altura: number;
   peso: number;
+  medico_numero_medico: number;
 }
- */

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { StatisticsComponent } from './statistics/statistics.component';
@@ -13,6 +13,7 @@ import * as $ from 'jquery';
 import { LoginComponent } from './login/login.component';
 import { HomeMedicComponent } from './home-medic/home-medic.component';
 import { PacienteComponent } from './paciente/paciente.component';
+import { AuthInterceptor } from './AuthInterceptor';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,13 @@ import { PacienteComponent } from './paciente/paciente.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

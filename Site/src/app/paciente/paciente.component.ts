@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Paciente} from '../paciente';
+import {PacienteService} from '../paciente.service';
 
 @Component({
   selector: 'app-paciente',
@@ -16,6 +18,7 @@ export class PacienteComponent implements OnInit {
     'Suíça', 'Turca', 'Ucraniana', 'Argentina', 'Canadiana', 'Mexicana', 'Japonesa', 'Portuguesa'].sort();
   regioes = ['Norte', 'Lisboa e Vale do Tejo', 'Centro', 'Alentejo', 'Algarve', 'Açores', 'Madeira'];
   formdic = {nome: 0, idade: 1, nacionalidade: 2, regiao: 3, peso: 4, altura: 5, estado: 6  };
+  paciente_atual: Paciente;
   private b_nome: HTMLElement;
   private b_idade: HTMLElement;
   private b_nacionalidade: HTMLElement;
@@ -31,7 +34,7 @@ export class PacienteComponent implements OnInit {
   private i_altura: HTMLElement;
   private i_estado: HTMLElement;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private pacienteService: PacienteService) {}
 
   ngOnInit(): void {
     //Função para colapsar navbar
@@ -61,7 +64,7 @@ export class PacienteComponent implements OnInit {
     this.b_altura = document.getElementById('b_altura');
     this.b_estado = document.getElementById('b_estado');
     if (this.id){
-      this.editPaciente();
+      this.pacienteService.getPacientById(this.id).subscribe(result => {console.log(result); this.paciente_atual = result; console.log(this.paciente_atual); this.editPaciente();});
     }
     else{
       this.addPaciente();
@@ -77,14 +80,16 @@ export class PacienteComponent implements OnInit {
     this.b_altura.style.display = 'block';
     this.b_estado.style.display = 'block';
     // Chamar serviço e ir buscar os valores e inicializar
+    console.log(this.paciente_atual);
+    console.log("aqui");
     this.formPaciente = new FormGroup(
       {
-        nome: new FormControl('', [Validators.required]),
-        idade: new FormControl('', [Validators.required]),
-        nacionalidade: new FormControl('', [Validators.required]),
-        regiao: new FormControl('', [Validators.required]),
-        peso: new FormControl('', [Validators.required]),
-        altura: new FormControl('', [Validators.required]),
+        nome: new FormControl(this.paciente_atual.nome, [Validators.required]),
+        idade: new FormControl(this.paciente_atual.idade, [Validators.required]),
+        nacionalidade: new FormControl(this.paciente_atual.nacionalidade, [Validators.required]),
+        regiao: new FormControl(this.paciente_atual.regiao, [Validators.required]),
+        peso: new FormControl(this.paciente_atual.peso, [Validators.required]),
+        altura: new FormControl(this.paciente_atual.altura, [Validators.required]),
         estado: new FormControl('', [Validators.required]),
       }
     );

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from 'rxjs/internal/Observable';
+import {Paciente} from './paciente';
 
 //Define mensagem em JSON e o URL é de segurança
 let httpOptions = {
@@ -10,28 +11,20 @@ let httpOptions = {
   })
 };
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class MedicService {
+export class PacienteService {
 
   //URL inicial da api
   private baseURL = 'http://localhost:8080/api/v1/';
   constructor(private http: HttpClient) { }
 
-  getPacientsFilter(medico: string, num: string, nome: string, estado: string): Observable<any> {
-    let url = this.baseURL + 'private/pacientesbymedic?medico=' + medico;
-
-    if (num !== '' && num !== null) {
-      url += '&num_paciente=' + num;
-    }
-    if (nome !== '' && nome !== null) {
-      url += '&nome=' + nome;
-    }
-    if (estado !== '' && nome !== null) {
-      url += '&estado=' + estado;
-    }
+  getPacientById(paciente_id: string): Observable<any> {
+    let url = this.baseURL + 'private/pacientes/' + paciente_id;
 
     return this.http.get(url, httpOptions);
   }
+
 }

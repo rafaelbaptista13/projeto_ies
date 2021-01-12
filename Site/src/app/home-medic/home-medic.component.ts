@@ -10,8 +10,8 @@ import {Router} from "@angular/router";
 })
 export class HomeMedicComponent implements OnInit {
   filterForm: FormGroup;
-  estados = ['Ativo', 'Óbito', 'Internado', 'Intesivo', 'Recuperado'];
-  public pacientes: {};
+  estados = ['Confinamento Domiciliário', 'Internado', 'Cuidados Intesivos', 'Recuperado'];
+  pacientes = {};
   constructor(private medicService: MedicService, private router: Router) { }
 
   ngOnInit(): void {
@@ -33,6 +33,8 @@ export class HomeMedicComponent implements OnInit {
         });
       });
     })(jQuery);
+    const medico_id = localStorage.getItem('codigo_acesso');
+    this.medicService.getPacientsFilter(medico_id, '', '', '').subscribe(pacientes => {this.pacientes = pacientes; } );
     this.initForm();
   }
   initForm(): void {
@@ -47,7 +49,8 @@ export class HomeMedicComponent implements OnInit {
 
   onSubmit(filterData): void {
     if (this.filterForm.valid){
-      this.medicService.getPacientsFilter(filterData.num_paciente, filterData.nome, filterData.estado).subscribe(pacientes => this.pacientes = pacientes);
+      const medico_id = localStorage.getItem('codigo_acesso');
+      this.medicService.getPacientsFilter(medico_id, filterData.num_paciente, filterData.nome, filterData.estado).subscribe(pacientes => {this.pacientes = pacientes; } );
       this.initForm();
     }
   }

@@ -1,5 +1,6 @@
 package ua.ies.g23.Covinfo19.pacientes_med_hosp.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Paciente;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.PacienteRepository;
+import ua.ies.g23.Covinfo19.relatorios.model.Caso;
+import ua.ies.g23.Covinfo19.relatorios.repository.CasoRepository;
 
 
 @RestController
@@ -28,6 +32,44 @@ import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.PacienteRepository;
 public class PacienteController {
     @Autowired
     private PacienteRepository pacienteRepository;
+
+    @Autowired
+    private CasoRepository casoRepository;
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("/pacientesbymedic")
+    public HashMap<Long, List<Object>> getAllByMedico(
+        @RequestParam(required = true) Integer medico,
+        @RequestParam(required = false) String num_paciente,
+        @RequestParam(required = false) String nome,
+        @RequestParam(required = false) String estado ) {
+            if (num_paciente == null) {
+                num_paciente = "%";
+            }
+
+            if (nome == null) {
+                nome = "%";
+            } else {
+                nome = "%" + nome + "%";
+            }
+
+            if (estado == null) {
+                estado = "%";
+            }
+
+            List<Paciente> pacientes = pacienteRepository.findByMedico(String.valueOf(medico), num_paciente, nome);
+            HashMap<Long, List<Object>> retorno = new HashMap<>();
+            for (Paciente p : pacientes) {
+                Caso caso = casoRepository.findByPacienteId(p.getPacienteId());
+                if (caso.getEstado_atual().equals(estado) || estado.equals("%")) {
+                    List<Object> dados = new ArrayList<>();
+                    dados.add(p);
+                    dados.add(caso);
+                    retorno.put(p.getPacienteId(), dados );
+                }
+            }
+            return retorno;
+        }
 
     @GetMapping("/pacientes")
     public List<Paciente> getAllCasos(

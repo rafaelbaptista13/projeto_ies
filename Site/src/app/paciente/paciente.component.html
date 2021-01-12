@@ -55,7 +55,7 @@
                   </div>
                 </div>
                 <div class="atributes">
-                  <form action=".">
+                  <form [formGroup]="formPaciente" (ngSubmit)="editar()">
                     <div class="row">
                       <div class="col-sm-2">
 
@@ -64,7 +64,7 @@
                         <h6 class="mb-0">Nome</h6>
                       </div>
                       <div class="col-sm-5 text-secondary">
-                        <input id="nome" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                        <input formControlName="nome" id="nome" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                       <div class="col-sm-1">
                         <button type="button" id="b_nome" style="display: none" (click)="enableinput('nome')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
@@ -79,7 +79,7 @@
                         <h6 class="mb-0">Idade</h6>
                       </div>
                       <div class="col-sm-5 text-secondary">
-                        <input type="number" min="0" class="form-control" placeholder="Idade" aria-label="name" aria-describedby="basic-addon1">
+                        <input formControlName="idade" type="number" min="0" class="form-control" placeholder="Idade" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                       <div class="col-sm-1">
                         <button type="button" id="b_idade" style="display: none" (click)="enableinput('idade')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
@@ -95,7 +95,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- select com ngfor -->
-                        <input type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                        <input formControlName="nacionalidade" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                       <div class="col-sm-1">
                         <button type="button" id="b_nacionalidade" style="display: none" (click)="enableinput('nacionalidade')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
@@ -111,7 +111,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- sleect com ng for -->
-                        <input type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                        <input formControlName="regiao" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                       <div class="col-sm-1">
                         <button type="button" id="b_regiao" style="display: none" (click)="enableinput('regiao')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
@@ -126,7 +126,7 @@
                         <h6 class="mb-0">Peso</h6>
                       </div>
                       <div class="col-sm-5 text-secondary">
-                        <input type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                        <input formControlName="peso" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                       <div class="col-sm-1">
                         <button type="button" id="b_peso" style="display: none" (click)="enableinput('peso')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
@@ -141,7 +141,7 @@
                         <h6 class="mb-0">Altura</h6>
                       </div>
                       <div class="col-sm-5 text-secondary">
-                        <input type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                        <input formControlName="altura" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                       <div class="col-sm-1">
                         <button type="button" id="b_altura" style="display: none" (click)="enableinput('altura')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
@@ -157,7 +157,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- select com ngfor -->
-                        <input type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                        <input formControlName="estado" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                       <div class="col-sm-1">
                         <button type="button" id="b_estado" style="display: none" (click)="enableinput('estado')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
