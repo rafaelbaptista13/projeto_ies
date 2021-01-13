@@ -6,7 +6,7 @@ import {CasosService} from './casos.service';
 
 //Define mensagem em JSON e o URL é de segurança
 const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json', 'access-control-allow-origin': 'http://192.168.160.215:8080/'})
+  headers: new HttpHeaders({'Content-Type': 'application/json', 'access-control-allow-origin': 'http://localhost:8080/'})
 };
 
 @Injectable({
@@ -15,7 +15,7 @@ const httpOptions = {
 export class HospitalService {
 
   //URL inicial da api
-  private baseURL = 'http://192.168.160.215:8080/api/v1/';
+  private baseURL = 'http://localhost:8080/api/v1/';
 
   constructor(private http: HttpClient, private casosService: CasosService) { }
 
@@ -51,9 +51,9 @@ export class HospitalService {
             if (taxaocupacao_min < taxaocupacao && taxaocupacao < taxaocupacao_max) {
               retorno[element.id] = [element.nome, result1, result2, ((element.numero_camas_ocupadas / element.numero_camas) * 100).toFixed(2)];
             }
-          })
-        })
-      } )
+          });
+        });
+      } );
     });
     return retorno;
   }

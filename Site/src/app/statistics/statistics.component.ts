@@ -55,7 +55,7 @@ export class StatisticsComponent implements OnInit {
           $('#sidebar').toggleClass('active');
           $(this).toggleClass('active');
         });
-      })
+      });
     })(jQuery);
 
     //Função para colapsar aba de filtros
@@ -64,7 +64,7 @@ export class StatisticsComponent implements OnInit {
         $('#filterCollapse').on('click', function () {
           $('#filters').toggle(500);
         });
-      })
+      });
     })(jQuery);
 
     //Get Probabilidades idades e chamada da função de criação de charts

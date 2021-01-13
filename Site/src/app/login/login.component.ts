@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid){
       // Alteração do valor para o diferente tipo de casos, de acordo com os filtros inseridos
       this.loginService.LoginValidation(this.loginForm.value).
-      subscribe(logged => {console.log(logged); this.router.navigate(['/home']);  }, error => { this.ngOnInit(); } );
+      subscribe(logged => {console.log(localStorage.getItem('token')); this.router.navigate(['/homeMedic']);  }, error => { this.ngOnInit(); } );
     }
   }
 }

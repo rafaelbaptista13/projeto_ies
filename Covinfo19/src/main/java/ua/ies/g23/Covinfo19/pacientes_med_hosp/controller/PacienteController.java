@@ -1,5 +1,9 @@
 package ua.ies.g23.Covinfo19.pacientes_med_hosp.controller;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,10 +11,13 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.None;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +28,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.bytebuddy.implementation.bytecode.Throw;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Hospital;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Medico;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Paciente;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.HospitalRepository;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.MedicoRepository;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.PacienteRepository;
+import ua.ies.g23.Covinfo19.relatorios.model.Caso;
+import ua.ies.g23.Covinfo19.relatorios.model.Relatorio_Paciente;
+import ua.ies.g23.Covinfo19.relatorios.repository.CasoRepository;
+import ua.ies.g23.Covinfo19.relatorios.repository.Relatorio_PacienteRepository;
 
 
 @RestController
@@ -31,6 +47,58 @@ import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.PacienteRepository;
 public class PacienteController {
     @Autowired
     private PacienteRepository pacienteRepository;
+
+    @Autowired
+    private MedicoRepository medicoRepository;
+
+    @Autowired
+    private CasoRepository casoRepository;
+
+    @Autowired
+    private Relatorio_PacienteRepository relatorioPacienteRepository;
+
+    @Autowired
+    private HospitalRepository hospitalRepository;
+
+    public static final SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("/pacientesbymedic")
+    public HashMap<Long, List<Object>> getAllByMedico(
+        @RequestParam(required = true) Integer medico,
+        @RequestParam(required = false) String num_paciente,
+        @RequestParam(required = false) String nome,
+        @RequestParam(required = false) String estado ) {
+            if (num_paciente == null) {
+                num_paciente = "%";
+            }
+
+            if (nome == null) {
+                nome = "%";
+            } else {
+                nome = "%" + nome + "%";
+            }
+
+            if (estado == null) {
+                estado = "%";
+            }
+            System.out.println("hey");
+            List<Paciente> pacientes = pacienteRepository.findByMedico(String.valueOf(medico), num_paciente, nome);
+            System.out.println(pacientes);
+            HashMap<Long, List<Object>> retorno = new HashMap<>();
+            for (Paciente p : pacientes) {
+                Caso caso = casoRepository.findByPacienteId(p.getPacienteId());
+                System.out.println(caso);
+                if (caso.getEstado_atual().equals(estado) || estado.equals("%")) {
+                    List<Object> dados = new ArrayList<>();
+                    dados.add(p);
+                    dados.add(caso);
+                    retorno.put(p.getPacienteId(), dados );
+                }
+            }
+            System.out.println(retorno);
+            return retorno;
+        }
 
     @GetMapping("/pacientes")
     public Page<Paciente> getAllCasos(
@@ -138,8 +206,52 @@ public class PacienteController {
     }
     
     @PostMapping("/pacientes")
-    public Paciente createPaciente(@Valid @RequestBody Paciente paciente) {
-        return pacienteRepository.save(paciente);
+    public Paciente createPaciente(@Valid @RequestBody Map<String, String> pacient_info)
+            throws NumberFormatException, ResourceNotFoundException {
+        Paciente paciente = new Paciente();
+        paciente.setNome(pacient_info.get("nome"));
+        paciente.setGenero(pacient_info.get("genero"));
+        paciente.setIdade(Integer.parseInt(pacient_info.get("idade")));
+        paciente.setConcelho(pacient_info.get("concelho"));
+        paciente.setRegiao(pacient_info.get("regiao"));
+        paciente.setNacionalidade(pacient_info.get("nacionalidade"));
+        paciente.setAltura(Integer.parseInt(pacient_info.get("altura")));
+        paciente.setPeso(Float.parseFloat(pacient_info.get("peso")));
+        Medico medico = medicoRepository.findById(Long.parseLong(pacient_info.get("medico_numero_medico")))
+        .orElseThrow(() -> new ResourceNotFoundException("Medico not found for this id :: " + pacient_info.get("medico_numero_medico")));
+        paciente.setMedico(medico);
+        pacienteRepository.save(paciente);
+        //Criação novo caso para o paciente. Atribuição dos valores dos campos do mesmo.
+        Caso caso = new Caso();
+        caso.setEstado_atual(pacient_info.get("estado"));
+        caso.setPaciente_id(paciente.getPacienteId());
+        casoRepository.save(caso);
+
+        DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date d2;
+        try {
+            String data = formatter.format(new Date(System.currentTimeMillis()));
+            d2 = df2.parse(data.split(" ")[0] + " " + data.split(" ")[2] );
+
+            //Criação relatorio para guardar o estado e tempo associado à mensagem recebida neste momento. Atribuição desse relatorio ao caso do paciente.
+            Relatorio_Paciente relatorio_paciente = new Relatorio_Paciente();
+            relatorio_paciente.setCaso(caso);
+            relatorio_paciente.setEstado(pacient_info.get("estado"));
+            relatorio_paciente.setData(d2);
+            System.out.println(relatorio_paciente);
+            relatorioPacienteRepository.save(relatorio_paciente);
+        
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
+        if (caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos") ) {
+            Hospital hospital = medico.getHospital();
+            hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() + 1);
+            hospitalRepository.save(hospital);
+        }
+        
+        return paciente;
     }
 
     @PutMapping("/pacientes/{id}")
