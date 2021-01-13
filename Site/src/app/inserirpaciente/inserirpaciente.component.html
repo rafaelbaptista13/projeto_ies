@@ -89,7 +89,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- select com ngfor -->
-                        <select  class="form-control" formControlName="genero">
+                        <select  class="custom-select" formControlName="genero">
                           <option disabled>--Selecione--</option>
                           <option *ngFor="let genero of generos" [value]="genero">{{ genero }}</option>
                         </select>
@@ -105,7 +105,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- select com ngfor -->
-                        <select  class="form-control" formControlName="nacionalidade">
+                        <select  class="custom-select" formControlName="nacionalidade">
                           <option disabled>--Selecione--</option>
                           <option *ngFor="let nacionalidade of nacionalidades" [value]="nacionalidade">{{ nacionalidade }}</option>
                         </select>
@@ -121,7 +121,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- sleect com ng for -->
-                        <select  class="form-control" formControlName="regiao">
+                        <select  class="custom-select" formControlName="regiao">
                           <option disabled>--Selecione--</option>
                           <option *ngFor="let regiao of regioes" [value]="regiao">{{ regiao }}</option>
                         </select>
@@ -137,7 +137,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- select com ngfor -->
-                        <select  class="form-control" formControlName="concelho">
+                        <select  class="custom-select" formControlName="concelho">
                           <option disabled>--Selecione--</option>
                           <option *ngFor="let concelho of concelhos" [value]="concelho">{{ concelho }}</option>
                         </select>
@@ -152,7 +152,7 @@
                         <h6 class="mb-0">Peso</h6>
                       </div>
                       <div class="col-sm-5 text-secondary">
-                        <input formControlName="peso" type="number" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                        <input formControlName="peso" type="number" class="form-control" placeholder="Peso" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                     </div>
                     <hr>
@@ -165,7 +165,7 @@
                         <h6 class="mb-0">Altura</h6>
                       </div>
                       <div class="col-sm-5 text-secondary">
-                        <input formControlName="altura" type="number" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                        <input formControlName="altura" type="number" class="form-control" placeholder="Altura" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                     </div>
                     <hr>
@@ -178,7 +178,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- select com ngfor -->
-                        <select  class="form-control" formControlName="estado">
+                        <select  class="custom-select" formControlName="estado">
                           <option disabled>--Selecione--</option>
                           <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
                         </select>

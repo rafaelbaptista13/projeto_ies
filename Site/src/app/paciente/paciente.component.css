@@ -174,22 +174,20 @@ ul.CTAs a {
   height: 85%;
 }
 
-.main-body{
-  height: 100%;
+body{
+  margin-top:20px;
+  color: #1a202c;
+  text-align: left;
+  background-color: #e2e8f0;
 }
-
-.row.gutters-sm{
-  height: 95%;
+.main-body {
+  padding: 15px;
 }
 .card {
   box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
 }
 
 .card {
-  width: 60%;
-  margin-left: 20%;
-  margin-right: 20%;
-  height: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -197,7 +195,7 @@ ul.CTAs a {
   word-wrap: break-word;
   background-color: #fff;
   background-clip: border-box;
-  border: 2px solid rgba(0,0,0,.125);
+  border: 0 solid rgba(0,0,0,.125);
   border-radius: .25rem;
 }
 
@@ -207,10 +205,6 @@ ul.CTAs a {
   padding: 1rem;
 }
 
-img{
-  width: 25%;
-  height: auto;
-}
 .gutters-sm {
   margin-right: -8px;
   margin-left: -8px;
@@ -224,11 +218,6 @@ img{
   margin-bottom: 1rem!important;
 }
 
-.mb-0{
-  font-size: 20px;
-  font-weight: bold;
-}
-
 .bg-gray-300 {
   background-color: #e2e8f0;
 }
@@ -239,41 +228,26 @@ img{
   box-shadow: none!important;
 }
 
-.atributes {
-  margin-top: 5%;
-  width: 80%;
-  margin-left: 10%;
-  margin-right: 10%;
+img{
+  width: 74%;
+  height: auto;
 }
-/* ---------------------------------------------------
-    MEDIAQUERIES
------------------------------------------------------ */
-@media (max-width: 768px) {
-  #sidebar {
-    margin-left: -250px;
-    transform: rotateY(90deg);
-  }
-  #sidebar.active {
-    margin-left: 0;
-    transform: none;
-  }
-  #sidebarCollapse span:first-of-type,
-  #sidebarCollapse span:nth-of-type(2),
-  #sidebarCollapse span:last-of-type {
-    transform: none;
-    opacity: 1;
-    margin: 5px auto;
-  }
-  #sidebarCollapse.active span {
-    margin: 0 auto;
-  }
-  #sidebarCollapse.active span:first-of-type {
-    transform: rotate(45deg) translate(2px, 2px);
-  }
-  #sidebarCollapse.active span:nth-of-type(2) {
-    opacity: 0;
-  }
-  #sidebarCollapse.active span:last-of-type {
-    transform: rotate(-45deg) translate(1px, -1px);
-  }
+
+button{
+  font-weight: bold;
+}
+
+#b_eliminar, #b_confirmar, #b_editar{
+  color: white;
+  width: 40%;
+  height: 20%;
+  margin: 0 5% 0 5%;
+}
+
+#b_confirmar{
+  display: none;
+}
+
+#b_editar{
+  display: block;
 }

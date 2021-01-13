@@ -5,6 +5,8 @@ import {Paciente} from '../paciente';
 import {PacienteService} from '../paciente.service';
 import {MedicService} from "../medic.service";
 
+declare const CanvasJS: any;
+
 @Component({
   selector: 'app-paciente',
   templateUrl: './paciente.component.html',
@@ -18,24 +20,20 @@ export class PacienteComponent implements OnInit {
     'Eslovena', 'Finlandesa', 'Grega', 'Húngara', 'Islandesa', 'Irlandesa', 'Lituana', 'Luxemburguesa', 'Norueguesa', 'Romena', 'Sueca',
     'Suíça', 'Turca', 'Ucraniana', 'Argentina', 'Canadiana', 'Mexicana', 'Japonesa', 'Portuguesa'].sort();
   regioes = ['Norte', 'Lisboa e Vale do Tejo', 'Centro', 'Alentejo', 'Algarve', 'Açores', 'Madeira'];
-  formdic = {nome: 0, idade: 1, nacionalidade: 2, regiao: 3, peso: 4, altura: 5, estado: 6  };
   paciente_atual: Paciente;
   concelhos = {'Norte': ["Caminha","Melgaço","Ponte de Lima","Viana do Castelo","Vila Nova de Cerveira","Monção","Barcelos","Braga","Esposende","Fafe","Guimarães","Vizela","Vila Nova de Famalicão","Arouca","Espinho","Gondomar","Maia","Matosinhos","Porto","Póvoa de Varzim","Santa Maria da Feira","Oliveira de Azeméis","Santo Tirso","São João da Madeira","Trofa","Vila Nova de Gaia","Chaves","Montalegre","Amarante","Celorico de Basto","Lousada","Paços de Ferreira","Penafiel","Lamego","Peso da Régua","Vila Real","Bragança","Miranda do Douro","Mirandela"]}
   estados = ['atvio', 'recuperado', 'internado', 'intensivo', 'obito'];
-  private b_nome: HTMLElement;
-  private b_idade: HTMLElement;
-  private b_nacionalidade: HTMLElement;
-  private b_regiao: HTMLElement;
-  private b_peso: HTMLElement;
-  private b_altura: HTMLElement;
-  private b_estado: HTMLElement;
 
-  private add: boolean;
   private update: boolean;
+  private b_editar: HTMLElement;
+  private b_confirmar: HTMLElement;
   constructor(private route: ActivatedRoute, private medicService: MedicService, private pacienteService: PacienteService) {}
 
   ngOnInit(): void {
-    //Função para colapsar navbar
+    chartEstados();
+    this.b_editar = document.getElementById('b_editar');
+    this.b_confirmar = document.getElementById('b_confirmar');
+    // Função para colapsar navbar
     (function($) {
       $(document).ready(function () {
         $('#sidebarCollapse').on('click', function () {
@@ -45,7 +43,7 @@ export class PacienteComponent implements OnInit {
       });
     })(jQuery);
 
-    //Função para colapsar aba de filtros
+    // Função para colapsar aba de filtros
     (function($) {
       $(document).ready(function () {
         $('#filterCollapse').on('click', function () {
@@ -54,99 +52,126 @@ export class PacienteComponent implements OnInit {
       });
     })(jQuery);
     this.id = this.route.snapshot.paramMap.get('id');
-    this.b_nome = document.getElementById('b_nome');
-    this.b_idade = document.getElementById('b_idade');
-    this.b_nacionalidade = document.getElementById('b_nacionalidade');
-    this.b_regiao = document.getElementById('b_regiao');
-    this.b_peso = document.getElementById('b_peso');
-    this.b_altura = document.getElementById('b_altura');
-    this.b_estado = document.getElementById('b_estado');
     if (this.id){
-      this.pacienteService.getPacientById(this.id).subscribe(result => {console.log(result); this.paciente_atual = result; console.log(this.paciente_atual); this.editPaciente();});
+      this.editPaciente();
+      this.pacienteService.getPacientById(this.id).subscribe(
+        result => {console.log(result); this.paciente_atual = result; console.log(this.paciente_atual); this.editPaciente();
+        });
     }
     else{
-      this.addPaciente();
+      console.log('No ID was given');
     }
   }
 
   editPaciente(): void{
-    this.add = false;
     this.update = true;
-    this.b_nome.style.display = 'block';
-    this.b_idade.style.display = 'block';
-    this.b_regiao.style.display = 'block';
-    this.b_nacionalidade.style.display = 'block';
-    this.b_peso.style.display = 'block';
-    this.b_altura.style.display = 'block';
-    this.b_estado.style.display = 'block';
     // Chamar serviço e ir buscar os valores e inicializar
-    console.log(this.paciente_atual);
-    console.log("aqui");
+    /*
     this.formPaciente = new FormGroup(
       {
         nome: new FormControl(this.paciente_atual.nome, [Validators.required]),
         idade: new FormControl(this.paciente_atual.idade, [Validators.required]),
+        genero: new FormControl(this.paciente_atual.genero, [Validators.required]),
         nacionalidade: new FormControl(this.paciente_atual.nacionalidade, [Validators.required]),
         regiao: new FormControl(this.paciente_atual.regiao, [Validators.required]),
+        concelho: new FormControl(this.paciente_atual.concelho, [Validators.required]),
         peso: new FormControl(this.paciente_atual.peso, [Validators.required]),
         altura: new FormControl(this.paciente_atual.altura, [Validators.required]),
         estado: new FormControl('', [Validators.required]),
       }
     );
+    */
+    // Test only
+    this.formPaciente = new FormGroup(
+      {
+        nome: new FormControl('Roberto', [Validators.required]),
+        idade: new FormControl('25', [Validators.required]),
+        genero: new FormControl('Masculino', [Validators.required]),
+        nacionalidade: new FormControl('Portuguesa', [Validators.required]),
+        regiao: new FormControl('Norte', [Validators.required]),
+        concelho: new FormControl('Esposende', [Validators.required]),
+        peso: new FormControl('90', [Validators.required]),
+        altura: new FormControl('1,75', [Validators.required]),
+        estado: new FormControl('Recuperado', [Validators.required]),
+      }
+    );
+    //
     this.formPaciente.get('nome').disable();
     this.formPaciente.get('idade').disable();
+    this.formPaciente.get('genero').disable();
     this.formPaciente.get('nacionalidade').disable();
     this.formPaciente.get('regiao').disable();
+    this.formPaciente.get('concelho').disable();
     this.formPaciente.get('peso').disable();
     this.formPaciente.get('altura').disable();
     this.formPaciente.get('estado').disable();
   }
 
-  addPaciente(): void{
-    this.add = true;
-    this.update = false;
-    this.b_nome.style.display = 'none';
-    this.b_idade.style.display = 'none';
-    this.b_regiao.style.display = 'none';
-    this.b_nacionalidade.style.display = 'none';
-    this.b_peso.style.display = 'none';
-    this.b_altura.style.display = 'none';
-    this.b_estado.style.display = 'none';
-    this.formPaciente = new FormGroup(
-      {
-        nome: new FormControl('', [Validators.required]),
-        idade: new FormControl('', [Validators.required]),
-        genero: new FormControl('', [Validators.required]),
-        nacionalidade: new FormControl('', [Validators.required]),
-        regiao: new FormControl('', [Validators.required]),
-        concelho: new FormControl('', [Validators.required]),
-        peso: new FormControl('', [Validators.required]),
-        altura: new FormControl('', [Validators.required]),
-        estado: new FormControl('', [Validators.required]),
-      }
-    );
+  enableinput(): void{
+    this.b_editar.style.display = 'none';
+    this.b_confirmar.style.display = 'block';
+    this.formPaciente.get('nome').enable();
+    this.formPaciente.get('idade').enable();
+    this.formPaciente.get('genero').enable();
+    this.formPaciente.get('nacionalidade').enable();
+    this.formPaciente.get('regiao').enable();
+    this.formPaciente.get('concelho').enable();
+    this.formPaciente.get('peso').enable();
+    this.formPaciente.get('altura').enable();
+    this.formPaciente.get('estado').enable();
   }
 
-  enableinput(input_name: string): void{
-    this.formPaciente.get(input_name).enable();
-  }
-
-  editar(): void{
+  submit_editar(): void{
     if (this.formPaciente.valid){
-      if (this.add){
-        const medico_id = localStorage.getItem('codigo_acesso');
-        const data = {nome: this.formPaciente.value.nome, idade: this.formPaciente.value.idade, genero: this.formPaciente.value.genero,
-        concelho: this.formPaciente.value.concelho, regiao: this.formPaciente.value.regiao, nacionalidade: this.formPaciente.value.nacionalidade,
-        altura: this.formPaciente.value.altura, peso: this.formPaciente.value.peso, estado: this.formPaciente.value.estado, medico: medico_id};
-        this.medicService.addPacient(data);
-      }
-      else if (this.update){
-        // Falta fazer este
-        const data = {nome: this.formPaciente.value.nome, idade: this.formPaciente.value.idade, genero: this.formPaciente.value.genero,
-          concelho: this.formPaciente.value.concelho, regiao: this.formPaciente.value.regiao, nacionalidade: this.formPaciente.value.nacionalidade,
-          altura: this.formPaciente.value.altura, peso: this.formPaciente.value.peso, estado: this.formPaciente.value.estado};
-        this.medicService.updatePacient(this.formPaciente.value);
-      }
+      const data = {nome: this.formPaciente.value.nome, idade: this.formPaciente.value.idade, genero: this.formPaciente.value.genero,
+        concelho: this.formPaciente.value.concelho, regiao: this.formPaciente.value.regiao,
+        nacionalidade: this.formPaciente.value.nacionalidade, altura: this.formPaciente.value.altura,
+        peso: this.formPaciente.value.peso, estado: this.formPaciente.value.estado};
+      this.medicService.updatePacient(data);
     }
   }
+
+  eliminar(): void{
+    // Eliminar cliente
+  }
 }
+
+// Função para especificar valores dos charts
+function chartEstados() {
+
+  // grafico todos os casos diarios
+
+  var chart = new CanvasJS.Chart("estadossgraph", {
+    animationEnabled: true,
+    title:{
+      text: ""
+    },
+    axisX:{
+      valueFormatString: "DD MMM",
+      crosshair: {
+        enabled: true,
+        snapToDataPoint: true
+      }
+    },
+    axisY: {
+      title: "Estado",
+      valueFormatString: "##",
+      crosshair: {
+        enabled: true,
+        snapToDataPoint: true,
+        labelFormatter: function(e) {
+          return CanvasJS.formatNumber(e.value, "##") + " infeções";
+        }
+      }
+    },
+    data: [{
+      type: "area",
+      xValueFormatString: "DD MMM",
+      yValueFormatString: "##",
+      dataPoints: ['Recuperado', 'Domiciliário', 'Internado', 'Intensivo', 'Óbito']
+    }]
+  });
+  chart.render();
+
+}
+
