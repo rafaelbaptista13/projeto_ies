@@ -51,12 +51,10 @@
                 <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle">
                 <div class="mt-3">
                   <h4>John Doe</h4>
-                  <p class="text-secondary mb-1">Full Stack Developer</p>
-                  <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
                   <div class="row">
-                    <button class="btn btn-danger" id="b_eliminar" (click)="eliminar()"><i class="fas fa-trash"></i></button>
                     <button class="btn btn-warning" id= "b_editar" (click)="enableinput()"><i class="fas fa-pencil-alt"></i></button>
                     <button class="btn btn-success" id= "b_confirmar" type="submit"><i class="fas fa-check-circle"></i></button>
+                    <button class="btn btn-danger" id="b_eliminar" (click)="eliminar()"><i class="fas fa-trash"></i></button>
                   </div>
                 </div>
               </div>
@@ -82,7 +80,7 @@
                   <h6 class="mb-0">Nome</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <input formControlName="nome" id="nome" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                  <input disabled formControlName="nome" id="nome" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
                 </div>
               </div>
               <hr>
@@ -91,7 +89,7 @@
                   <h6 class="mb-0">Idade</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <input formControlName="idade" type="number" min="0" class="form-control" placeholder="Idade" aria-label="name" aria-describedby="basic-addon1">
+                  <input disabled formControlName="idade" type="number" min="0" class="form-control" placeholder="Idade" aria-label="name" aria-describedby="basic-addon1">
                 </div>
               </div>
               <hr>
@@ -100,7 +98,7 @@
                   <h6 class="mb-0">Nacionalidade</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <select  class="custom-select" formControlName="nacionalidade">
+                  <select disabled class="custom-select" formControlName="nacionalidade">
                     <option disabled>--Selecione--</option>
                     <option *ngFor="let nacionalidade of nacionalidades" [value]="nacionalidade">{{ nacionalidade }}</option>
                   </select>
@@ -112,7 +110,7 @@
                   <h6 class="mb-0">Região</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <select  class="custom-select" formControlName="regiao">
+                  <select disabled class="custom-select" formControlName="regiao">
                     <option disabled>--Selecione--</option>
                     <option *ngFor="let regiao of regioes" [value]="regiao">{{ regiao }}</option>
                   </select>
@@ -124,7 +122,7 @@
                   <h6 class="mb-0">Concelho</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <select  class="custom-select" formControlName="concelho">
+                  <select disabled class="custom-select" formControlName="concelho">
                     <option disabled>--Selecione--</option>
                     <option *ngFor="let concelho of concelhos" [value]="concelho">{{ concelho }}</option>
                   </select>
@@ -136,7 +134,7 @@
                   <h6 class="mb-0">Peso</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <input formControlName="peso" type="number" class="form-control" placeholder="Peso" aria-label="name" aria-describedby="basic-addon1">
+                  <input disabled formControlName="peso" type="number" class="form-control" placeholder="Peso" aria-label="name" aria-describedby="basic-addon1">
                 </div>
               </div>
               <hr>
@@ -145,7 +143,7 @@
                   <h6 class="mb-0">Altura</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <input formControlName="altura" type="number" class="form-control" placeholder="Altura" aria-label="name" aria-describedby="basic-addon1">
+                  <input disabled formControlName="altura" type="number" class="form-control" placeholder="Altura" aria-label="name" aria-describedby="basic-addon1">
                 </div>
               </div>
               <hr>
@@ -154,7 +152,7 @@
                   <h6 class="mb-0">Estado</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  <select  class="custom-select" formControlName="estado">
+                  <select disabled class="custom-select" formControlName="estado">
                     <option disabled>--Selecione--</option>
                     <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
                   </select>

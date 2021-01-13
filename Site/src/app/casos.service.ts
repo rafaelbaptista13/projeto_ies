@@ -17,6 +17,12 @@ export class CasosService {
 
   constructor(private http: HttpClient) { }
 
+  getCasoByPaciente(id: number): Observable<any> {
+    let url = this.baseURL + 'private/casobypaciente/' + id;
+
+    return this.http.get(url, httpOptions);
+  }
+
   //Função que retorna numero de casos de acordo com os filtros (ou sem filtros caso nao sejam especificados)
   getNumeroCasos(estado: string, idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
                  alturaMax: any, pesoMin: any, pesoMax: any): Observable<any> {

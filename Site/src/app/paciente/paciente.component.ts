@@ -4,6 +4,9 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Paciente} from '../paciente';
 import {PacienteService} from '../paciente.service';
 import {MedicService} from "../medic.service";
+import {CasosService} from '../casos.service';
+import {Caso} from '../caso';
+import {RelatoriopacienteService} from '../relatoriopaciente.service';
 
 declare const CanvasJS: any;
 
@@ -14,23 +17,24 @@ declare const CanvasJS: any;
 })
 export class PacienteComponent implements OnInit {
   private id: string;
-  formPaciente: FormGroup;
+  formPaciente: FormGroup = new FormGroup({});
   nacionalidades = ['Alemã', 'Espanhola', 'Francesa', 'Italiana', 'Inglesa', 'Brasileira', 'Belga', 'Russa', 'Americana', 'Chinesa', 'Angolana',
     'Moçambicana', 'Holandesa', 'Polaca', 'Cabo-Verdiana', 'Albanesa', 'Austríaca', 'Búlgara', 'Croata', 'Dinamarquesa', 'Eslovaca',
     'Eslovena', 'Finlandesa', 'Grega', 'Húngara', 'Islandesa', 'Irlandesa', 'Lituana', 'Luxemburguesa', 'Norueguesa', 'Romena', 'Sueca',
     'Suíça', 'Turca', 'Ucraniana', 'Argentina', 'Canadiana', 'Mexicana', 'Japonesa', 'Portuguesa'].sort();
   regioes = ['Norte', 'Lisboa e Vale do Tejo', 'Centro', 'Alentejo', 'Algarve', 'Açores', 'Madeira'];
   paciente_atual: Paciente;
+  caso_atual: Caso;
+  relatorios = [];
   concelhos = {'Norte': ["Caminha","Melgaço","Ponte de Lima","Viana do Castelo","Vila Nova de Cerveira","Monção","Barcelos","Braga","Esposende","Fafe","Guimarães","Vizela","Vila Nova de Famalicão","Arouca","Espinho","Gondomar","Maia","Matosinhos","Porto","Póvoa de Varzim","Santa Maria da Feira","Oliveira de Azeméis","Santo Tirso","São João da Madeira","Trofa","Vila Nova de Gaia","Chaves","Montalegre","Amarante","Celorico de Basto","Lousada","Paços de Ferreira","Penafiel","Lamego","Peso da Régua","Vila Real","Bragança","Miranda do Douro","Mirandela"]}
   estados = ['atvio', 'recuperado', 'internado', 'intensivo', 'obito'];
 
-  private update: boolean;
   private b_editar: HTMLElement;
   private b_confirmar: HTMLElement;
-  constructor(private route: ActivatedRoute, private medicService: MedicService, private pacienteService: PacienteService) {}
+  constructor(private route: ActivatedRoute, private medicService: MedicService, private pacienteService: PacienteService, private casoService: CasosService, private relatorioService: RelatoriopacienteService) {}
 
   ngOnInit(): void {
-    chartEstados();
+    //chartEstados();
     this.b_editar = document.getElementById('b_editar');
     this.b_confirmar = document.getElementById('b_confirmar');
     // Função para colapsar navbar
@@ -53,20 +57,25 @@ export class PacienteComponent implements OnInit {
     })(jQuery);
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id){
-      this.editPaciente();
       this.pacienteService.getPacientById(this.id).subscribe(
-        result => {console.log(result); this.paciente_atual = result; console.log(this.paciente_atual); this.editPaciente();
+        result => {this.paciente_atual = result;
+          this.casoService.getCasoByPaciente(this.paciente_atual.paciente_id).subscribe(result2 => {
+            this.caso_atual = result2;
+            this.relatorioService.getRelatoriosByCaso(this.caso_atual.id).subscribe(result3 => {
+              this.relatorios = result3;
+              console.log(this.relatorios);
+              this.editPaciente();
+            });
+          });
         });
     }
     else{
-      console.log('No ID was given');
+      console.log("No ID was given.");
     }
   }
 
   editPaciente(): void{
-    this.update = true;
-    // Chamar serviço e ir buscar os valores e inicializar
-    /*
+    console.log(this.paciente_atual);
     this.formPaciente = new FormGroup(
       {
         nome: new FormControl(this.paciente_atual.nome, [Validators.required]),
@@ -77,22 +86,7 @@ export class PacienteComponent implements OnInit {
         concelho: new FormControl(this.paciente_atual.concelho, [Validators.required]),
         peso: new FormControl(this.paciente_atual.peso, [Validators.required]),
         altura: new FormControl(this.paciente_atual.altura, [Validators.required]),
-        estado: new FormControl('', [Validators.required]),
-      }
-    );
-    */
-    // Test only
-    this.formPaciente = new FormGroup(
-      {
-        nome: new FormControl('Roberto', [Validators.required]),
-        idade: new FormControl('25', [Validators.required]),
-        genero: new FormControl('Masculino', [Validators.required]),
-        nacionalidade: new FormControl('Portuguesa', [Validators.required]),
-        regiao: new FormControl('Norte', [Validators.required]),
-        concelho: new FormControl('Esposende', [Validators.required]),
-        peso: new FormControl('90', [Validators.required]),
-        altura: new FormControl('1,75', [Validators.required]),
-        estado: new FormControl('Recuperado', [Validators.required]),
+        estado: new FormControl(this.caso_atual.estadoAtual, [Validators.required]),
       }
     );
     //
