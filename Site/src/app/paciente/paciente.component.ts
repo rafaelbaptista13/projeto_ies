@@ -131,7 +131,7 @@ export class PacienteComponent implements OnInit {
     this.formPaciente.get(input_name).enable();
   }
 
-  setPacient(): void{
+  editar(): void{
     if (this.formPaciente.valid){
       if (this.add){
         const medico_id = localStorage.getItem('codigo_acesso');

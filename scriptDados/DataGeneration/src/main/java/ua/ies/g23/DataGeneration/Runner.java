@@ -22,7 +22,7 @@ public class Runner implements CommandLineRunner {
 	HashMap<String, Object> mensagem = new HashMap<String, Object>();
 	
 	// Construção 10 Mensagens Novos Pacientes Distintos
-	for (int i = 0; i<= 500; i++) {
+	for (int i = 0; i<= 100; i++) {
 		mensagem = construcaoMensagem();
 
 		//Atribuição tempo atual à mensagem inserção paciente

@@ -55,7 +55,7 @@
                   </div>
                 </div>
                 <div class="atributes">
-                  <form [formGroup]="formPaciente" (ngSubmit)="editar()">
+                  <form [formGroup]="formPaciente" (ngSubmit)="inserir()">
                     <div class="row">
                       <div class="col-sm-2">
 
@@ -65,9 +65,6 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <input formControlName="nome" id="nome" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
-                      </div>
-                      <div class="col-sm-1">
-                        <button type="button" id="b_nome" style="display: none" (click)="enableinput('nome')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
                       </div>
                     </div>
                     <hr>
@@ -81,8 +78,21 @@
                       <div class="col-sm-5 text-secondary">
                         <input formControlName="idade" type="number" min="0" class="form-control" placeholder="Idade" aria-label="name" aria-describedby="basic-addon1">
                       </div>
-                      <div class="col-sm-1">
-                        <button type="button" id="b_idade" style="display: none" (click)="enableinput('idade')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-2">
+
+                      </div>
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Género</h6>
+                      </div>
+                      <div class="col-sm-5 text-secondary">
+                        <!-- select com ngfor -->
+                        <select  class="form-control" formControlName="genero">
+                          <option disabled>--Selecione--</option>
+                          <option *ngFor="let genero of generos" [value]="genero">{{ genero }}</option>
+                        </select>
                       </div>
                     </div>
                     <hr>
@@ -95,10 +105,10 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- select com ngfor -->
-                        <input formControlName="nacionalidade" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
-                      </div>
-                      <div class="col-sm-1">
-                        <button type="button" id="b_nacionalidade" style="display: none" (click)="enableinput('nacionalidade')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                        <select  class="form-control" formControlName="nacionalidade">
+                          <option disabled>--Selecione--</option>
+                          <option *ngFor="let nacionalidade of nacionalidades" [value]="nacionalidade">{{ nacionalidade }}</option>
+                        </select>
                       </div>
                     </div>
                     <hr>
@@ -111,10 +121,26 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- sleect com ng for -->
-                        <input formControlName="regiao" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                        <select  class="form-control" formControlName="regiao">
+                          <option disabled>--Selecione--</option>
+                          <option *ngFor="let regiao of regioes" [value]="regiao">{{ regiao }}</option>
+                        </select>
                       </div>
-                      <div class="col-sm-1">
-                        <button type="button" id="b_regiao" style="display: none" (click)="enableinput('regiao')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-2">
+
+                      </div>
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Concelho</h6>
+                      </div>
+                      <div class="col-sm-5 text-secondary">
+                        <!-- select com ngfor -->
+                        <select  class="form-control" formControlName="concelho">
+                          <option disabled>--Selecione--</option>
+                          <option *ngFor="let concelho of concelhos" [value]="concelho">{{ concelho }}</option>
+                        </select>
                       </div>
                     </div>
                     <hr>
@@ -126,13 +152,11 @@
                         <h6 class="mb-0">Peso</h6>
                       </div>
                       <div class="col-sm-5 text-secondary">
-                        <input formControlName="peso" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
-                      </div>
-                      <div class="col-sm-1">
-                        <button type="button" id="b_peso" style="display: none" (click)="enableinput('peso')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                        <input formControlName="peso" type="number" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                     </div>
                     <hr>
+
                     <div class="row">
                       <div class="col-sm-2">
 
@@ -141,51 +165,47 @@
                         <h6 class="mb-0">Altura</h6>
                       </div>
                       <div class="col-sm-5 text-secondary">
-                        <input formControlName="altura" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
-                      </div>
-                      <div class="col-sm-1">
-                        <button type="button" id="b_altura" style="display: none" (click)="enableinput('altura')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                        <input formControlName="altura" type="number" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                     </div>
                     <hr>
                     <div class="row">
                       <div class="col-sm-2">
-                        </div>
-                        <div class="col-sm-3">
-                          <h6 class="mb-0">Estado</h6>
-                        </div>
-                        <div class="col-sm-5 text-secondary">
-                          <!-- select com ngfor -->
-                          <select class="custom-select" formControlName="estado">
-                            <option selected>Choose...</option>
-                            <option *ngFor="let estado of estados" value="{{estado}}">{{estado}}</option>
-                          </select>
-                        </div>
-                        <div class="col-sm-1">
-                          <button type="button" id="b_estado" style="display: none" (click)="enableinput('estado')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
-                        </div>
-                      </div>
-                      <hr>
-                      <div class="row">
-                        <div class="col-sm-5">
 
-                        </div>
-                        <div class="col-sm-6">
-                          <button type="submit" class="btn btn-success">Confirm</button>
-                        </div>
-                        <div class="col-sm-1">
-
-                        </div>
                       </div>
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Estado</h6>
+                      </div>
+                      <div class="col-sm-5 text-secondary">
+                        <!-- select com ngfor -->
+                        <select  class="form-control" formControlName="estado">
+                          <option disabled>--Selecione--</option>
+                          <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                      <div class="col-sm-5">
+
+                      </div>
+                      <div class="col-sm-6">
+                        <button type="submit" class="btn btn-success">Confirm</button>
+                      </div>
+                      <div class="col-sm-1">
+
+                      </div>
+                    </div>
 
                   </form>
                 </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+
   </div>
-
-
-</div>

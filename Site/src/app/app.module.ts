@@ -14,6 +14,7 @@ import { LoginComponent } from './login/login.component';
 import { HomeMedicComponent } from './home-medic/home-medic.component';
 import { PacienteComponent } from './paciente/paciente.component';
 import { AuthInterceptor } from './AuthInterceptor';
+import { InserirpacienteComponent } from './inserirpaciente/inserirpaciente.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { AuthInterceptor } from './AuthInterceptor';
     HospitalComponent,
     LoginComponent,
     HomeMedicComponent,
-    PacienteComponent
+    PacienteComponent,
+    InserirpacienteComponent
   ],
   imports: [
     BrowserModule,

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Hospital;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Medico;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Paciente;
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.HospitalRepository;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.MedicoRepository;
@@ -33,6 +34,9 @@ import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.MedicoRepository;
 public class MedicoController {
     @Autowired
     private MedicoRepository medicoRepository;
+
+    @Autowired
+    private MedicoRepository pacienteRepository;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -91,12 +95,6 @@ public class MedicoController {
                 .orElseThrow(() -> new ResourceNotFoundException("Medico not found for this id :: " + MedicoId));
         return ResponseEntity.ok().body(Medico);
     }
-
-    @GetMapping("/pacientesbymedic")
-    public List<Paciente> getAllByMedico(
-        @RequestParam(required = true) Integer medico ) {
-            return pacienteRepository.findByMedico(String.valueOf(medico));
-        }
         
     @PostMapping("/medicos")
     @Transactional(rollbackFor = Exception.class)

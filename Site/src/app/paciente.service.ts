@@ -27,4 +27,10 @@ export class PacienteService {
     return this.http.get(url, httpOptions);
   }
 
+  createPacient(mensagem: any): Observable<any> {
+    let url = this.baseURL + 'private/pacientes';
+
+    return this.http.post(url, mensagem, httpOptions);
+  }
+
 }
