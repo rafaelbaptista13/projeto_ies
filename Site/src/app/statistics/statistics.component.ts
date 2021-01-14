@@ -14,6 +14,9 @@ declare const CanvasJS: any;
 })
 export class StatisticsComponent implements OnInit {
   //Declaração de variáveis
+  medicoLogado: boolean;
+  medicoId: number;
+
   casosAtivos: number;
   casosRecuperados: number;
   casosCuidadosIntensivos: number;
@@ -48,6 +51,12 @@ export class StatisticsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (localStorage.getItem('codigo_acesso') != null) {
+      this.medicoLogado = true;
+      this.medicoId = Number(localStorage.getItem('codigo_acesso'));
+    } else {
+      this.medicoLogado = false;
+    }
     //Função para colapsar navbar
     (function($) {
       $(document).ready(function () {

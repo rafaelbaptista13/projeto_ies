@@ -15,6 +15,7 @@ import { HomeMedicComponent } from './home-medic/home-medic.component';
 import { PacienteComponent } from './paciente/paciente.component';
 import { AuthInterceptor } from './AuthInterceptor';
 import { InserirpacienteComponent } from './inserirpaciente/inserirpaciente.component';
+import { AboutusComponent } from './aboutus/aboutus.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { InserirpacienteComponent } from './inserirpaciente/inserirpaciente.comp
     LoginComponent,
     HomeMedicComponent,
     PacienteComponent,
-    InserirpacienteComponent
+    InserirpacienteComponent,
+    AboutusComponent
   ],
   imports: [
     BrowserModule,

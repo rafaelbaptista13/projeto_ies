@@ -8,6 +8,7 @@ import {LoginComponent} from './login/login.component';
 import {HomeMedicComponent} from "./home-medic/home-medic.component";
 import {PacienteComponent} from "./paciente/paciente.component";
 import {InserirpacienteComponent} from './inserirpaciente/inserirpaciente.component';
+import {AboutusComponent} from './aboutus/aboutus.component';
 
 //Paths disponiveis
 const routes: Routes = [
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: 'homeMedic', component: HomeMedicComponent},
   {path: 'pacient', component: InserirpacienteComponent},
   {path: 'pacient/:id', component: PacienteComponent},
+  {path: 'aboutus', component: AboutusComponent},
 ];
 
 @NgModule({

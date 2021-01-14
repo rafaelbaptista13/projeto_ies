@@ -22,7 +22,13 @@ body{
 }
 
 #navbar .col-md-2, .col-md-4{
+  text-align: center;
   margin: 2% 0 2% 0;
+  max-width: 13%;
+}
+
+.dropdown-item {
+  color: black;
 }
 
 #navbar .col-md-2:hover, .col-md-4:hover{

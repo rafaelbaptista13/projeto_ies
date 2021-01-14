@@ -1,5 +1,7 @@
 package ua.ies.g23.Covinfo19;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,7 +31,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.cors().and().authorizeRequests()
+        http.cors().configurationSource(request -> {
+            var cors = new CorsConfiguration();
+            cors.setAllowedOrigins(List.of("http://localhost:4200"));
+            cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
+            cors.setAllowedHeaders(List.of("*")); return cors;
+        }).and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, SecurityConstants.PRIVATE_URL+"/**").authenticated()
                 .antMatchers(HttpMethod.POST, SecurityConstants.PRIVATE_URL+"/**").authenticated()
                 .antMatchers(HttpMethod.PUT, SecurityConstants.PRIVATE_URL+"/**").authenticated()
