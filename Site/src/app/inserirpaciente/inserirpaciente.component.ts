@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Paciente} from '../paciente';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MedicService} from '../medic.service';
 import {PacienteService} from '../paciente.service';
 
@@ -11,6 +11,9 @@ import {PacienteService} from '../paciente.service';
   styleUrls: ['./inserirpaciente.component.css']
 })
 export class InserirpacienteComponent implements OnInit {
+  medicoLogado: boolean;
+  medicoId: number;
+
   formPaciente: FormGroup;
   nacionalidades = ['Alemã', 'Espanhola', 'Francesa', 'Italiana', 'Inglesa', 'Brasileira', 'Belga', 'Russa', 'Americana', 'Chinesa', 'Angolana',
     'Moçambicana', 'Holandesa', 'Polaca', 'Cabo-Verdiana', 'Albanesa', 'Austríaca', 'Búlgara', 'Croata', 'Dinamarquesa', 'Eslovaca',
@@ -33,11 +36,18 @@ export class InserirpacienteComponent implements OnInit {
   'Algarve': ["Albufeira","Alcoutim","Aljezur","Castro Marim","Faro","Lagoa","Lagos","Loulé","Monchique","Olhão","Portimão","São Brás de Alportel","Silves","Tavira","Vila do Bispo","Vila Real de Santo António"],
   'Açores': ["Vila do Porto","Ponta Delgada","Ribeira Grande","Vila Franca do Campo","Angra do Heroísmo","Vila da Praia da Vitória", "Velas", "Lajes do Pico","São Roque do Pico", "Horta", "Lajes das Flores", "Santa Cruz das Flores", "Corvo"],
   'Madeira': ["Câmara de Lobos", "Funchal", "Machico", "Ponta do Sol", "Porto Moniz", "São Vicente", "Santa Cruz", "Porto Santo"]};
-  estados = ["Confinamento Domiciliário", "Internado", "Cuidados Intensivos", "Recuperado"];
+  estados = ["Confinamento Domiciliário", "Internado", "Cuidados Intensivos"];
 
-  constructor(private route: ActivatedRoute, private medicService: MedicService, private pacienteService: PacienteService) {}
+  constructor(private router: Router, private route: ActivatedRoute, private medicService: MedicService, private pacienteService: PacienteService) {}
 
   ngOnInit(): void {
+    if (localStorage.getItem('codigo_acesso') != null) {
+      this.medicoLogado = true;
+      this.medicoId = Number(localStorage.getItem('codigo_acesso'));
+    } else {
+      this.router.navigate(['/login']);
+    }
+
     //Função para colapsar navbar
     (function($) {
       $(document).ready(function () {
@@ -76,11 +86,8 @@ export class InserirpacienteComponent implements OnInit {
   }
 
   inserir() {
-    console.log("aqui");
     if (this.formPaciente.valid) {
-      console.log("passei 1 if");
       if (this.concelhosdict[this.formPaciente.controls.regiao.value].indexOf(this.formPaciente.controls.concelho.value) > -1) {
-        console.log("passei 2 if");
         const mensagem = {
           'nome': this.formPaciente.controls.nome.value,
           'genero': this.formPaciente.controls.genero.value,

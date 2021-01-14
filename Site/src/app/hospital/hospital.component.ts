@@ -8,12 +8,20 @@ import {HospitalService} from '../hospital.service';
   styleUrls: ['./hospital.component.css']
 })
 export class HospitalComponent implements OnInit {
+  medicoLogado: boolean;
+  medicoId: number;
   regioes = ['Norte', 'Lisboa e Vale do Tejo', 'Centro', 'Alentejo', 'Algarve', 'Açores', 'Madeira'];
   filterForm: FormGroup;
   hospitais: {};
   constructor(private hospitalService: HospitalService) { }
 
   ngOnInit(): void {
+    if (localStorage.getItem('codigo_acesso') != null) {
+      this.medicoLogado = true;
+      this.medicoId = Number(localStorage.getItem('codigo_acesso'));
+    } else {
+      this.medicoLogado = false;
+    }
     //Função para colapsar navbar
     (function($) {
       $(document).ready(function () {

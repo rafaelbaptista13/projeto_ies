@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {MedicService} from "../medic.service";
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home-medic',
@@ -9,12 +9,22 @@ import {Router} from "@angular/router";
   styleUrls: ['./home-medic.component.css']
 })
 export class HomeMedicComponent implements OnInit {
+  medicoLogado: boolean;
+  medicoId: number;
   filterForm: FormGroup;
   estados = ['Confinamento Domiciliário', 'Internado', 'Cuidados Intesivos', 'Recuperado'];
   pacientes = {};
-  constructor(private medicService: MedicService, private router: Router) { }
+
+  constructor(private router: Router, private medicService: MedicService) { }
 
   ngOnInit(): void {
+    if (localStorage.getItem('codigo_acesso') != null) {
+      this.medicoLogado = true;
+      this.medicoId = Number(localStorage.getItem('codigo_acesso'));
+    } else {
+      this.router.navigate(['/login']);
+    }
+
     // Função para colapsar navbar
     (function($) {
       $(document).ready(function () {

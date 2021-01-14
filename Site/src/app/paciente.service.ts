@@ -7,7 +7,7 @@ import {Paciente} from './paciente';
 let httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-    'access-control-allow-origin': 'http://localhost:8080/',
+    'Access-Control-Allow-Origin': 'http://localhost:8080/',
   })
 };
 
@@ -21,16 +21,19 @@ export class PacienteService {
   private baseURL = 'http://localhost:8080/api/v1/';
   constructor(private http: HttpClient) { }
 
-  getPacientById(paciente_id: string): Observable<any> {
+  getPacientById(paciente_id: string): Observable<Paciente> {
     let url = this.baseURL + 'private/pacientes/' + paciente_id;
-
-    return this.http.get(url, httpOptions);
+    return this.http.get<Paciente>(url, httpOptions);
   }
 
   createPacient(mensagem: any): Observable<any> {
     let url = this.baseURL + 'private/pacientes';
-
     return this.http.post(url, mensagem, httpOptions);
+  }
+
+  updatePacient(id: number, data: any): Observable<any>{
+    const url = this.baseURL + 'private/pacientes/' + id;
+    return this.http.put(url, data, httpOptions);
   }
 
 }

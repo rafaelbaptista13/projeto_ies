@@ -8,46 +8,50 @@ body{
     NAVBAR
 --------------------------------------------- */
 
-#navbar {
-  width: 100%;
-  background: #7386D5;
-  color: #fff;
-  transition: 0.2s;
-  transform-origin: bottom left;
-  display: inline-block;
-}
-
 #navbar .active {
   opacity: 85%;
 }
 
-#navbar .col-md-2, .col-md-4{
-  margin: 2% 0 2% 0;
+nav.navbar.navbar-expand-lg.navbar-light.bg-light{
+  background: #7386D5 !important;
 }
 
-#navbar .col-md-2:hover, .col-md-4:hover{
-  transform: scale(1.2);
-  -webkit-transition: transform 0.2s ease;
+.navbar-light .navbar-brand{
+  color: white;
 }
 
+.navbar-light .navbar-nav .active > .nav-link{
+  color: #fff;
+}
 
-#navbar a {
-  font-size: 1.1em;
+.navbar-light .navbar-nav .nav-link {
+  color: #fff;
+}
+
+.mr-auto{
   width: 100%;
 }
 
-#navbar a.active, a[aria-expanded="true"] {
-  color: #fff;
+li.nav-item:hover{
+  transform: scale(1.2);
 }
 
 a {
-  width: 100%;
-  font-size: 20px !important;
+  font-size: 25px;
   font-weight: bold;
-  padding-left: 10% !important;
+}
 
-  text-decoration: none;
-  color: #fff;
+a.navbar-brand{
+  float: left;
+  font-size: 50px;
+}
+
+.vertical {
+  border-left: 3px solid white;
+  opacity: 20%;
+  height: 100%;
+  position:absolute;
+  left: 270px;
 }
 
 .image{
@@ -83,7 +87,7 @@ a {
   margin-top: 100px;
 }
 
-.btn.btn-info{
+.btn.btn-info {
   width: 25%;
   font-size: 40px;
   margin-left: 37.5%;
@@ -94,4 +98,3 @@ a {
   height: auto;
 
 }
-

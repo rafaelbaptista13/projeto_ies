@@ -17,7 +17,7 @@
         <a routerLink="/hospital" >Hospitais</a>
       </li>
       <li>
-        <a href="about.html">Sobre nós</a>
+        <a routerLink="/aboutus">Sobre nós</a>
       </li>
       <li>
         <a routerLink="/login">Área profissionais de saúde</a>
@@ -49,10 +49,7 @@
             <div class="card">
               <div class="card-body">
                 <div class="d-flex flex-column align-items-center text-center">
-                  <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
-                  <div class="mt-3">
-                    <h4>John Doe</h4>
-                  </div>
+                  <img src="assets/Static/images/icons/account.png" alt="Admin" class="rounded-circle" width="150">
                 </div>
                 <div class="atributes">
                   <form [formGroup]="formPaciente" (ngSubmit)="inserir()">
@@ -89,7 +86,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- select com ngfor -->
-                        <select  class="form-control" formControlName="genero">
+                        <select  class="custom-select" formControlName="genero">
                           <option disabled>--Selecione--</option>
                           <option *ngFor="let genero of generos" [value]="genero">{{ genero }}</option>
                         </select>
@@ -105,7 +102,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- select com ngfor -->
-                        <select  class="form-control" formControlName="nacionalidade">
+                        <select  class="custom-select" formControlName="nacionalidade">
                           <option disabled>--Selecione--</option>
                           <option *ngFor="let nacionalidade of nacionalidades" [value]="nacionalidade">{{ nacionalidade }}</option>
                         </select>
@@ -121,7 +118,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- sleect com ng for -->
-                        <select  class="form-control" formControlName="regiao">
+                        <select  class="custom-select" formControlName="regiao">
                           <option disabled>--Selecione--</option>
                           <option *ngFor="let regiao of regioes" [value]="regiao">{{ regiao }}</option>
                         </select>
@@ -137,7 +134,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- select com ngfor -->
-                        <select  class="form-control" formControlName="concelho">
+                        <select  class="custom-select" formControlName="concelho">
                           <option disabled>--Selecione--</option>
                           <option *ngFor="let concelho of concelhos" [value]="concelho">{{ concelho }}</option>
                         </select>
@@ -152,7 +149,7 @@
                         <h6 class="mb-0">Peso</h6>
                       </div>
                       <div class="col-sm-5 text-secondary">
-                        <input formControlName="peso" type="number" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                        <input formControlName="peso" type="number" class="form-control" placeholder="Peso" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                     </div>
                     <hr>
@@ -165,7 +162,7 @@
                         <h6 class="mb-0">Altura</h6>
                       </div>
                       <div class="col-sm-5 text-secondary">
-                        <input formControlName="altura" type="number" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                        <input formControlName="altura" type="number" class="form-control" placeholder="Altura" aria-label="name" aria-describedby="basic-addon1">
                       </div>
                     </div>
                     <hr>
@@ -178,7 +175,7 @@
                       </div>
                       <div class="col-sm-5 text-secondary">
                         <!-- select com ngfor -->
-                        <select  class="form-control" formControlName="estado">
+                        <select  class="custom-select" formControlName="estado">
                           <option disabled>--Selecione--</option>
                           <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
                         </select>

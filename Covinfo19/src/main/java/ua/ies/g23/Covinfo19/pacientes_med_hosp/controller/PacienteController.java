@@ -198,13 +198,14 @@ public class PacienteController {
         }   
 
     @GetMapping("/pacientes/{id}")
-    public ResponseEntity<Paciente> getPacienteById(@PathVariable(value = "id") Long pacienteID)
+    public ResponseEntity<Paciente> getPacienteById(@PathVariable(value = "id") Long paciente_id)
         throws ResourceNotFoundException {
-        Paciente paciente = pacienteRepository.findById(pacienteID)
-          .orElseThrow(() -> new ResourceNotFoundException("Paciente not found for this id :: " + pacienteID));
+        Paciente paciente = pacienteRepository.findById(paciente_id)
+          .orElseThrow(() -> new ResourceNotFoundException("Paciente not found for this id :: " + paciente_id));
         return ResponseEntity.ok().body(paciente);
     }
     
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/pacientes")
     public Paciente createPaciente(@Valid @RequestBody Map<String, String> pacient_info)
             throws NumberFormatException, ResourceNotFoundException {
@@ -254,23 +255,60 @@ public class PacienteController {
         return paciente;
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @PutMapping("/pacientes/{id}")
-    public ResponseEntity<Paciente> updatePaciente(@PathVariable(value = "id") Long pacienteID,
-         @Valid @RequestBody Paciente pacienteDetails) throws ResourceNotFoundException {
-        Paciente paciente = pacienteRepository.findById(pacienteID)
-        .orElseThrow(() -> new ResourceNotFoundException("Paciente not found for this id :: " + pacienteID));
+    public ResponseEntity<Paciente> updatePaciente(@Valid @RequestBody Map<String, String> pacient_info) throws ResourceNotFoundException {
         
-        paciente.setNome(pacienteDetails.getNome());
-        paciente.setGenero(pacienteDetails.getGenero());
-        paciente.setIdade(pacienteDetails.getIdade());
-        paciente.setConcelho(pacienteDetails.getConcelho());
-        paciente.setRegiao(pacienteDetails.getRegiao());
-        paciente.setNacionalidade(pacienteDetails.getNacionalidade());
-        paciente.setAltura(pacienteDetails.getAltura());
-        paciente.setPeso(pacienteDetails.getPeso());
-        paciente.setMedico(pacienteDetails.getMedico());
-        final Paciente updatedPaciente = pacienteRepository.save(paciente);
-        return ResponseEntity.ok(updatedPaciente);
+        System.out.println(pacient_info);
+        
+        Paciente paciente = pacienteRepository.findById(Long.parseLong(pacient_info.get("pacientId")))
+        .orElseThrow(() -> new ResourceNotFoundException("Paciente not found for this id :: " + pacient_info.get("pacientId")));
+        
+        paciente.setNome(pacient_info.get("nome"));
+        paciente.setGenero(pacient_info.get("genero"));
+        paciente.setIdade(Integer.parseInt(pacient_info.get("idade")));
+        paciente.setConcelho(pacient_info.get("concelho"));
+        paciente.setRegiao(pacient_info.get("regiao"));
+        paciente.setNacionalidade(pacient_info.get("nacionalidade"));
+        paciente.setAltura(Integer.parseInt(pacient_info.get("altura")));
+        paciente.setPeso(Float.parseFloat(pacient_info.get("peso")));
+        pacienteRepository.save(paciente);
+        
+        Caso caso = casoRepository.findByPacienteId(Long.parseLong(pacient_info.get("pacientId")));
+        String estado_passado = caso.getEstado_atual();
+        caso.setEstado_atual(pacient_info.get("estado"));
+        casoRepository.save(caso);
+
+        DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date d2;
+        try {
+            String data = formatter.format(new Date(System.currentTimeMillis()));
+            d2 = df2.parse(data.split(" ")[0] + " " + data.split(" ")[2] );
+
+            //Criação relatorio para guardar o estado e tempo associado à mensagem recebida neste momento. Atribuição desse relatorio ao caso do paciente.
+            Relatorio_Paciente relatorio_paciente = new Relatorio_Paciente();
+            relatorio_paciente.setCaso(caso);
+            relatorio_paciente.setEstado(pacient_info.get("estado"));
+            relatorio_paciente.setData(d2);
+            relatorioPacienteRepository.save(relatorio_paciente);
+        
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Medico medico = medicoRepository.findById(Long.parseLong(pacient_info.get("medico_numero_medico")))
+        .orElseThrow(() -> new ResourceNotFoundException("Medico not found for this id :: " + pacient_info.get("medico_numero_medico")));
+        Hospital hospital = medico.getHospital();
+        if ((caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos")) && (estado_passado.equals("Confinamento Domiciliário") || estado_passado.equals("Recuperado")) ) {
+            hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() + 1);
+            hospitalRepository.save(hospital);
+        } else if ((caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Recuperado") || caso.getEstado_atual().equals("Óbito")) && (estado_passado.equals("Internado") || estado_passado.equals("Cuidados Intensivos")) ) {
+            hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() - 1);
+            hospitalRepository.save(hospital);
+        }
+
+        
+        return ResponseEntity.ok(paciente);
     }
 
     @DeleteMapping("/pacientes/{id}")

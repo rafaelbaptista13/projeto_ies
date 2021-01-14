@@ -5,7 +5,8 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 
 //Define mensagem em JSON e o URL é de segurança
 const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json', 'access-control-allow-origin': 'http://localhost:8080/'})
+  headers: new HttpHeaders({'Content-Type': 'application/json',
+    'access-control-allow-origin': 'http://localhost:8080/'})
 };
 
 @Injectable({
@@ -16,6 +17,12 @@ export class CasosService {
   private baseURL = 'http://localhost:8080/api/v1/';
 
   constructor(private http: HttpClient) { }
+
+  getCasoByPaciente(id: number): Observable<any> {
+    let url = this.baseURL + 'private/casobypaciente/' + id;
+
+    return this.http.get(url, httpOptions);
+  }
 
   //Função que retorna numero de casos de acordo com os filtros (ou sem filtros caso nao sejam especificados)
   getNumeroCasos(estado: string, idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,

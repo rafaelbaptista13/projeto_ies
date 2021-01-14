@@ -49,7 +49,7 @@ export class HospitalService {
           this.http.get(urlint).subscribe(result2 => {
             let taxaocupacao: number = (element.numero_camas_ocupadas / element.numero_camas) * 100;
             if (taxaocupacao_min < taxaocupacao && taxaocupacao < taxaocupacao_max) {
-              retorno[element.id] = [element.nome, result1, result2, ((element.numero_camas_ocupadas / element.numero_camas) * 100).toFixed(2)];
+              retorno[element.id] = [element.nome, result2, result1, ((element.numero_camas_ocupadas / element.numero_camas) * 100).toFixed(2)];
             }
           });
         });

@@ -41,6 +41,14 @@ public class Relatorio_PacienteController {
         return relatorio_PacienteRepository.findAll(pageRequest);
     }
 
+    @GetMapping("/relatorio_pacientes_bycaso/{id}")
+    public List<Relatorio_Paciente> getRelatorioPacienteByCaso(@PathVariable(value = "id") Long casoId)
+        throws ResourceNotFoundException {
+        List<Relatorio_Paciente> relatorios_Paciente = relatorio_PacienteRepository.findAllByCaso(casoId);
+
+        return relatorios_Paciente;
+    }
+
     @GetMapping("/relatorio_pacientes/{id}")
     public ResponseEntity<Relatorio_Paciente> getHospitalById(@PathVariable(value = "id") Long relatorio_pacienteId)
         throws ResourceNotFoundException {
