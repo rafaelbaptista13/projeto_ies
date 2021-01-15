@@ -9,9 +9,7 @@ export class HomeComponent implements OnInit {
   medicoLogado: boolean;
   medicoId: number;
 
-  constructor() {
-    document.body.style.backgroundColor = "#e6eeff";
-  }
+  constructor() {}
 
   ngOnInit(): void {
     if (localStorage.getItem('codigo_acesso') != null) {

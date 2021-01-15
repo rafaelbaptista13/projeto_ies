@@ -45,6 +45,7 @@ export class InserirpacienteComponent implements OnInit {
       this.medicoLogado = true;
       this.medicoId = Number(localStorage.getItem('codigo_acesso'));
     } else {
+      this.medicoLogado = false;
       this.router.navigate(['/login']);
     }
 

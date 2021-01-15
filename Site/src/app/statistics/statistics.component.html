@@ -3,7 +3,7 @@
   <nav id="sidebar">
     <h1>Numero Medico</h1>
     <div class="sidebar-header">
-      <h3>Covinfo</h3>
+      <h3>CovInfo19</h3>
     </div>
 
     <ul class="list-unstyled components">
@@ -11,7 +11,7 @@
         <a routerLink="/home" >Home</a>
       </li>
       <li class="active">
-        <a routerLink="/statistics">Estatística</a>
+        <a routerLink="/statistics">Estatísticas</a>
       </li>
       <li>
         <a routerLink="/hospital">Hospitais</a>
@@ -19,11 +19,20 @@
       <li>
         <a routerLink="/aboutus">Sobre nós</a>
       </li>
-      <li>
-        <a routerLink="/login">Área profissionais de saúde</a>
+      <li *ngIf="medicoLogado==false" id="logged">
+        <a routerLink="/login">Área Reservada</a>
       </li>
-      <li>
-        <a routerLink="/homeMedic">Pacientes</a>
+      <li *ngIf="medicoLogado" id="nlogged">
+        <button class="dropdown-btn">Área Reservada
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+          <a class="dropdown-item" routerLink="/homeMedic">Lista Pacientes</a>
+          <a class="dropdown-item" routerLink="/pacient">Inserir Paciente</a>
+        </div>
+      </li>
+      <li *ngIf="medicoLogado" class="nav-item logout">
+        <a class="nav-link" routerLink="/logout">Logout</a>
       </li>
     </ul>
   </nav>
@@ -40,26 +49,25 @@
           <span></span>
           <span></span>
         </button>
-        <button class="search" id="filterCollapse">Filters <i class="fas fa-search"></i></button>
+        <button class="search" id="filterCollapse">Filtros <i class="fas fa-search"></i></button>
 
       </div>
     </nav>
 
     <div class="filters" id="filters" style="display: none">
-      <h2 class="filter_title">Filters</h2>
       <form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)">
         <div class="row">
           <div class="col-2">
             <h5 class="idade_title">Idade</h5>
             <div class="idade_div">
-              <input placeholder="min" min="0" id="idade_min" formControlName="idade_min" type="number">
-              <input placeholder="max" min="0" id="idade_max" formControlName="idade_max" type="number">
+              <input placeholder="min" class="form-control" min="0" id="idade_min" formControlName="idade_min" type="number">
+              <input placeholder="max" class="form-control" min="0" id="idade_max" formControlName="idade_max" type="number">
             </div>
           </div>
           <div class="col-2">
             <h5 class="genero_title">Género</h5>
             <div class="genero_div">
-              <select name="genero_option" id="g_options" formControlName="genero">
+              <select name="genero_option" class="custom-select" id="g_options" formControlName="genero">
                 <option hidden disabled selected value>Selecionar Opção</option>
                 <option value=""></option>
                 <option value="Masculino">Masculino</option>
@@ -70,7 +78,7 @@
           <div class="col-2">
             <h5 class="regiao_title">Região</h5>
             <div class="regiao_div">
-              <select name="regiao_option" id="r_options" formControlName="regiao">
+              <select name="regiao_option" class="custom-select" id="r_options" formControlName="regiao">
                 <option hidden disabled selected value>Selecionar Opção</option>
                 <option value=""></option>
                 <option *ngFor="let regiao of regioes" value="{{regiao}}">{{regiao}}</option>
@@ -81,7 +89,7 @@
           <div class="col-2">
             <h5 class="nacionalidade_title">Nacionalidade</h5>
             <div class="nacionalidade_div">
-              <select name="nacionalidade_option" id="n_options" formControlName="nacionalidade">
+              <select name="nacionalidade_option" class="custom-select" id="n_options" formControlName="nacionalidade">
                 <option hidden disabled selected value>Selecionar Opção</option>
                 <option value=""></option>
                 <option *ngFor="let nacionalidade of nacionalidades" value="{{nacionalidade}}">{{nacionalidade}}</option>
@@ -92,15 +100,15 @@
           <div class="col-2">
             <h5 class="altura_title">Altura</h5>
             <div class="altura_div">
-              <input placeholder="min" min="0" formControlName="altura_min" type="number">
-              <input placeholder="max" min="0" formControlName="altura_max" type="number">
+              <input placeholder="min" class="form-control" min="0" formControlName="altura_min" type="number">
+              <input placeholder="max" class="form-control" min="0" formControlName="altura_max" type="number">
             </div>
           </div>
           <div class="col-2">
             <h5 class="peso_title">Peso</h5>
             <div class="peso_div">
-              <input placeholder="min" min="0" formControlName="peso_min" type="number">
-              <input placeholder="max" min="0" formControlName="peso_max" type="number">
+              <input placeholder="min" class="form-control" min="0" formControlName="peso_min" type="number">
+              <input placeholder="max" class="form-control" min="0" formControlName="peso_max" type="number">
             </div>
           </div>
         </div>
