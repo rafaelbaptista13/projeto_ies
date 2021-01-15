@@ -67,6 +67,22 @@ export class InserirpacienteComponent implements OnInit {
         });
       });
     })(jQuery);
+
+    const dropdown = document.getElementsByClassName('dropdown-btn');
+    let i;
+
+    for (i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener('click', function(): void {
+        this.classList.toggle('drop');
+        const dropdownContent = this.nextElementSibling;
+        if (dropdownContent.style.display === 'block') {
+          dropdownContent.style.display = 'none';
+        } else {
+          dropdownContent.style.display = 'block';
+        }
+      });
+    }
+
     this.addPaciente();
   }
 
@@ -101,7 +117,10 @@ export class InserirpacienteComponent implements OnInit {
           'medico_numero_medico': localStorage.getItem('codigo_acesso'),
           'estado': this.formPaciente.controls.estado.value
         }
-        this.pacienteService.createPacient(mensagem).subscribe(result => console.log(result));
+        this.pacienteService.createPacient(mensagem).subscribe(result => this.router.navigate(['/homeMedic']),
+          error => {
+            this.router.navigate(['/login']);
+          });
       }
     }
   }

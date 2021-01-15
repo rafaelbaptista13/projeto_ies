@@ -82,6 +82,22 @@ export class PacienteComponent implements OnInit {
         });
       });
     })(jQuery);
+
+    const dropdown = document.getElementsByClassName('dropdown-btn');
+    let i;
+
+    for (i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener('click', function(): void {
+        this.classList.toggle('drop');
+        const dropdownContent = this.nextElementSibling;
+        if (dropdownContent.style.display === 'block') {
+          dropdownContent.style.display = 'none';
+        } else {
+          dropdownContent.style.display = 'block';
+        }
+      });
+    }
+
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id){
       this.pacienteService.getPacientById(this.id).subscribe(
@@ -96,8 +112,17 @@ export class PacienteComponent implements OnInit {
             this.relatorioService.getRelatoriosByCaso(this.caso_atual.id).subscribe(result3 => {
               this.relatorios = result3;
               this.editPaciente();
+            },
+              error => {
+                this.router.navigate(['/homeMedic']);
+              });
+          },
+            error => {
+              this.router.navigate(['/homeMedic']);
             });
-          });
+        },
+        error => {
+          this.router.navigate(['/homeMedic']);
         });
     }
     else{
@@ -121,7 +146,7 @@ export class PacienteComponent implements OnInit {
     );
     this.formReady = true;
     setTimeout(() => {
-      chartEstados();
+      chartEstados(this.relatorios);
     }, 1000)
 
   }
@@ -161,7 +186,10 @@ export class PacienteComponent implements OnInit {
         };
         this.pacienteService.updatePacient(this.paciente_atual.pacienteId, data).subscribe(result => {
           this.ngOnInit();
-        });
+        },
+          error => {
+            this.router.navigate(['/homeMedic']);
+          });
       } else {
         this.regioesError = true;
       }
@@ -169,12 +197,31 @@ export class PacienteComponent implements OnInit {
   }
 
   eliminar(): void{
-    // Eliminar cliente
+    this.pacienteService.deletePacient(this.paciente_atual.pacienteId).subscribe(sucesso => {this.router.navigate(['/homeMedic'])},
+      error => {
+        this.router.navigate(['/homeMedic']);
+      });
   }
 }
 
 // Função para especificar valores dos charts
-function chartEstados () {
+function chartEstados (relatorios: any[]) {
+  var array_valores = [];
+  for (let relatorio of relatorios) {
+    let valor = 0;
+    if (relatorio.estado === 'Recuperado') {
+      valor = 20;
+    } else if (relatorio.estado === 'Confinamento Domiciliário') {
+      valor = 40;
+    } else if (relatorio.estado === 'Internado') {
+      valor = 60;
+    } else if (relatorio.estado === 'Cuidados Intensivos') {
+      valor = 80;
+    } else if (relatorio.estado === 'Óbito') {
+      valor = 100;
+    }
+    array_valores.push({x: new Date(relatorio.data), y: valor});
+  }
   var labels = {
     20: 'Recuperado', 40: 'Confinamento Domiciliário', 60: 'Internado', 80: 'Cuidados Intensivos', 100: 'Óbito', 120: ' '
   };
@@ -186,21 +233,19 @@ function chartEstados () {
     },
     axisY:{
       interval: 20,
+      maximum: 105,
+      minimum: 1,
       labelFormatter: function(e) {
         return customLabel(e.value);
       }
     },
     data: [{
       type: "stepLine",
-      yValueFormatString: "#0.0\"%\"",
-      xValueFormatString: "MMM YYYY",
-      markerSize: 5,
-      dataPoints: [
-        { x: new Date(2016, 0), y: 0 },
-        { x: new Date(2016, 1), y: 20 },
-        { x: new Date(2016, 2), y: 100 },
-
-      ]
+      yValueFormatString: " ",
+      xValueFormatString: "DD MMM",
+      markerSize: 10,
+      lineThickness: 3,
+      dataPoints: array_valores
     }]
   });
   chart.render();
@@ -208,8 +253,6 @@ function chartEstados () {
   function customLabel (value) {
     if (value && labels[value])
       return labels[value];
-    else
-      return value;
   }
 
 }

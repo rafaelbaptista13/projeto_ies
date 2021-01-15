@@ -18,6 +18,45 @@ export class CasosService {
 
   constructor(private http: HttpClient) { }
 
+  getNumerosPandemia(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
+                     alturaMax: any, pesoMin: any, pesoMax: any): Observable<any> {
+    let url = this.baseURL + 'public/casos/numerospandemia?';
+
+    //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
+    if (idadeMin !== '' && idadeMin !== null) {
+      url += '&idademin=' + idadeMin;
+    }
+
+    if (idadeMax !== '' && idadeMax !== null) {
+      url += '&idademax=' + idadeMax;
+    }
+
+    if (genero !== '' && genero !== null) {
+      url += '&genero=' + genero;
+    }
+
+    if (regiao !== '' && regiao !== null) {
+      url += '&regiao=' + regiao;
+    }
+    if (nacionalidade !== '' && nacionalidade !== null) {
+      url += '&nacionalidade=' + nacionalidade;
+    }
+    if (alturaMax !== '' && alturaMax !== null) {
+      url += '&alturamax=' + alturaMax;
+    }
+    if (alturaMin !== '' && alturaMin !== null) {
+      url += '&alturamin=' + alturaMin;
+    }
+    if (pesoMax !== '' && pesoMax !== null) {
+      url += '&pesomax=' + pesoMax;
+    }
+    if (pesoMin !== '' && pesoMin !== null) {
+      url += '&pesomin=' + pesoMin;
+    }
+
+    return this.http.get(url, httpOptions);
+  }
+
   getCasoByPaciente(id: number): Observable<any> {
     let url = this.baseURL + 'private/casobypaciente/' + id;
 
@@ -299,4 +338,42 @@ export class CasosService {
     return this.http.get<any>(url);
   }
 
+  getProbabilidadeGraficoCurvaturaDaily(idadeMin: any, idadeMax: any, genero: string, regiao: string, nacionalidade: string, alturaMin: any,
+                                   alturaMax: any, pesoMin: any, pesoMax: any): Observable<number> {
+    let url = this.baseURL + 'public/casos/grafico/curva_diaria/daily?';
+
+    //Cadeia de ifs que verifica os filtros especificados e constroi o URL de acordo com as seleções
+    if (idadeMin !== '' && idadeMin !== null) {
+      url += '&idademin=' + idadeMin;
+    }
+
+    if (idadeMax !== '' && idadeMax !== null) {
+      url += '&idademax=' + idadeMax;
+    }
+
+    if (genero !== '' && genero !== null) {
+      url += '&genero=' + genero;
+    }
+
+    if (regiao !== '' && regiao !== null) {
+      url += '&regiao=' + regiao;
+    }
+    if (nacionalidade !== '' && nacionalidade !== null) {
+      url += '&nacionalidade=' + nacionalidade;
+    }
+    if (alturaMax !== '' && alturaMax !== null) {
+      url += '&alturamax=' + alturaMax;
+    }
+    if (alturaMin !== '' && alturaMin !== null) {
+      url += '&alturamin=' + alturaMin;
+    }
+    if (pesoMax !== '' && pesoMax !== null) {
+      url += '&pesomax=' + pesoMax;
+    }
+    if (pesoMin !== '' && pesoMin !== null) {
+      url += '&pesomin=' + pesoMin;
+    }
+
+    return this.http.get<number>(url);
+  }
 }

@@ -50,7 +50,7 @@ public class Relatorio_PacienteController {
     }
 
     @GetMapping("/relatorio_pacientes/{id}")
-    public ResponseEntity<Relatorio_Paciente> getHospitalById(@PathVariable(value = "id") Long relatorio_pacienteId)
+    public ResponseEntity<Relatorio_Paciente> getRelatorioById(@PathVariable(value = "id") Long relatorio_pacienteId)
         throws ResourceNotFoundException {
         Relatorio_Paciente relatorio_Paciente = relatorio_PacienteRepository.findById(relatorio_pacienteId)
           .orElseThrow(() -> new ResourceNotFoundException("Relatorio_Paciente not found for this id :: " + relatorio_pacienteId));
@@ -73,7 +73,6 @@ public class Relatorio_PacienteController {
     
             relatorio_Paciente.setEstado(Relatorio_PacienteDetails.getEstado());
             relatorio_Paciente.setData(Relatorio_PacienteDetails.getData());
-            //relatorio_Paciente.setPaciente(Relatorio_PacienteDetails.getPaciente());
             final Relatorio_Paciente updatedRelatorio_Paciente = relatorio_PacienteRepository.save(relatorio_Paciente);
             return ResponseEntity.ok(updatedRelatorio_Paciente);
     }

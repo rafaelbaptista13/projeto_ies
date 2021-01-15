@@ -82,27 +82,27 @@ public class PacienteController {
             if (estado == null) {
                 estado = "%";
             }
-            System.out.println("hey");
             List<Paciente> pacientes = pacienteRepository.findByMedico(String.valueOf(medico), num_paciente, nome);
-            System.out.println(pacientes);
             HashMap<Long, List<Object>> retorno = new HashMap<>();
             for (Paciente p : pacientes) {
-                Caso caso = casoRepository.findByPacienteId(p.getPacienteId());
-                if (caso==null) continue;
-                System.out.println(caso);
-                if (caso.getEstado_atual().equals(estado) || estado.equals("%")) {
+                //Caso caso = casoRepository.findByPacienteId(p.getPacienteId());
+                if (estado.equals("Ativos")) {
+                    if (p.getEstado_atual().equals("Confinamento Domiciliário") || p.getEstado_atual().equals("Internado") || p.getEstado_atual().equals("Cuidados Intensivos")) {
+                        List<Object> dados = new ArrayList<>();
+                        dados.add(p);
+                        retorno.put(p.getPacienteId(), dados );
+                    }
+                } else if (p.getEstado_atual().equals(estado) || estado.equals("%")) {
                     List<Object> dados = new ArrayList<>();
                     dados.add(p);
-                    dados.add(caso);
                     retorno.put(p.getPacienteId(), dados );
                 }
             }
-            System.out.println(retorno);
             return retorno;
         }
 
     @GetMapping("/pacientes")
-    public Page<Paciente> getAllCasos(
+    public Page<Paciente> getAllPacientes(
         @RequestParam(required = false) String genero,
         @RequestParam(required = false) Integer idademax,
         @RequestParam(required = false) Integer idademin,
@@ -219,6 +219,7 @@ public class PacienteController {
         paciente.setNacionalidade(pacient_info.get("nacionalidade"));
         paciente.setAltura(Integer.parseInt(pacient_info.get("altura")));
         paciente.setPeso(Float.parseFloat(pacient_info.get("peso")));
+        paciente.setEstado_atual(pacient_info.get("estado"));
         Medico medico = medicoRepository.findById(Long.parseLong(pacient_info.get("medico_numero_medico")))
         .orElseThrow(() -> new ResourceNotFoundException("Medico not found for this id :: " + pacient_info.get("medico_numero_medico")));
         paciente.setMedico(medico);
@@ -240,7 +241,6 @@ public class PacienteController {
             relatorio_paciente.setCaso(caso);
             relatorio_paciente.setEstado(pacient_info.get("estado"));
             relatorio_paciente.setData(d2);
-            System.out.println(relatorio_paciente);
             relatorioPacienteRepository.save(relatorio_paciente);
         
         } catch (ParseException e) {
@@ -273,39 +273,42 @@ public class PacienteController {
         paciente.setNacionalidade(pacient_info.get("nacionalidade"));
         paciente.setAltura(Integer.parseInt(pacient_info.get("altura")));
         paciente.setPeso(Float.parseFloat(pacient_info.get("peso")));
+        paciente.setEstado_atual(pacient_info.get("estado"));
         pacienteRepository.save(paciente);
         
         Caso caso = casoRepository.findByPacienteId(Long.parseLong(pacient_info.get("pacientId")));
         String estado_passado = caso.getEstado_atual();
         caso.setEstado_atual(pacient_info.get("estado"));
         casoRepository.save(caso);
-
-        DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date d2;
-        try {
-            String data = formatter.format(new Date(System.currentTimeMillis()));
-            d2 = df2.parse(data.split(" ")[0] + " " + data.split(" ")[2] );
-
-            //Criação relatorio para guardar o estado e tempo associado à mensagem recebida neste momento. Atribuição desse relatorio ao caso do paciente.
-            Relatorio_Paciente relatorio_paciente = new Relatorio_Paciente();
-            relatorio_paciente.setCaso(caso);
-            relatorio_paciente.setEstado(pacient_info.get("estado"));
-            relatorio_paciente.setData(d2);
-            relatorioPacienteRepository.save(relatorio_paciente);
         
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        if (!estado_passado.equals(caso.getEstado_atual())) {
+            DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date d2;
+            try {
+                String data = formatter.format(new Date(System.currentTimeMillis()));
+                d2 = df2.parse(data.split(" ")[0] + " " + data.split(" ")[2] );
 
-        Medico medico = medicoRepository.findById(Long.parseLong(pacient_info.get("medico_numero_medico")))
-        .orElseThrow(() -> new ResourceNotFoundException("Medico not found for this id :: " + pacient_info.get("medico_numero_medico")));
-        Hospital hospital = medico.getHospital();
-        if ((caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos")) && (estado_passado.equals("Confinamento Domiciliário") || estado_passado.equals("Recuperado")) ) {
-            hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() + 1);
-            hospitalRepository.save(hospital);
-        } else if ((caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Recuperado") || caso.getEstado_atual().equals("Óbito")) && (estado_passado.equals("Internado") || estado_passado.equals("Cuidados Intensivos")) ) {
-            hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() - 1);
-            hospitalRepository.save(hospital);
+                //Criação relatorio para guardar o estado e tempo associado à mensagem recebida neste momento. Atribuição desse relatorio ao caso do paciente.
+                Relatorio_Paciente relatorio_paciente = new Relatorio_Paciente();
+                relatorio_paciente.setCaso(caso);
+                relatorio_paciente.setEstado(pacient_info.get("estado"));
+                relatorio_paciente.setData(d2);
+                relatorioPacienteRepository.save(relatorio_paciente);
+            
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Medico medico = medicoRepository.findById(Long.parseLong(pacient_info.get("medico_numero_medico")))
+            .orElseThrow(() -> new ResourceNotFoundException("Medico not found for this id :: " + pacient_info.get("medico_numero_medico")));
+            Hospital hospital = medico.getHospital();
+            if ((caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos")) && (estado_passado.equals("Confinamento Domiciliário") || estado_passado.equals("Recuperado")) ) {
+                hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() + 1);
+                hospitalRepository.save(hospital);
+            } else if ((caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Recuperado") || caso.getEstado_atual().equals("Óbito")) && (estado_passado.equals("Internado") || estado_passado.equals("Cuidados Intensivos")) ) {
+                hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() - 1);
+                hospitalRepository.save(hospital);
+            }
         }
 
         
@@ -317,7 +320,13 @@ public class PacienteController {
          throws ResourceNotFoundException {
         Paciente paciente = pacienteRepository.findById(pacienteID)
        .orElseThrow(() -> new ResourceNotFoundException("Paciente not found for this id :: " + pacienteID));
-
+        
+        Caso caso = casoRepository.findByPacienteId(pacienteID);
+        List<Relatorio_Paciente> relatorios_Paciente = relatorioPacienteRepository.findAllByCaso(caso.getId());
+        for (Relatorio_Paciente r: relatorios_Paciente) {
+            relatorioPacienteRepository.delete(r);
+        }
+        casoRepository.delete(caso);
         pacienteRepository.delete(paciente);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);

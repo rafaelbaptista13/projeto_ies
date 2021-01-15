@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {MedicService} from "../medic.service";
 import {Router} from '@angular/router';
+import {PacienteService} from '../paciente.service';
 
 @Component({
   selector: 'app-home-medic',
@@ -12,10 +13,10 @@ export class HomeMedicComponent implements OnInit {
   medicoLogado: boolean;
   medicoId: number;
   filterForm: FormGroup;
-  estados = ['Confinamento Domiciliário', 'Internado', 'Cuidados Intesivos', 'Recuperado'];
+  estados = ['Ativos', 'Confinamento Domiciliário', 'Internado', 'Cuidados Intensivos', 'Recuperado', 'Óbito'];
   pacientes = {};
 
-  constructor(private router: Router, private medicService: MedicService) { }
+  constructor(private router: Router, private medicService: MedicService, private pacienteService: PacienteService) { }
 
   ngOnInit(): void {
     if (localStorage.getItem('codigo_acesso') != null) {
@@ -45,28 +46,64 @@ export class HomeMedicComponent implements OnInit {
       });
     })(jQuery);
     const medico_id = localStorage.getItem('codigo_acesso');
-    this.medicService.getPacientsFilter(medico_id, '', '', '').subscribe(pacientes => {this.pacientes = pacientes; } );
-    this.initForm();
+    this.medicService.getPacientsFilter(medico_id, '', '', 'Ativos').subscribe(pacientes => {this.pacientes = pacientes; },
+      error => {
+        this.router.navigate(['/login']);
+      });
+
+    const dropdown = document.getElementsByClassName('dropdown-btn');
+    let i;
+
+    for (i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener('click', function(): void {
+        this.classList.toggle('active');
+        const dropdownContent = this.nextElementSibling;
+        if (dropdownContent.style.display === 'block') {
+          dropdownContent.style.display = 'none';
+        } else {
+          dropdownContent.style.display = 'block';
+        }
+      });
+    }
+
+    this.initForm(true);
   }
-  initForm(): void {
-    this.filterForm = new FormGroup(
-      {
-        num_paciente: new FormControl(''),
-        nome: new FormControl(''),
-        estado: new FormControl(''),
-      }
-    );
+  initForm(inicial: boolean): void {
+    if (inicial) {
+      this.filterForm = new FormGroup(
+        {
+          num_paciente: new FormControl(''),
+          nome: new FormControl(''),
+          estado: new FormControl('Ativos'),
+        }
+      );
+    } else {
+      this.filterForm = new FormGroup(
+        {
+          num_paciente: new FormControl(''),
+          nome: new FormControl(''),
+          estado: new FormControl(''),
+        }
+      );
+    }
   }
 
   onSubmit(filterData): void {
     if (this.filterForm.valid){
       const medico_id = localStorage.getItem('codigo_acesso');
-      this.medicService.getPacientsFilter(medico_id, filterData.num_paciente, filterData.nome, filterData.estado).subscribe(pacientes => {this.pacientes = pacientes; } );
-      this.initForm();
+      this.medicService.getPacientsFilter(medico_id, filterData.num_paciente, filterData.nome, filterData.estado).subscribe(pacientes => {this.pacientes = pacientes; },
+        error => {
+          this.router.navigate(['/login']);
+        } );
+      this.initForm(false);
     }
   }
 
-  addPacient(): void{
-    this.router.navigate(['/pacient']);
+  eliminar(id: number): void{
+    this.pacienteService.deletePacient(id).subscribe(sucesso => {this.ngOnInit()},
+      error => {
+        this.router.navigate(['/login']);
+      });
   }
+
 }

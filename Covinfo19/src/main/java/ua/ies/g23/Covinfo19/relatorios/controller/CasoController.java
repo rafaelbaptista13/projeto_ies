@@ -47,6 +47,244 @@ public class CasoController {
     @Autowired
     private MedicoRepository medicoRepository;
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("/public/casos/numerospandemia")
+    public HashMap<String,Integer> getNumerosPandemia(
+            @RequestParam(required = false) String genero, @RequestParam(required = false) Integer idademax,
+            @RequestParam(required = false) Integer idademin, @RequestParam(required = false) String concelho,
+            @RequestParam(required = false) String regiao, @RequestParam(required = false) String nacionalidade,
+            @RequestParam(required = false) Integer alturamin, @RequestParam(required = false) Integer alturamax,
+            @RequestParam(required = false) Double pesomin, @RequestParam(required = false) Double pesomax) {
+
+        String strgenero = "";
+        if (genero != null) {
+            strgenero = genero;
+        } else {
+            strgenero = "%";
+        }
+
+        String stridademin = "";
+        if (idademin != null) {
+            stridademin = idademin.toString();
+        } else {
+            stridademin = "0";
+        }
+
+        String stridademax = "";
+        if (idademax != null) {
+            stridademax = idademax.toString();
+        } else {
+            stridademax = "300";
+        }
+
+        String strconcelho = "";
+        if (concelho != null) {
+            strconcelho = concelho;
+        } else {
+            strconcelho = "%";
+        }
+
+        String strregiao = "";
+        if (regiao != null) {
+            strregiao = regiao;
+        } else {
+            strregiao = "%";
+        }
+
+        String strnacionalidade = "";
+        if (nacionalidade != null) {
+            strnacionalidade = nacionalidade;
+        } else {
+            strnacionalidade = "%";
+        }
+
+        String stralturamin = "";
+        if (alturamin != null) {
+            stralturamin = alturamin.toString();
+        } else {
+            stralturamin = "0";
+        }
+
+        String stralturamax = "";
+        if (alturamax != null) {
+            stralturamax = alturamax.toString();
+        } else {
+            stralturamax = "300";
+        }
+
+        String strpesomin = "";
+        if (pesomin != null) {
+            strpesomin = pesomin.toString();
+        } else {
+            strpesomin = "0";
+        }
+
+        String strpesomax = "";
+        if (pesomax != null) {
+            strpesomax = pesomax.toString();
+        } else {
+            strpesomax = "500";
+        }
+
+        List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
+                    strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
+
+        int casosativos = 0;
+        int casosinternados = 0;
+        int casoscuidados = 0;
+        int casosrecuperados = 0;
+        int casosobito = 0;
+        for (Paciente p : pacientes) {
+            if (p.getEstado_atual().equals("Confinamento Domiciliário")) {
+                casosativos +=1;
+            } else if (p.getEstado_atual().equals("Internado")) {
+                casosinternados +=1;
+                casosativos +=1;
+            } else if (p.getEstado_atual().equals("Cuidados Intensivos")) {
+                casoscuidados +=1;
+                casosativos +=1;
+            } else if (p.getEstado_atual().equals("Recuperado")) {
+                casosrecuperados +=1;
+            } else if (p.getEstado_atual().equals("Óbito")) {
+                casosobito +=1;
+            }
+        }
+        HashMap<String, Integer> retorno = new HashMap<String, Integer>();
+        retorno.put("Ativos", casosativos);
+        retorno.put("Internados", casosinternados);
+        retorno.put("Cuidados Intensivos", casoscuidados);
+        retorno.put("Recuperados", casosrecuperados);
+        retorno.put("Óbitos", casosobito);
+        return retorno;
+
+    }
+
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("/public/casos/grafico/curva_diaria/daily")
+    public Integer getDailyCasosGraficoCurvaEvolucao(@RequestParam(required = false) String genero,
+            @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
+            @RequestParam(required = false) String concelho, @RequestParam(required = false) String regiao,
+            @RequestParam(required = false) String nacionalidade, @RequestParam(required = false) Integer alturamin,
+            @RequestParam(required = false) Integer alturamax, @RequestParam(required = false) Double pesomin,
+            @RequestParam(required = false) Double pesomax) {
+
+        Calendar cal = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal2.set(Calendar.HOUR_OF_DAY, 23);
+        cal2.set(Calendar.MINUTE, 59);
+        cal2.set(Calendar.SECOND, 59);
+
+        Date date = cal.getTime();
+        Date date_fim = cal2.getTime();
+        String strgenero = "";
+        if (genero != null) {
+            strgenero = genero;
+        } else {
+            strgenero = "%";
+        }
+
+        String stridademin = "";
+        if (idademin != null) {
+            stridademin = idademin.toString();
+        } else {
+            stridademin = "0";
+            idademin = 0;
+        }
+
+        String stridademax = "";
+        if (idademax != null) {
+            stridademax = idademax.toString();
+        } else {
+            stridademax = "300";
+            idademax = 300;
+        }
+
+        String strconcelho = "";
+        if (concelho != null) {
+            strconcelho = concelho;
+        } else {
+            strconcelho = "%";
+        }
+
+        String strregiao = "";
+        if (regiao != null) {
+            strregiao = regiao;
+        } else {
+            strregiao = "%";
+        }
+
+        String strnacionalidade = "";
+        if (nacionalidade != null) {
+            strnacionalidade = nacionalidade;
+        } else {
+            strnacionalidade = "%";
+        }
+
+        String stralturamin = "";
+        if (alturamin != null) {
+            stralturamin = alturamin.toString();
+        } else {
+            stralturamin = "0";
+            alturamin = 0;
+        }
+
+        String stralturamax = "";
+        if (alturamax != null) {
+            stralturamax = alturamax.toString();
+        } else {
+            stralturamax = "300";
+            alturamax = 300;
+        }
+
+        String strpesomin = "";
+        if (pesomin != null) {
+            strpesomin = pesomin.toString();
+        } else {
+            strpesomin = "0";
+            pesomin = Double.valueOf(0);
+        }
+
+        String strpesomax = "";
+        if (pesomax != null) {
+            strpesomax = pesomax.toString();
+        } else {
+            strpesomax = "500";
+            pesomax = Double.valueOf(500);
+        }
+        
+
+        List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
+                    strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
+        List<Caso> casos_pacientes = new ArrayList<>();
+
+        for (Paciente p: pacientes) {
+            if (p.getEstado_atual().equals("Confinamento Domiciliário")
+                        || p.getEstado_atual().equals("Internado")
+                        || p.getEstado_atual().equals("Cuidados Intensivos")) {
+                Caso caso = CasoRepository.findByPacienteId(p.getPacienteId());
+                if (caso == null) continue;
+                casos_pacientes.add(caso);
+            }
+        }
+
+
+        int contador = 0;
+        for (Caso c: casos_pacientes) {
+            Relatorio_Paciente relatorio = relatorioRepository.findRecentByCaso(c.getId());
+            if (relatorio.getData().after(date) && relatorio.getData().before(date_fim)) {
+                contador += 1;
+            }
+        }
+
+        return contador;
+    }
+
+
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/public/casos/grafico/curva_diaria")
     public Map<String, Integer> getAllCasosGraficoCurvaEvolucao(@RequestParam(required = false) String genero,
@@ -58,7 +296,6 @@ public class CasoController {
 
         Map<String, Integer> dicionarioCasos = new HashMap<String, Integer>();
         Map<Date, Date> dicionarioDias = new HashMap<Date, Date>();
-        int somaCasosTodos = 0;
 
         // DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -74,7 +311,6 @@ public class CasoController {
         Date date = cal.getTime();
         Date date_fim = cal2.getTime();
         dicionarioDias.put(date, date_fim);
-
         for (int i = 1; i <= 14; i++) {
             cal.add(Calendar.DATE, -1);
             cal2.add(Calendar.DATE, -1);
@@ -158,27 +394,47 @@ public class CasoController {
             strpesomax = "500";
             pesomax = Double.valueOf(500);
         }
+        
 
+        List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
+                    strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
+
+        List<Caso> casos_pacientes = new ArrayList<>();
+        for (Paciente p: pacientes) {
+            if (p.getEstado_atual().equals("Confinamento Domiciliário")
+                        || p.getEstado_atual().equals("Internado")
+                        || p.getEstado_atual().equals("Cuidados Intensivos")) {
+                Caso caso = CasoRepository.findByPacienteId(p.getPacienteId());
+                if (caso == null) continue;
+                casos_pacientes.add(caso);
+            }
+        }
+
+        HashMap<Caso, Relatorio_Paciente> caso_relatorio = new HashMap<>();
+        for (Caso c: casos_pacientes) {
+            Relatorio_Paciente relatorio = relatorioRepository.findRecentByCaso(c.getId());
+            if (relatorio == null) continue;
+            caso_relatorio.put(c, relatorio);
+        }
+
+        List<Caso> casos_verificados = new ArrayList<>();
+        
         for (Date dia : dicionarioDias.keySet()) {
-            List<Paciente> pacientes;
             Date data_fim_dia = dicionarioDias.get(dia);
 
-            pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
-                    strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
             List<Caso> casos = new ArrayList<Caso>();
-            for (Paciente paciente : pacientes) {
-                Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso == null) continue;
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
-                        || caso.getEstado_atual().equals("Internado")
-                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
-                    Relatorio_Paciente relatorio = relatorioRepository.findRecentByCaso(caso.getId());
-                    if (relatorio == null) continue;
-                    if (relatorio.getData().after(dia) && relatorio.getData().before(data_fim_dia)) {
-                        casos.add(caso);
-                    }
+            for (Caso caso : caso_relatorio.keySet()) {
+                Relatorio_Paciente relatorio = caso_relatorio.get(caso);
+                if (relatorio.getData().after(dia) && relatorio.getData().before(data_fim_dia)) {
+                    casos.add(caso);
+                    casos_verificados.add(caso);
                 }
             }
+
+            for (Caso c: casos_verificados) {
+                caso_relatorio.remove(c);
+            }
+            casos_verificados = new ArrayList<>();
 
             String mes = dia.toString().split(" ")[1];
             if (mes.equals("Jan")) {
@@ -210,7 +466,6 @@ public class CasoController {
             String chave = dia.toString().split(" ")[5] + "-" + mes + "-" + dia.toString().split(" ")[2];
 
             dicionarioCasos.put(chave, casos.size());
-
         }
         return dicionarioCasos;
     }
@@ -227,8 +482,6 @@ public class CasoController {
         List<Integer> listaPesos = new ArrayList<Integer>();
         List<Double> listaPesosPercentagem = new ArrayList<Double>();
         int somaCasosTodos = 0;
-
-        System.out.println();
 
         String strgenero = "";
         if (genero != null) {
@@ -314,21 +567,20 @@ public class CasoController {
 
             pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
                     strnacionalidade, stralturamin, stralturamax, strpesominima, strpesomaxima);
-            List<Caso> casos = new ArrayList<Caso>();
-            for (Paciente paciente : pacientes) {
-                Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso==null) continue;
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
-                        || caso.getEstado_atual().equals("Internado")
-                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
-                    if (paciente.getPeso() >= pesomin && paciente.getPeso() <= pesomax) {
-                        casos.add(caso);
+            
+            int contador = 0;
+            for (Paciente p : pacientes) {
+                if (p.getEstado_atual().equals("Confinamento Domiciliário")
+                        || p.getEstado_atual().equals("Internado")
+                        || p.getEstado_atual().equals("Cuidados Intensivos")) {
+                    if (p.getPeso() >= pesomin && p.getPeso() <= pesomax) {
+                        contador += 1;
                     }
                 }
             }
 
-            listaPesos.add(casos.size());
-            somaCasosTodos += casos.size();
+            listaPesos.add(contador);
+            somaCasosTodos += contador;
         }
 
         if (somaCasosTodos == 0) {
@@ -340,7 +592,7 @@ public class CasoController {
                 listaPesosPercentagem.add((double) integer / somaCasosTodos * 100);
             }
         }
-        System.out.println(listaPesosPercentagem);
+
         return listaPesosPercentagem;
     }
 
@@ -439,21 +691,20 @@ public class CasoController {
 
             pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
                     strnacionalidade, stralturaminima, stralturamaxima, strpesomin, strpesomax);
-            List<Caso> casos = new ArrayList<Caso>();
-            for (Paciente paciente : pacientes) {
-                Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso==null) continue;
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
-                        || caso.getEstado_atual().equals("Internado")
-                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
-                    if (paciente.getAltura() >= alturamin && paciente.getAltura() <= alturamax) {
-                        casos.add(caso);
+            
+            int contador = 0;
+            for (Paciente p : pacientes) {
+                if (p.getEstado_atual().equals("Confinamento Domiciliário")
+                        || p.getEstado_atual().equals("Internado")
+                        || p.getEstado_atual().equals("Cuidados Intensivos")) {
+                    if (p.getAltura() >= alturamin && p.getAltura() <= alturamax) {
+                        contador += 1;
                     }
                 }
             }
 
-            listaAlturas.add(casos.size());
-            somaCasosTodos += casos.size();
+            listaAlturas.add(contador);
+            somaCasosTodos += contador;
         }
 
         if (somaCasosTodos == 0) {
@@ -465,7 +716,6 @@ public class CasoController {
                 listaAlturasPercentagem.add((double) integer / somaCasosTodos * 100);
             }
         }
-        System.out.println(listaAlturasPercentagem);
         return listaAlturasPercentagem;
     }
 
@@ -563,21 +813,20 @@ public class CasoController {
 
             pacientes = pacienteRepository.findAllFilters(genero_nome, stridademin, stridademax, strconcelho, strregiao,
                     strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
-            List<Caso> casos = new ArrayList<Caso>();
-            for (Paciente paciente : pacientes) {
-                Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso==null) continue;
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
-                        || caso.getEstado_atual().equals("Internado")
-                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
+
+            int contador = 0;
+            for (Paciente p : pacientes) {
+                if (p.getEstado_atual().equals("Confinamento Domiciliário")
+                        || p.getEstado_atual().equals("Internado")
+                        || p.getEstado_atual().equals("Cuidados Intensivos")) {
                     if (strgenero.equals("%") || strgenero.equals(genero_nome)) {
-                        casos.add(caso);
+                        contador += 1;
                     }
                 }
             }
 
-            listaCasosGenero.add(casos.size());
-            somaCasosTodos += casos.size();
+            listaCasosGenero.add(contador);
+            somaCasosTodos += contador;
         }
 
         if (somaCasosTodos == 0) {
@@ -589,7 +838,7 @@ public class CasoController {
                 listaCasosGeneroPercentagem.add((double) integer / somaCasosTodos * 100);
             }
         }
-        System.out.println(listaCasosGeneroPercentagem);
+
         return listaCasosGeneroPercentagem;
     }
 
@@ -692,21 +941,20 @@ public class CasoController {
 
             pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, regiao_nome,
                     strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
-            List<Caso> casos = new ArrayList<Caso>();
-            for (Paciente paciente : pacientes) {
-                Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso==null) continue;
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
-                        || caso.getEstado_atual().equals("Internado")
-                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
+
+            int contador = 0;
+            for (Paciente p : pacientes) {
+                if (p.getEstado_atual().equals("Confinamento Domiciliário")
+                        || p.getEstado_atual().equals("Internado")
+                        || p.getEstado_atual().equals("Cuidados Intensivos")) {
                     if (strregiao.equals("%") || strregiao.equals(regiao_nome)) {
-                        casos.add(caso);
+                        contador += 1;
                     }
                 }
             }
 
-            listaCasosRegioes.add(casos.size());
-            somaCasosTodos += casos.size();
+            listaCasosRegioes.add(contador);
+            somaCasosTodos += contador;
         }
 
         if (somaCasosTodos == 0) {
@@ -718,7 +966,7 @@ public class CasoController {
                 listaCasosRegioesPercentagem.add((double) integer / somaCasosTodos * 100);
             }
         }
-        System.out.println(listaCasosRegioesPercentagem);
+
         return listaCasosRegioesPercentagem;
     }
 
@@ -730,7 +978,7 @@ public class CasoController {
             @RequestParam(required = false) String nacionalidade, @RequestParam(required = false) Integer alturamin,
             @RequestParam(required = false) Integer alturamax, @RequestParam(required = false) Double pesomin,
             @RequestParam(required = false) Double pesomax) {
-        System.out.println("Estou aqui\n\n");
+
         List<Integer> listaIdades = new ArrayList<Integer>();
         List<Double> listaIdadesPercentagem = new ArrayList<Double>();
         int somaCasosTodos = 0;
@@ -815,21 +1063,20 @@ public class CasoController {
 
             pacientes = pacienteRepository.findAllFilters(strgenero, stridademinima, stridademaxima, strconcelho,
                     strregiao, strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
-            List<Caso> casos = new ArrayList<Caso>();
-            for (Paciente paciente : pacientes) {
-                Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso==null) continue;
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
-                        || caso.getEstado_atual().equals("Internado")
-                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
-                    if (paciente.getIdade() >= idademin && paciente.getIdade() <= idademax) {
-                        casos.add(caso);
+
+            int contador = 0;
+            for (Paciente p : pacientes) {
+                if (p.getEstado_atual().equals("Confinamento Domiciliário")
+                        || p.getEstado_atual().equals("Internado")
+                        || p.getEstado_atual().equals("Cuidados Intensivos")) {
+                    if (p.getIdade() >= idademin && p.getIdade() <= idademax) {
+                        contador += 1;
                     }
                 }
             }
 
-            listaIdades.add(casos.size());
-            somaCasosTodos += casos.size();
+            listaIdades.add(contador);
+            somaCasosTodos += contador;
         }
 
         if (somaCasosTodos == 0) {
@@ -841,7 +1088,7 @@ public class CasoController {
                 listaIdadesPercentagem.add((double) integer / somaCasosTodos * 100);
             }
         }
-        System.out.println(listaIdadesPercentagem);
+
         return listaIdadesPercentagem;
     }
 
@@ -953,31 +1200,28 @@ public class CasoController {
             pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
                     strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
         }
-        List<Caso> casos = new ArrayList<Caso>();
-        if (estado.equals("ativos")) {
-            for (Paciente paciente : pacientes) {
-                Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso==null) continue;
-                if (caso.getEstado_atual().equals("Confinamento Domiciliário")
-                        || caso.getEstado_atual().equals("Internado")
-                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
-                    casos.add(caso);
-                }
-            }
-            return casos.size();
-        } else {
-            for (Paciente paciente : pacientes) {
-                Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
-                if (caso==null) continue;
-                if (caso.getEstado_atual().equals(estado) || estado.equals("semestado")) {
-                    casos.add(caso);
-                }
-            }
-            return casos.size();
-        }
 
+        int contador = 0;
+        if (estado.equals("ativos")) {
+            for (Paciente p : pacientes) {
+                if (p.getEstado_atual().equals("Confinamento Domiciliário")
+                        || p.getEstado_atual().equals("Internado")
+                        || p.getEstado_atual().equals("Cuidados Intensivos")) {
+                    contador += 1;
+                }
+            }
+            return contador;
+        } else {
+            for (Paciente p : pacientes) {
+                if (p.getEstado_atual().equals(estado) || estado.equals("semestado")) {
+                    contador += 1;
+                }
+            }
+            return contador;
+        }
     }
 
+    
     @GetMapping("/public/casos")
     public List<Caso> getAllCasos(@RequestParam(required = false) String estado,
             @RequestParam(required = false) String genero, @RequestParam(required = false) Integer idademax,
@@ -1082,6 +1326,8 @@ public class CasoController {
         }
         return casos;
     }
+
+
 
     @GetMapping("/private/casobypaciente/{id}")
     public Caso getCasoByPacienteId(@PathVariable(value = "id") Long PacienteId) throws ResourceNotFoundException {

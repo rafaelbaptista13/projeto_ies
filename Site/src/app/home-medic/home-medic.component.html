@@ -49,8 +49,9 @@
           <span></span>
         </button>
 
-        <button type="button" (click)="addPacient()" class="add">Adicionar Paciente<i class="fas fa-plus"></i></button>
-        <button class="search" id="filterCollapse">Filtros <i class="fas fa-search"></i></button>
+        <button type="button" [routerLink]="['/pacient']" class="add">Adicionar Paciente<i class="fas fa-plus"></i></button>
+        <button class="search" id="filterCollapse">Search <i class="fas fa-search"></i></button>
+
 
 
       </div>
@@ -88,7 +89,7 @@
 
     <div *ngIf="(pacientes | json) != ('{}'); then thenBlock4 else elseBlock4"> </div>
     <ng-template #thenBlock4>
-      <table class="table table-borderless">
+      <table class="table table-borderless" style="text-align: center;">
         <thead>
         <tr>
           <th scope="col">Número Paciente</th>
@@ -101,10 +102,10 @@
         <tr *ngFor="let item of pacientes | keyvalue">
           <th scope="row">{{ item.key }}</th>
           <td>{{ pacientes[item.key][0].nome }}</td>
-          <td>{{ pacientes[item.key][1].estado_atual }}</td>
+          <td>{{ pacientes[item.key][0].estado_atual }}</td>
           <td>
             <a [routerLink]="['/pacient/', item.key]"><i class="fas fa-user-edit"></i></a>&nbsp;&nbsp;&nbsp;
-            <a routerLink="/home"><i class="fas fa-trash"></i></a></td>
+            <a (click)="eliminar(item.key)"><i class="fas fa-trash"></i></a></td>
         </tr>
         </tbody>
       </table>
