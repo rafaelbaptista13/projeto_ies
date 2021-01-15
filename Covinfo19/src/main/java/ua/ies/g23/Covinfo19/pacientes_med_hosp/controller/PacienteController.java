@@ -85,19 +85,16 @@ public class PacienteController {
             List<Paciente> pacientes = pacienteRepository.findByMedico(String.valueOf(medico), num_paciente, nome);
             HashMap<Long, List<Object>> retorno = new HashMap<>();
             for (Paciente p : pacientes) {
-                Caso caso = casoRepository.findByPacienteId(p.getPacienteId());
-                if (caso == null) continue;
+                //Caso caso = casoRepository.findByPacienteId(p.getPacienteId());
                 if (estado.equals("Ativos")) {
-                    if (caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos")) {
+                    if (p.getEstado_atual().equals("Confinamento Domiciliário") || p.getEstado_atual().equals("Internado") || p.getEstado_atual().equals("Cuidados Intensivos")) {
                         List<Object> dados = new ArrayList<>();
                         dados.add(p);
-                        dados.add(caso);
                         retorno.put(p.getPacienteId(), dados );
                     }
-                } else if (caso.getEstado_atual().equals(estado) || estado.equals("%")) {
+                } else if (p.getEstado_atual().equals(estado) || estado.equals("%")) {
                     List<Object> dados = new ArrayList<>();
                     dados.add(p);
-                    dados.add(caso);
                     retorno.put(p.getPacienteId(), dados );
                 }
             }
@@ -105,7 +102,7 @@ public class PacienteController {
         }
 
     @GetMapping("/pacientes")
-    public Page<Paciente> getAllCasos(
+    public Page<Paciente> getAllPacientes(
         @RequestParam(required = false) String genero,
         @RequestParam(required = false) Integer idademax,
         @RequestParam(required = false) Integer idademin,
@@ -222,6 +219,7 @@ public class PacienteController {
         paciente.setNacionalidade(pacient_info.get("nacionalidade"));
         paciente.setAltura(Integer.parseInt(pacient_info.get("altura")));
         paciente.setPeso(Float.parseFloat(pacient_info.get("peso")));
+        paciente.setEstado_atual(pacient_info.get("estado"));
         Medico medico = medicoRepository.findById(Long.parseLong(pacient_info.get("medico_numero_medico")))
         .orElseThrow(() -> new ResourceNotFoundException("Medico not found for this id :: " + pacient_info.get("medico_numero_medico")));
         paciente.setMedico(medico);
@@ -243,7 +241,6 @@ public class PacienteController {
             relatorio_paciente.setCaso(caso);
             relatorio_paciente.setEstado(pacient_info.get("estado"));
             relatorio_paciente.setData(d2);
-            System.out.println(relatorio_paciente);
             relatorioPacienteRepository.save(relatorio_paciente);
         
         } catch (ParseException e) {
@@ -276,6 +273,7 @@ public class PacienteController {
         paciente.setNacionalidade(pacient_info.get("nacionalidade"));
         paciente.setAltura(Integer.parseInt(pacient_info.get("altura")));
         paciente.setPeso(Float.parseFloat(pacient_info.get("peso")));
+        paciente.setEstado_atual(pacient_info.get("estado"));
         pacienteRepository.save(paciente);
         
         Caso caso = casoRepository.findByPacienteId(Long.parseLong(pacient_info.get("pacientId")));

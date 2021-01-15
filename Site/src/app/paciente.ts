@@ -8,9 +8,10 @@ export class Paciente {
   nacionalidade: string;
   altura: number;
   peso: number;
+  estado_atual: string;
   medico_numero_medico: number;
 
-  constructor(nome: string, genero: string, idade: number, concelho: string,  regiao: string, nacionalidade: string, altura: number, peso: number, medico_numero_medico) {
+  constructor(nome: string, genero: string, idade: number, concelho: string,  regiao: string, nacionalidade: string, altura: number, peso: number, estado_atual:string, medico_numero_medico:number) {
     this.nome = nome;
     this.genero = genero;
     this.idade = idade;
@@ -19,6 +20,7 @@ export class Paciente {
     this.nacionalidade = nacionalidade;
     this.altura = altura;
     this.peso = peso;
+    this.estado_atual = estado_atual;
     this.medico_numero_medico = medico_numero_medico;
   }
 }

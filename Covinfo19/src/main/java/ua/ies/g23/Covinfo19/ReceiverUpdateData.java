@@ -68,7 +68,9 @@ public class ReceiverUpdateData {
       hospitalRepository.save(hospital);
     }
     
-    //Atualização do estado atual no caso em questão.
+    //Atualização do estado atual no caso e paciente em questão.
+    paciente.setEstado_atual(json.getString("estado_atual"));
+    pacienteRepository.save(paciente);
     caso.setEstado_atual(json.getString("estado_atual"));
     System.out.println(caso);
     casoRepository.save(caso);
@@ -84,7 +86,6 @@ public class ReceiverUpdateData {
       relatorio_paciente.setEstado(json.getString("estado_atual"));
       relatorio_paciente.setData(d2);
       relatorioPacienteRepository.save(relatorio_paciente);
-      System.out.println(relatorio_paciente);
       
     } catch (Exception e) {
       e.printStackTrace();

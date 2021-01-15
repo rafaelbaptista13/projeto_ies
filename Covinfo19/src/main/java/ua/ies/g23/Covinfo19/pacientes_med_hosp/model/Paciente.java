@@ -41,6 +41,10 @@ public class Paciente {
     @Column(name = "peso", nullable = false)
     private float peso;
 
+    @Column(name = "estado_atual", nullable = false)
+    private String estado_atual;
+    
+
     // é acompanhado por um medico
     @ManyToOne
     private Medico medico;
@@ -50,7 +54,7 @@ public class Paciente {
 
     }
 
-    public Paciente(long paciente_id, String nome, String genero, int idade, String concelho, String regiao, String nacionalidade, int altura, float peso, Medico medico) {
+    public Paciente(long paciente_id, String nome, String genero, int idade, String concelho, String regiao, String nacionalidade, int altura, float peso, String estado_atual, Medico medico) {
         this.paciente_id = paciente_id;
         this.nome = nome;
         this.genero = genero;
@@ -60,6 +64,7 @@ public class Paciente {
         this.nacionalidade = nacionalidade;
         this.altura = altura;
         this.peso = peso;
+        this.estado_atual = estado_atual;
         this.medico = medico;
     }
  
@@ -129,6 +134,14 @@ public class Paciente {
     }
     public void setPeso(float peso) {
         this.peso = peso;
+    }
+
+    public String getEstado_atual() {
+        return estado_atual;
+    }
+
+    public void setEstado_atual(String estado_atual) {
+        this.estado_atual = estado_atual;
     }
 
     public Medico getMedico() {

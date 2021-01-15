@@ -94,19 +94,16 @@ export class CasosdiariosComponent implements OnInit {
       '','','','').subscribe(prob => { this.probabilidadesGraficoCurva = prob; this.chartCurva(this.probabilidadesGraficoCurva); });
 
     //Inicialização do valor das variáveis sem filtros, com chamada á API para obter os valores
-    this.casosService.getNumeroCasos('ativos', '', '', '', '', '', '',
-      '', '', '').subscribe(casosAtivos => this.casosAtivos = casosAtivos);
-    this.casosService.getNumeroCasos('Recuperado', '', '', '', '', '', '',
-      '', '', '').subscribe(casosRecuperados => this.casosRecuperados = casosRecuperados);
-    this.casosService.getNumeroCasos('Cuidados+Intensivos', '', '', '', '', '', '',
-      '', '', '').subscribe(casosCuidadosIntensivos => this.casosCuidadosIntensivos = casosCuidadosIntensivos);
-    this.casosService.getNumeroCasos('Óbito', '', '', '', '', '', '',
-      '', '', '').subscribe(casosMortos => this.casosMortos = casosMortos);
-    this.casosService.getNumeroCasos('Internado', '', '', '', '', '', '',
-      '', '', '').subscribe(casosInternados => this.casosInternados = casosInternados);
-
+    this.casosService.getNumerosPandemia( '', '', '', '', '', '',
+      '', '', '').subscribe(resultado => {
+        this.casosAtivos = resultado['Ativos'];
+        this.casosCuidadosIntensivos = resultado['Cuidados Intensivos'];
+        this.casosInternados = resultado['Internados'];
+        this.casosMortos = resultado['Óbitos'];
+        this.casosRecuperados = resultado['Recuperados'];
+    });
     const source = interval(10000);
-    this.subscription = source.subscribe(val => this.updateGraficos());
+    this.subscription = source.subscribe(val => {console.log('vou update');this.updateGraficos();});
 
   }
 
@@ -121,40 +118,32 @@ export class CasosdiariosComponent implements OnInit {
     this.pesomin = filterData.peso_min;
     this.pesomax = filterData.peso_max;
     //Alteração do valor para o diferente tipo de casos, de acordo com os filtros inseridos
+    this.casosService.getNumerosPandemia( filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
+      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).subscribe(resultado => {
+      this.casosAtivos = resultado['Ativos'];
+      this.casosCuidadosIntensivos = resultado['Cuidados Intensivos'];
+      this.casosInternados = resultado['Internados'];
+      this.casosMortos = resultado['Óbitos'];
+      this.casosRecuperados = resultado['Recuperados'];
+    });
+
     this.casosService.getProbabilidadeGraficoCurvatura(filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
       filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
     subscribe(prob => { this.probabilidadesGraficoCurva = prob; this.chartCurva(this.probabilidadesGraficoCurva); });
-    this.casosService.getNumeroCasos('ativos', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
-      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosAtivos => this.casosAtivos = casosAtivos);
-    this.casosService.getNumeroCasos('Recuperado', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
-      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosRecuperados => this.casosRecuperados = casosRecuperados);
-    this.casosService.getNumeroCasos('Cuidados+Intensivos', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
-      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosCuidadosIntensivos => this.casosCuidadosIntensivos = casosCuidadosIntensivos);
-    this.casosService.getNumeroCasos('Óbito', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
-      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosMortos => this.casosMortos = casosMortos);
-    this.casosService.getNumeroCasos('Internado', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
-      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosInternados => this.casosInternados = casosInternados);
 
   }
 
   updateGraficos(): void {
     console.log("entrei");
     //Inicialização do valor das variáveis sem filtros, com chamada á API para obter os valores
-    this.casosService.getNumeroCasos('ativos', this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
-      this.alturamax, this.pesomin, this.pesomax).subscribe(casosAtivos => this.casosAtivos = casosAtivos);
-    this.casosService.getNumeroCasos('Recuperado', this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
-      this.alturamax, this.pesomin, this.pesomax).subscribe(casosRecuperados => this.casosRecuperados = casosRecuperados);
-    this.casosService.getNumeroCasos('Cuidados+Intensivos', this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
-      this.alturamax, this.pesomin, this.pesomax).subscribe(casosCuidadosIntensivos => this.casosCuidadosIntensivos = casosCuidadosIntensivos);
-    this.casosService.getNumeroCasos('Óbito', this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
-      this.alturamax, this.pesomin, this.pesomax).subscribe(casosMortos => this.casosMortos = casosMortos);
-    this.casosService.getNumeroCasos('Internado', this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
-      this.alturamax, this.pesomin, this.pesomax).subscribe(casosInternados => this.casosInternados = casosInternados);
+    this.casosService.getNumerosPandemia( this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
+      this.alturamax, this.pesomin, this.pesomax).subscribe(resultado => {
+      this.casosAtivos = resultado['Ativos'];
+      this.casosCuidadosIntensivos = resultado['Cuidados Intensivos'];
+      this.casosInternados = resultado['Internados'];
+      this.casosMortos = resultado['Óbitos'];
+      this.casosRecuperados = resultado['Recuperados'];
+    });
 
     this.casosService.getProbabilidadeGraficoCurvaturaDaily(this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
       this.alturamax, this.pesomin, this.pesomax).subscribe(prob => {

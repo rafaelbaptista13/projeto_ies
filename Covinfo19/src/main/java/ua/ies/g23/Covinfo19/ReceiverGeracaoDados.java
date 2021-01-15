@@ -53,6 +53,7 @@ public class ReceiverGeracaoDados {
     paciente.setNacionalidade(json.getString("nacionalidade"));
     paciente.setAltura(Integer.parseInt(json.getString("altura")));
     paciente.setPeso((float) Double.parseDouble(json.getString("peso")));
+    paciente.setEstado_atual(json.getString("estado"));
 
     //Obtenção lista de hospitais da região do paciente utilizada para atribuição medico ao paciente.
     List<Hospital> listaHospitais = hospitalRepository.findAllFilters("%", "%", json.getString("regiao"), "0", "5000", "0", "5000");
@@ -140,7 +141,6 @@ public class ReceiverGeracaoDados {
     caso.setEstado_atual(json.getString("estado"));
     caso.setPaciente_id(paciente.getPacienteId());
     casoRepository.save(caso);
-    System.out.println(caso);
 
     DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     Date d2;
@@ -152,7 +152,6 @@ public class ReceiverGeracaoDados {
       relatorio_paciente.setCaso(caso);
       relatorio_paciente.setEstado(json.getString("estado"));
       relatorio_paciente.setData(d2);
-      System.out.println(relatorio_paciente);
       relatorioPacienteRepository.save(relatorio_paciente);
       
     } catch (ParseException e) {
