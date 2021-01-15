@@ -203,6 +203,10 @@ ul.CTAs a {
 
 }
 
+.form-control{
+  display: inline-block;
+}
+
 .card-signin {
   border: 0;
   border-radius: 1rem;
@@ -302,6 +306,7 @@ ul.CTAs a {
   background: #F7F7F7;
   border-radius: 1rem;
   box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+  font-weight: bold;
 }
 
 .filter_title{
@@ -456,6 +461,9 @@ ul.CTAs a {
   margin-right: 3%;
 }
 
+form div.row div.col-2{
+  margin-top: 4%;
+}
 
 
 

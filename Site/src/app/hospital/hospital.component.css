@@ -203,19 +203,16 @@ ul.CTAs a {
 
 }
 
+.col-4{
+  margin-top: 4%;
+}
+
 .filters{
   margin: 4% 0 4% 0;
   border: 0;
   background: #F7F7F7;
   border-radius: 1rem;
   box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-}
-
-.filter_title{
-  text-align: center;
-  font-size: 40px;
-  font-weight: bold;
-  margin: 3%;
 }
 
 .taxaocupacao_title{
@@ -320,4 +317,8 @@ ul.CTAs a {
 .fa-caret-down {
   float: right;
   margin-right: 3%;
+}
+
+.form-control{
+  display: inline-block;
 }

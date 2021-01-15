@@ -49,26 +49,25 @@
           <span></span>
         </button>
 
-        <button class="search" id="filterCollapse">Search<i class="fas fa-search"></i></button>
+        <button class="search" id="filterCollapse">Filtros <i class="fas fa-search"></i></button>
 
 
       </div>
     </nav>
 
     <div class="filters" id="filters" style="display: none">
-      <h2 class="filter_title">Filters</h2>
-      <form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)">
+      <form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)" class="form">
         <div class="row">
           <div class="col-4">
             <h5 class="nome_title">Nome</h5>
             <div class="nome_div">
-              <input id="nome" formControlName="nome">
+              <input id="nome" class="form-control" formControlName="nome" class="form-control">
             </div>
           </div>
           <div class="col-4">
             <h5 class="regiao_title">Região</h5>
             <div class="regiao_div">
-              <select name="regiao_option" id="r_options" formControlName="regiao">
+              <select name="regiao_option" class="custom-select" id="r_options" formControlName="regiao">
                 <option hidden disabled selected value>Selecionar Opção</option>
                 <option value=""></option>
                 <option *ngFor="let regiao of regioes" value="{{regiao}}">{{regiao}}</option>
@@ -79,8 +78,8 @@
           <div class="col-4">
             <h5 class="taxaocupacao_title">Taxa Ocupação</h5>
             <div class="taxaocupacao_div">
-              <input placeholder="min" min="0" id="taxaocupacao_min" formControlName="taxaocupacao_min" type="number">
-              <input placeholder="max" min="0" id="taxaocupacao_max" formControlName="taxaocupacao_max" type="number">
+              <input placeholder="min" class="form-control" min="0" id="taxaocupacao_min" formControlName="taxaocupacao_min" type="number">
+              <input placeholder="max" class="form-control" min="0" id="taxaocupacao_max" formControlName="taxaocupacao_max" type="number">
             </div>
           </div>
         </div>
