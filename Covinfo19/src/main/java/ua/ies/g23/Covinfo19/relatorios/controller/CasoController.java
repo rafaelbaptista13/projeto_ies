@@ -1,8 +1,6 @@
 package ua.ies.g23.Covinfo19.relatorios.controller;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,7 +13,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-import org.w3c.dom.ls.LSInput;
 
 import ua.ies.g23.Covinfo19.relatorios.model.Caso;
 import ua.ies.g23.Covinfo19.relatorios.model.Relatorio_Paciente;
@@ -173,10 +168,12 @@ public class CasoController {
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso == null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
                     Relatorio_Paciente relatorio = relatorioRepository.findRecentByCaso(caso.getId());
+                    if (relatorio == null) continue;
                     if (relatorio.getData().after(dia) && relatorio.getData().before(data_fim_dia)) {
                         casos.add(caso);
                     }
@@ -320,6 +317,7 @@ public class CasoController {
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -444,6 +442,7 @@ public class CasoController {
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -567,6 +566,7 @@ public class CasoController {
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -695,6 +695,7 @@ public class CasoController {
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -817,6 +818,7 @@ public class CasoController {
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -955,6 +957,7 @@ public class CasoController {
         if (estado.equals("ativos")) {
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -965,6 +968,7 @@ public class CasoController {
         } else {
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals(estado) || estado.equals("semestado")) {
                     casos.add(caso);
                 }
@@ -1071,6 +1075,7 @@ public class CasoController {
 
         for (Paciente paciente : pacientes) {
             Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+            if (caso==null) continue;
             if (caso.getEstado_atual().equals(estado) || estado == null) {
                 casos.add(caso);
             }

@@ -88,6 +88,7 @@ public class PacienteController {
             HashMap<Long, List<Object>> retorno = new HashMap<>();
             for (Paciente p : pacientes) {
                 Caso caso = casoRepository.findByPacienteId(p.getPacienteId());
+                if (caso==null) continue;
                 System.out.println(caso);
                 if (caso.getEstado_atual().equals(estado) || estado.equals("%")) {
                     List<Object> dados = new ArrayList<>();
