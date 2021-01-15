@@ -1088,6 +1088,8 @@ public class CasoController {
         return casos;
     }
 
+
+
     @GetMapping("/private/casobypaciente/{id}")
     public Caso getCasoByPacienteId(@PathVariable(value = "id") Long PacienteId) throws ResourceNotFoundException {
         Caso Caso = CasoRepository.findByPacienteId(PacienteId);

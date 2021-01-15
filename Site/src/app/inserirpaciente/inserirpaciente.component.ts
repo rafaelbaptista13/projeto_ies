@@ -100,7 +100,10 @@ export class InserirpacienteComponent implements OnInit {
           'medico_numero_medico': localStorage.getItem('codigo_acesso'),
           'estado': this.formPaciente.controls.estado.value
         }
-        this.pacienteService.createPacient(mensagem).subscribe(result => console.log(result));
+        this.pacienteService.createPacient(mensagem).subscribe(result => this.router.navigate(['/homeMedic']),
+          error => {
+            this.router.navigate(['/login']);
+          });
       }
     }
   }

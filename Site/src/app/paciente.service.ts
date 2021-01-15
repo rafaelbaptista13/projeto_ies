@@ -36,4 +36,9 @@ export class PacienteService {
     return this.http.put(url, data, httpOptions);
   }
 
+  deletePacient(id: number): Observable<any>{
+    const url = this.baseURL + 'private/pacientes/' + id;
+    return this.http.delete(url, httpOptions);
+  }
+
 }

@@ -41,7 +41,9 @@ export class StatisticsComponent implements OnInit {
   chartGenerosObj: any;
   chartAlturasObj: any;
   chartPesosObj: any;
+
   subscription: Subscription;
+  subscription2: Subscription;
 
   //Inicialização com todos os filtros vazios
   constructor(private casosService: CasosService, private formBuilder: FormBuilder) {
@@ -58,6 +60,12 @@ export class StatisticsComponent implements OnInit {
     });
 
   }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    this.subscription2.unsubscribe();
+  }
+
 
   ngOnInit(): void {
     if (localStorage.getItem('codigo_acesso') != null) {
@@ -116,8 +124,11 @@ export class StatisticsComponent implements OnInit {
     this.casosService.getNumeroCasos('Internado', '', '', '', '', '', '',
       '', '', '').subscribe(casosInternados => this.casosInternados = casosInternados);
 
-    const source = interval(30000);
+    const source = interval(10000);
     this.subscription = source.subscribe(val => this.updateGraficos());
+    const source2 = interval(60000);
+    this.subscription2 = source2.subscribe(val => this.updateGraficos2());
+
   }
 
   //Função chamada quando é submetido um novo formulário de filtros
@@ -161,9 +172,101 @@ export class StatisticsComponent implements OnInit {
 
   updateGraficos(): void {
     console.log("entrei");
-    //var length = this.chartCurvaObj.options.data[0].dataPoints.length;
-    //this.chartCurvaObj.options.data[0].dataPoints[length - 1].y = Math.random() * 100;
-    //this.chartCurvaObj.render();
+    //Inicialização do valor das variáveis sem filtros, com chamada á API para obter os valores
+    this.casosService.getNumeroCasos('ativos', '', '', '', '', '', '',
+      '', '', '').subscribe(casosAtivos => this.casosAtivos = casosAtivos);
+    this.casosService.getNumeroCasos('Recuperado', '', '', '', '', '', '',
+      '', '', '').subscribe(casosRecuperados => this.casosRecuperados = casosRecuperados);
+    this.casosService.getNumeroCasos('Cuidados+Intensivos', '', '', '', '', '', '',
+      '', '', '').subscribe(casosCuidadosIntensivos => this.casosCuidadosIntensivos = casosCuidadosIntensivos);
+    this.casosService.getNumeroCasos('Óbito', '', '', '', '', '', '',
+      '', '', '').subscribe(casosMortos => this.casosMortos = casosMortos);
+    this.casosService.getNumeroCasos('Internado', '', '', '', '', '', '',
+      '', '', '').subscribe(casosInternados => this.casosInternados = casosInternados);
+
+    this.casosService.getProbabilidadeGraficoCurvatura('','','','','',
+      '','','','').subscribe(prob => {
+      var length = this.chartCurvaObj.options.data[0].dataPoints.length;
+      let d: Date = new Date();
+      this.chartCurvaObj.options.data[0].dataPoints[length - 1].y = prob[d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()];
+      this.chartCurvaObj.render();
+    });
+
+  }
+
+  updateGraficos2(): void {
+    console.log('entrei2')
+    this.casosService.getProbabilidadeGraficoIdades('','','','','',
+      '','','','').subscribe(prob => {
+      let array_data = [
+        { y: prob[0], name: "1-10"},
+        { y: prob[1], name: "11-20"},
+        { y: prob[2], name: "21-30" },
+        { y: prob[3], name: "31-40" },
+        { y: prob[4], name: "41-50" },
+        { y: prob[5], name: "51-60" },
+        { y: prob[6], name: "61-70" },
+        { y: prob[7], name: "71-80", exploded: true },
+        { y: prob[8], name: "+81" },
+      ];
+      this.chartIdadesObj.options.data[0].dataPoints = array_data; this.chartIdadesObj.render();
+    });
+
+    this.casosService.getProbabilidadeGraficoRegiao('','','','','',
+      '','','','').subscribe(prob => {
+      let array_data = [
+        { y: prob[0], name: "Norte", exploded: true},
+        { y: prob[1], name: "Centro"},
+        { y: prob[2], name: "Lisboa e Vale do Tejo" },
+        { y: prob[3], name: "Alentejo" },
+        { y: prob[4], name: "Algarve" },
+        { y: prob[5], name: "Açores" },
+        { y: prob[6], name: "Madeira" },
+      ];
+      this.chartRegioesObj.options.data[0].dataPoints = array_data; this.chartRegioesObj.render();
+    });
+
+    this.casosService.getProbabilidadeGraficoGenero('','','','','',
+      '','','','').subscribe(prob => {
+      let array_data = [
+        { y: prob[0], label: "Masculino" },
+        { y: prob[1], label: "Feminino" }
+      ];
+
+      this.chartGenerosObj.options.data[0].dataPoints = array_data; this.chartGenerosObj.render();
+    });
+
+    this.casosService.getProbabilidadeGraficoAltura('','','','','',
+      '','','','').subscribe(prob => {
+      let array_data = [
+        { y: prob[0], label: "-1,50" },
+        { y: prob[1], label: "1,51-1,60" },
+        { y: prob[2], label: "1,61-1,70", exploded: true },
+        { y: prob[3], label: "1,71-1,80"},
+        { y: prob[4], label: "1,81-1,90" },
+        { y: prob[5], label: "1,91-2,00" },
+        { y: prob[6], label: "+2,01" },
+      ];
+
+      this.chartAlturasObj.options.data[0].dataPoints = array_data; this.chartAlturasObj.render();
+    });
+
+    this.casosService.getProbabilidadeGraficoPeso('','','','','',
+      '','','','').subscribe(prob => {
+      let array_data = [
+        { y: prob[0], label: "-20" },
+        { y: prob[1], label: "21-30" },
+        { y: prob[2], label: "31-40" },
+        { y: prob[3], label: "41-50" },
+        { y: prob[4], label: "51-60" },
+        { y: prob[5], label: "61-70", exploded: true},
+        { y: prob[6], label: "71-80" },
+        { y: prob[7], label: "81-90" },
+        { y: prob[8], label: "+91" },
+      ];
+
+      this.chartPesosObj.options.data[0].dataPoints = array_data; this.chartPesosObj.render();
+    });
   }
 
   //Função para especificar valores dos charts
