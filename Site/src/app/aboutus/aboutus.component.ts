@@ -17,6 +17,7 @@ export class AboutusComponent implements OnInit {
       this.medicoId = Number(localStorage.getItem('codigo_acesso'));
     } else {
       this.medicoLogado = false;
+      this.medicoLogado = false;
     }
 
     // Função para colapsar navbar

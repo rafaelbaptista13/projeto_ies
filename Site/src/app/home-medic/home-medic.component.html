@@ -3,7 +3,7 @@
   <nav id="sidebar">
     <h1>Numero medico</h1>
     <div class="sidebar-header">
-      <h3>Covinfo</h3>
+      <h3>CovInfo19</h3>
     </div>
 
     <ul class="list-unstyled components">
@@ -11,7 +11,7 @@
         <a routerLink="/home" >Home</a>
       </li>
       <li>
-        <a routerLink="/statistics">Estatística</a>
+        <a routerLink="/statistics">Estatísticas</a>
       </li>
       <li class="active">
         <a routerLink="/hospital" >Hospitais</a>
@@ -19,11 +19,20 @@
       <li>
         <a routerLink="/aboutus">Sobre nós</a>
       </li>
-      <li>
-        <a routerLink="/login">Área profissionais de saúde</a>
+      <li *ngIf="medicoLogado==false" id="logged">
+        <a routerLink="/login">Área Reservada</a>
       </li>
-      <li>
-        <a routerLink="/homeMedic">Pacientes</a>
+      <li *ngIf="medicoLogado" id="nlogged">
+        <button class="dropdown-btn">Área Reservada
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+          <a class="dropdown-item" routerLink="/homeMedic">Lista Pacientes</a>
+          <a class="dropdown-item" routerLink="/pacient">Inserir Paciente</a>
+        </div>
+      </li>
+      <li *ngIf="medicoLogado" class="nav-item logout">
+        <a class="nav-link" routerLink="/logout">Logout</a>
       </li>
     </ul>
   </nav>

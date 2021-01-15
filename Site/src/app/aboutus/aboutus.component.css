@@ -309,3 +309,34 @@ ul.CTAs a {
   transform: scale(1.1);
   -webkit-transition: transform 0.2s ease;
 }
+
+/* DROPDOWN */
+.sidenav a, .dropdown-btn {
+  text-decoration: none;
+  color: white;
+  display: block;
+  border: none;
+  font-size: 1.1em;
+  background: none;
+  width:100%;
+  height: 50px;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+}
+
+/* On mouse-over */
+.sidenav a:hover, .dropdown-btn:hover {
+  color: #7386D5;
+  background: #fff;
+}
+
+.dropdown-container {
+  display: none;
+  background: #6d7fcc;
+}
+
+.fa-caret-down {
+  float: right;
+  margin-right: 3%;
+}
