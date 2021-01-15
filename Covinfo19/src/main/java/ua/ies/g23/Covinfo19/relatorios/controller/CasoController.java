@@ -53,6 +53,183 @@ public class CasoController {
     private MedicoRepository medicoRepository;
 
     @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("/public/casos/grafico/curva_diaria/daily")
+    public Map<String, Integer> getDailyCasosGraficoCurvaEvolucao(@RequestParam(required = false) String genero,
+            @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
+            @RequestParam(required = false) String concelho, @RequestParam(required = false) String regiao,
+            @RequestParam(required = false) String nacionalidade, @RequestParam(required = false) Integer alturamin,
+            @RequestParam(required = false) Integer alturamax, @RequestParam(required = false) Double pesomin,
+            @RequestParam(required = false) Double pesomax) {
+
+        Map<String, Integer> dicionarioCasos = new HashMap<String, Integer>();
+        Map<Date, Date> dicionarioDias = new HashMap<Date, Date>();
+        int somaCasosTodos = 0;
+
+        // DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Calendar cal = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal2.set(Calendar.HOUR_OF_DAY, 23);
+        cal2.set(Calendar.MINUTE, 59);
+        cal2.set(Calendar.SECOND, 59);
+
+        Date date = cal.getTime();
+        Date date_fim = cal2.getTime();
+        dicionarioDias.put(date, date_fim);
+        for (int i = 1; i <= 14; i++) {
+            cal.add(Calendar.DATE, -1);
+            cal2.add(Calendar.DATE, -1);
+            date = cal.getTime();
+            date_fim = cal2.getTime();
+            dicionarioDias.put(date, date_fim);
+        }
+        String strgenero = "";
+        if (genero != null) {
+            strgenero = genero;
+        } else {
+            strgenero = "%";
+        }
+
+        String stridademin = "";
+        if (idademin != null) {
+            stridademin = idademin.toString();
+        } else {
+            stridademin = "0";
+            idademin = 0;
+        }
+
+        String stridademax = "";
+        if (idademax != null) {
+            stridademax = idademax.toString();
+        } else {
+            stridademax = "300";
+            idademax = 300;
+        }
+
+        String strconcelho = "";
+        if (concelho != null) {
+            strconcelho = concelho;
+        } else {
+            strconcelho = "%";
+        }
+
+        String strregiao = "";
+        if (regiao != null) {
+            strregiao = regiao;
+        } else {
+            strregiao = "%";
+        }
+
+        String strnacionalidade = "";
+        if (nacionalidade != null) {
+            strnacionalidade = nacionalidade;
+        } else {
+            strnacionalidade = "%";
+        }
+
+        String stralturamin = "";
+        if (alturamin != null) {
+            stralturamin = alturamin.toString();
+        } else {
+            stralturamin = "0";
+            alturamin = 0;
+        }
+
+        String stralturamax = "";
+        if (alturamax != null) {
+            stralturamax = alturamax.toString();
+        } else {
+            stralturamax = "300";
+            alturamax = 300;
+        }
+
+        String strpesomin = "";
+        if (pesomin != null) {
+            strpesomin = pesomin.toString();
+        } else {
+            strpesomin = "0";
+            pesomin = Double.valueOf(0);
+        }
+
+        String strpesomax = "";
+        if (pesomax != null) {
+            strpesomax = pesomax.toString();
+        } else {
+            strpesomax = "500";
+            pesomax = Double.valueOf(500);
+        }
+        
+
+        List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
+                    strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
+        List<Caso> casos_pacientes = new ArrayList<>();
+        for (Paciente p: pacientes) {
+            Caso caso = CasoRepository.findByPacienteId(p.getPacienteId());
+            if (caso.getEstado_atual().equals("Confinamento Domiciliário")
+                        || caso.getEstado_atual().equals("Internado")
+                        || caso.getEstado_atual().equals("Cuidados Intensivos")) {
+                casos_pacientes.add(caso);
+            }
+        }
+        HashMap<Caso, Relatorio_Paciente> caso_relatorio = new HashMap<>();
+        for (Caso c: casos_pacientes) {
+            Relatorio_Paciente relatorio = relatorioRepository.findRecentByCaso(c.getId());
+            caso_relatorio.put(c, relatorio);
+        }
+        List<Caso> casos_verificados = new ArrayList<>();
+        for (Date dia : dicionarioDias.keySet()) {
+            Date data_fim_dia = dicionarioDias.get(dia);
+            List<Caso> casos = new ArrayList<Caso>();
+            for (Caso caso : caso_relatorio.keySet()) {
+                Relatorio_Paciente relatorio = caso_relatorio.get(caso);
+                if (relatorio.getData().after(dia) && relatorio.getData().before(data_fim_dia)) {
+                    casos.add(caso);
+                    casos_verificados.add(caso);
+                }
+            }
+            for (Caso c: casos_verificados) {
+                caso_relatorio.remove(c);
+            }
+            casos_verificados = new ArrayList<>();
+            String mes = dia.toString().split(" ")[1];
+            if (mes.equals("Jan")) {
+                mes = "1";
+            } else if (mes.equals("Feb")) {
+                mes = "2";
+            } else if (mes.equals("Mar")) {
+                mes = "3";
+            } else if (mes.equals("Apr")) {
+                mes = "4";
+            } else if (mes.equals("May")) {
+                mes = "5";
+            } else if (mes.equals("Jun")) {
+                mes = "6";
+            } else if (mes.equals("Jul")) {
+                mes = "7";
+            } else if (mes.equals("Aug")) {
+                mes = "8";
+            } else if (mes.equals("Set")) {
+                mes = "9";
+            } else if (mes.equals("Oct")) {
+                mes = "10";
+            } else if (mes.equals("Nov")) {
+                mes = "11";
+            } else if (mes.equals("Dec")) {
+                mes = "12";
+            }
+
+            String chave = dia.toString().split(" ")[5] + "-" + mes + "-" + dia.toString().split(" ")[2];
+
+            dicionarioCasos.put(chave, casos.size());
+        }
+        return dicionarioCasos;
+    }
+
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/public/casos/grafico/curva_diaria")
     public Map<String, Integer> getAllCasosGraficoCurvaEvolucao(@RequestParam(required = false) String genero,
             @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
