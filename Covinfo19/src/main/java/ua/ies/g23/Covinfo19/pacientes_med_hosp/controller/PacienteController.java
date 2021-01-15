@@ -86,6 +86,7 @@ public class PacienteController {
             HashMap<Long, List<Object>> retorno = new HashMap<>();
             for (Paciente p : pacientes) {
                 Caso caso = casoRepository.findByPacienteId(p.getPacienteId());
+                if (caso == null) continue;
                 if (estado.equals("Ativos")) {
                     if (caso.getEstado_atual().equals("Confinamento Domiciliário") || caso.getEstado_atual().equals("Internado") || caso.getEstado_atual().equals("Cuidados Intensivos")) {
                         List<Object> dados = new ArrayList<>();

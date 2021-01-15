@@ -18,31 +18,31 @@ export class StatisticsComponent implements OnInit {
   medicoLogado: boolean;
   medicoId: number;
 
-  casosAtivos: number;
-  casosRecuperados: number;
-  casosCuidadosIntensivos: number;
-  casosMortos: number;
-  casosInternados: number;
   probabilidadesGraficoIdades: number[];
   probabilidadesGraficoRegioes: number[];
   probabilidadesGraficoGeneros: number[];
   probabilidadesGraficoAlturas: number[];
   probabilidadesGraficoPesos: number[];
-  probabilidadesGraficoCurva: {};
   nacionalidades = ['Alemã', 'Espanhola', 'Francesa', 'Italiana', 'Inglesa', 'Brasileira', 'Belga', 'Russa', 'Americana', 'Chinesa', 'Angolana',
     'Moçambicana', 'Holandesa', 'Polaca', 'Cabo-Verdiana', 'Albanesa', 'Austríaca', 'Búlgara', 'Croata', 'Dinamarquesa', 'Eslovaca',
     'Eslovena', 'Finlandesa', 'Grega', 'Húngara', 'Islandesa', 'Irlandesa', 'Lituana', 'Luxemburguesa', 'Norueguesa', 'Romena', 'Sueca',
     'Suíça', 'Turca', 'Ucraniana', 'Argentina', 'Canadiana', 'Mexicana', 'Japonesa', 'Portuguesa'].sort();
   regioes = ['Norte', 'Lisboa e Vale do Tejo', 'Centro', 'Alentejo', 'Algarve', 'Açores', 'Madeira'];
   filterForm;
-  chartCurvaObj: any;
   chartIdadesObj: any;
   chartRegioesObj: any;
   chartGenerosObj: any;
   chartAlturasObj: any;
   chartPesosObj: any;
-
-  subscription: Subscription;
+  idademin = '';
+  idademax = '';
+  genero = '';
+  regiao = '';
+  nacionalidade = '';
+  alturamin = '';
+  alturamax = '';
+  pesomin = '';
+  pesomax = '';
   subscription2: Subscription;
 
   //Inicialização com todos os filtros vazios
@@ -62,7 +62,6 @@ export class StatisticsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
     this.subscription2.unsubscribe();
   }
 
@@ -109,30 +108,22 @@ export class StatisticsComponent implements OnInit {
     this.casosService.getProbabilidadeGraficoPeso('','','','','',
       '','','','').subscribe(prob => { this.probabilidadesGraficoPesos = prob; this.chartPesos(this.probabilidadesGraficoPesos); });
 
-    this.casosService.getProbabilidadeGraficoCurvatura('','','','','',
-      '','','','').subscribe(prob => { this.probabilidadesGraficoCurva = prob; this.chartCurva(this.probabilidadesGraficoCurva); });
-
-    //Inicialização do valor das variáveis sem filtros, com chamada á API para obter os valores
-    this.casosService.getNumeroCasos('ativos', '', '', '', '', '', '',
-      '', '', '').subscribe(casosAtivos => this.casosAtivos = casosAtivos);
-    this.casosService.getNumeroCasos('Recuperado', '', '', '', '', '', '',
-      '', '', '').subscribe(casosRecuperados => this.casosRecuperados = casosRecuperados);
-    this.casosService.getNumeroCasos('Cuidados+Intensivos', '', '', '', '', '', '',
-      '', '', '').subscribe(casosCuidadosIntensivos => this.casosCuidadosIntensivos = casosCuidadosIntensivos);
-    this.casosService.getNumeroCasos('Óbito', '', '', '', '', '', '',
-      '', '', '').subscribe(casosMortos => this.casosMortos = casosMortos);
-    this.casosService.getNumeroCasos('Internado', '', '', '', '', '', '',
-      '', '', '').subscribe(casosInternados => this.casosInternados = casosInternados);
-
-    const source = interval(10000);
-    this.subscription = source.subscribe(val => this.updateGraficos());
-    const source2 = interval(60000);
+    const source2 = interval(15000);
     this.subscription2 = source2.subscribe(val => this.updateGraficos2());
 
   }
 
   //Função chamada quando é submetido um novo formulário de filtros
   onSubmit(filterData): void {
+    this.idademin = filterData.idade_min;
+    this.idademax = filterData.idade_max;
+    this.genero = filterData.genero;
+    this.regiao = filterData.regiao;
+    this.nacionalidade = filterData.nacionalidade;
+    this.alturamin = filterData.altura_min;
+    this.alturamax = filterData.altura_max;
+    this.pesomin = filterData.peso_min;
+    this.pesomax = filterData.peso_max;
     //Alteração do valor para o diferente tipo de casos, de acordo com os filtros inseridos
     this.casosService.getProbabilidadeGraficoIdades(filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
       filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
@@ -149,55 +140,13 @@ export class StatisticsComponent implements OnInit {
     this.casosService.getProbabilidadeGraficoPeso(filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
       filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
     subscribe(prob => { this.probabilidadesGraficoPesos = prob; this.chartPesos(this.probabilidadesGraficoPesos); });
-    this.casosService.getProbabilidadeGraficoCurvatura(filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
-      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(prob => { this.probabilidadesGraficoCurva = prob; this.chartCurva(this.probabilidadesGraficoCurva); });
-    this.casosService.getNumeroCasos('ativos', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
-      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-      subscribe(casosAtivos => this.casosAtivos = casosAtivos);
-    this.casosService.getNumeroCasos('Recuperado', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
-      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosRecuperados => this.casosRecuperados = casosRecuperados);
-    this.casosService.getNumeroCasos('Cuidados+Intensivos', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
-      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosCuidadosIntensivos => this.casosCuidadosIntensivos = casosCuidadosIntensivos);
-    this.casosService.getNumeroCasos('Óbito', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
-      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosMortos => this.casosMortos = casosMortos);
-    this.casosService.getNumeroCasos('Internado', filterData.idade_min, filterData.idade_max, filterData.genero, filterData.regiao,
-      filterData.nacionalidade, filterData.altura_min, filterData.altura_max, filterData.peso_min, filterData.peso_max).
-    subscribe(casosInternados => this.casosInternados = casosInternados);
-
-  }
-
-  updateGraficos(): void {
-    console.log("entrei");
-    //Inicialização do valor das variáveis sem filtros, com chamada á API para obter os valores
-    this.casosService.getNumeroCasos('ativos', '', '', '', '', '', '',
-      '', '', '').subscribe(casosAtivos => this.casosAtivos = casosAtivos);
-    this.casosService.getNumeroCasos('Recuperado', '', '', '', '', '', '',
-      '', '', '').subscribe(casosRecuperados => this.casosRecuperados = casosRecuperados);
-    this.casosService.getNumeroCasos('Cuidados+Intensivos', '', '', '', '', '', '',
-      '', '', '').subscribe(casosCuidadosIntensivos => this.casosCuidadosIntensivos = casosCuidadosIntensivos);
-    this.casosService.getNumeroCasos('Óbito', '', '', '', '', '', '',
-      '', '', '').subscribe(casosMortos => this.casosMortos = casosMortos);
-    this.casosService.getNumeroCasos('Internado', '', '', '', '', '', '',
-      '', '', '').subscribe(casosInternados => this.casosInternados = casosInternados);
-
-    this.casosService.getProbabilidadeGraficoCurvatura('','','','','',
-      '','','','').subscribe(prob => {
-      var length = this.chartCurvaObj.options.data[0].dataPoints.length;
-      let d: Date = new Date();
-      this.chartCurvaObj.options.data[0].dataPoints[length - 1].y = prob[d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()];
-      this.chartCurvaObj.render();
-    });
 
   }
 
   updateGraficos2(): void {
     console.log('entrei2')
-    this.casosService.getProbabilidadeGraficoIdades('','','','','',
-      '','','','').subscribe(prob => {
+    this.casosService.getProbabilidadeGraficoIdades(this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
+      this.alturamax, this.pesomin, this.pesomax).subscribe(prob => {
       let array_data = [
         { y: prob[0], name: "1-10"},
         { y: prob[1], name: "11-20"},
@@ -212,8 +161,8 @@ export class StatisticsComponent implements OnInit {
       this.chartIdadesObj.options.data[0].dataPoints = array_data; this.chartIdadesObj.render();
     });
 
-    this.casosService.getProbabilidadeGraficoRegiao('','','','','',
-      '','','','').subscribe(prob => {
+    this.casosService.getProbabilidadeGraficoRegiao(this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
+      this.alturamax, this.pesomin, this.pesomax).subscribe(prob => {
       let array_data = [
         { y: prob[0], name: "Norte", exploded: true},
         { y: prob[1], name: "Centro"},
@@ -226,8 +175,8 @@ export class StatisticsComponent implements OnInit {
       this.chartRegioesObj.options.data[0].dataPoints = array_data; this.chartRegioesObj.render();
     });
 
-    this.casosService.getProbabilidadeGraficoGenero('','','','','',
-      '','','','').subscribe(prob => {
+    this.casosService.getProbabilidadeGraficoGenero(this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
+      this.alturamax, this.pesomin, this.pesomax).subscribe(prob => {
       let array_data = [
         { y: prob[0], label: "Masculino" },
         { y: prob[1], label: "Feminino" }
@@ -236,8 +185,8 @@ export class StatisticsComponent implements OnInit {
       this.chartGenerosObj.options.data[0].dataPoints = array_data; this.chartGenerosObj.render();
     });
 
-    this.casosService.getProbabilidadeGraficoAltura('','','','','',
-      '','','','').subscribe(prob => {
+    this.casosService.getProbabilidadeGraficoAltura(this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
+      this.alturamax, this.pesomin, this.pesomax).subscribe(prob => {
       let array_data = [
         { y: prob[0], label: "-1,50" },
         { y: prob[1], label: "1,51-1,60" },
@@ -251,8 +200,8 @@ export class StatisticsComponent implements OnInit {
       this.chartAlturasObj.options.data[0].dataPoints = array_data; this.chartAlturasObj.render();
     });
 
-    this.casosService.getProbabilidadeGraficoPeso('','','','','',
-      '','','','').subscribe(prob => {
+    this.casosService.getProbabilidadeGraficoPeso(this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
+      this.alturamax, this.pesomin, this.pesomax).subscribe(prob => {
       let array_data = [
         { y: prob[0], label: "-20" },
         { y: prob[1], label: "21-30" },
@@ -267,60 +216,6 @@ export class StatisticsComponent implements OnInit {
 
       this.chartPesosObj.options.data[0].dataPoints = array_data; this.chartPesosObj.render();
     });
-  }
-
-  //Função para especificar valores dos charts
-  chartCurva(probabilidadesGraficoCurva): void {
-
-    // grafico todos os casos diarios
-    var array_valores = [];
-    for (let date in probabilidadesGraficoCurva) {
-      array_valores.push({x: new Date(date), y: probabilidadesGraficoCurva[date]});
-    }
-    array_valores = array_valores.sort((n1, n2) => {
-      if (n1.x > n2.x) {
-        return 1;
-      }
-
-      if (n1.x < n2.x) {
-        return -1;
-      }
-
-      return 0;
-    });
-
-    this.chartCurvaObj = new CanvasJS.Chart("allcasesgraph", {
-      animationEnabled: true,
-      title:{
-        text: ""
-      },
-      axisX:{
-        valueFormatString: "DD MMM",
-        crosshair: {
-          enabled: true,
-          snapToDataPoint: true
-        }
-      },
-      axisY: {
-        title: "Número de casos",
-        valueFormatString: "##",
-        crosshair: {
-          enabled: true,
-          snapToDataPoint: true,
-          labelFormatter: function(e) {
-            return CanvasJS.formatNumber(e.value, "##") + " infeções";
-          }
-        }
-      },
-      data: [{
-        type: "area",
-        xValueFormatString: "DD MMM",
-        yValueFormatString: "##",
-        dataPoints: array_valores
-      }]
-    });
-    this.chartCurvaObj.render();
-
   }
 
   chartIdades(probabilidadesGraficoIdades): void {

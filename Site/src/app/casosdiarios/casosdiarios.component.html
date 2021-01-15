@@ -10,10 +10,10 @@
       <li>
         <a routerLink="/home" >Home</a>
       </li>
-      <li>
+      <li class="active">
         <a routerLink="/daily">Casos Diários</a>
       </li>
-      <li class="active">
+      <li>
         <a routerLink="/statistics">Estatística</a>
       </li>
       <li>
@@ -112,49 +112,61 @@
     </div>
 
 
-
-    <br>
     <div class="row">
-      <div class="col-4">
+      <div class="col-2">
         <div class="card card-signin">
-          <div class="card-body">
-            <h3 style="text-align: center;">Número de casos por idade</h3>
-            <div id="agepiegraph" style="height: 370px; width: 100%;"></div>
+          <div style="text-align: center;" class="card-body">
+            <h3>Casos ativos</h3>
+            <h4>{{casosAtivos}}</h4>
           </div>
         </div>
       </div>
-      <div class="col-4">
+      <div class="col-3">
         <div class="card card-signin">
-          <div class="card-body">
-            <h3 style="text-align: center;">Número de casos por regiões</h3>
-            <div id="regionpiegraph" style="height: 370px; width: 100%;"></div>
+          <div style="text-align: center;" class="card-body">
+            <h3>Casos recuperados</h3>
+            <h4>{{casosRecuperados}}</h4>
           </div>
         </div>
       </div>
-      <div class="col-4" style="margin-bottom: 30px">
+      <div class="col-2">
         <div class="card card-signin">
-          <div class="card-body">
-            <h3 style="text-align: center;">Número de casos por género</h3>
-            <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+          <div style="text-align: center;" class="card-body">
+            <h3>Internados</h3>
+            <h4>{{casosInternados}}</h4>
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-3">
         <div class="card card-signin">
-          <div class="card-body">
-            <h3 style="text-align: center;">Número de casos por altura</h3>
-            <div id="heightpiegraph" style="height: 370px; width: 100%;"></div>
+          <div style="text-align: center;" class="card-body">
+            <h3>Cuidados Intensivos</h3>
+            <h4>{{casosCuidadosIntensivos}}</h4>
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-2">
         <div class="card card-signin">
-          <div class="card-body">
-            <h3 style="text-align: center;">Número de casos por peso</h3>
-            <div id="weightpiegraph" style="height: 370px; width: 100%;"></div>
+          <div style="text-align: center;" class="card-body">
+            <h3>Mortos</h3>
+            <h4>{{casosMortos}}</h4>
           </div>
         </div>
       </div>
     </div>
+    <br>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card card-signin">
+          <div class="card-body">
+            <h2 style="text-align: center;">Número de casos diários de infeções de covid-19</h2>
+            <div id="allcasesgraph" style="height: 370px; width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
   </div>
 </div>

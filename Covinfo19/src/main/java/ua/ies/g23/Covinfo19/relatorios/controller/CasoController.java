@@ -1,8 +1,6 @@
 package ua.ies.g23.Covinfo19.relatorios.controller;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,7 +13,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-import org.w3c.dom.ls.LSInput;
 
 import ua.ies.g23.Covinfo19.relatorios.model.Caso;
 import ua.ies.g23.Covinfo19.relatorios.model.Relatorio_Paciente;
@@ -54,18 +49,12 @@ public class CasoController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/public/casos/grafico/curva_diaria/daily")
-    public Map<String, Integer> getDailyCasosGraficoCurvaEvolucao(@RequestParam(required = false) String genero,
+    public Integer getDailyCasosGraficoCurvaEvolucao(@RequestParam(required = false) String genero,
             @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
             @RequestParam(required = false) String concelho, @RequestParam(required = false) String regiao,
             @RequestParam(required = false) String nacionalidade, @RequestParam(required = false) Integer alturamin,
             @RequestParam(required = false) Integer alturamax, @RequestParam(required = false) Double pesomin,
             @RequestParam(required = false) Double pesomax) {
-
-        Map<String, Integer> dicionarioCasos = new HashMap<String, Integer>();
-        Map<Date, Date> dicionarioDias = new HashMap<Date, Date>();
-        int somaCasosTodos = 0;
-
-        // DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         Calendar cal = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
@@ -78,14 +67,6 @@ public class CasoController {
 
         Date date = cal.getTime();
         Date date_fim = cal2.getTime();
-        dicionarioDias.put(date, date_fim);
-        for (int i = 1; i <= 14; i++) {
-            cal.add(Calendar.DATE, -1);
-            cal2.add(Calendar.DATE, -1);
-            date = cal.getTime();
-            date_fim = cal2.getTime();
-            dicionarioDias.put(date, date_fim);
-        }
         String strgenero = "";
         if (genero != null) {
             strgenero = genero;
@@ -179,53 +160,43 @@ public class CasoController {
             Relatorio_Paciente relatorio = relatorioRepository.findRecentByCaso(c.getId());
             caso_relatorio.put(c, relatorio);
         }
-        List<Caso> casos_verificados = new ArrayList<>();
-        for (Date dia : dicionarioDias.keySet()) {
-            Date data_fim_dia = dicionarioDias.get(dia);
-            List<Caso> casos = new ArrayList<Caso>();
-            for (Caso caso : caso_relatorio.keySet()) {
-                Relatorio_Paciente relatorio = caso_relatorio.get(caso);
-                if (relatorio.getData().after(dia) && relatorio.getData().before(data_fim_dia)) {
-                    casos.add(caso);
-                    casos_verificados.add(caso);
-                }
+        List<Caso> casos = new ArrayList<Caso>();
+        for (Caso caso : caso_relatorio.keySet()) {
+            Relatorio_Paciente relatorio = caso_relatorio.get(caso);
+            if (relatorio.getData().after(date) && relatorio.getData().before(date_fim)) {
+                casos.add(caso);
             }
-            for (Caso c: casos_verificados) {
-                caso_relatorio.remove(c);
-            }
-            casos_verificados = new ArrayList<>();
-            String mes = dia.toString().split(" ")[1];
-            if (mes.equals("Jan")) {
-                mes = "1";
-            } else if (mes.equals("Feb")) {
-                mes = "2";
-            } else if (mes.equals("Mar")) {
-                mes = "3";
-            } else if (mes.equals("Apr")) {
-                mes = "4";
-            } else if (mes.equals("May")) {
-                mes = "5";
-            } else if (mes.equals("Jun")) {
-                mes = "6";
-            } else if (mes.equals("Jul")) {
-                mes = "7";
-            } else if (mes.equals("Aug")) {
-                mes = "8";
-            } else if (mes.equals("Set")) {
-                mes = "9";
-            } else if (mes.equals("Oct")) {
-                mes = "10";
-            } else if (mes.equals("Nov")) {
-                mes = "11";
-            } else if (mes.equals("Dec")) {
-                mes = "12";
-            }
-
-            String chave = dia.toString().split(" ")[5] + "-" + mes + "-" + dia.toString().split(" ")[2];
-
-            dicionarioCasos.put(chave, casos.size());
         }
-        return dicionarioCasos;
+        String mes = date.toString().split(" ")[1];
+        if (mes.equals("Jan")) {
+            mes = "1";
+        } else if (mes.equals("Feb")) {
+            mes = "2";
+        } else if (mes.equals("Mar")) {
+            mes = "3";
+        } else if (mes.equals("Apr")) {
+            mes = "4";
+        } else if (mes.equals("May")) {
+            mes = "5";
+        } else if (mes.equals("Jun")) {
+            mes = "6";
+        } else if (mes.equals("Jul")) {
+            mes = "7";
+        } else if (mes.equals("Aug")) {
+            mes = "8";
+        } else if (mes.equals("Set")) {
+            mes = "9";
+        } else if (mes.equals("Oct")) {
+            mes = "10";
+        } else if (mes.equals("Nov")) {
+            mes = "11";
+        } else if (mes.equals("Dec")) {
+            mes = "12";
+        }
+
+        String chave = date.toString().split(" ")[5] + "-" + mes + "-" + date.toString().split(" ")[2];
+
+        return casos.size();
     }
 
 
@@ -345,6 +316,7 @@ public class CasoController {
         List<Caso> casos_pacientes = new ArrayList<>();
         for (Paciente p: pacientes) {
             Caso caso = CasoRepository.findByPacienteId(p.getPacienteId());
+            if (caso == null) continue;
             if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -354,6 +326,7 @@ public class CasoController {
         HashMap<Caso, Relatorio_Paciente> caso_relatorio = new HashMap<>();
         for (Caso c: casos_pacientes) {
             Relatorio_Paciente relatorio = relatorioRepository.findRecentByCaso(c.getId());
+            if (relatorio == null) continue;
             caso_relatorio.put(c, relatorio);
         }
         List<Caso> casos_verificados = new ArrayList<>();
@@ -507,6 +480,7 @@ public class CasoController {
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -631,6 +605,7 @@ public class CasoController {
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -754,6 +729,7 @@ public class CasoController {
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -882,6 +858,7 @@ public class CasoController {
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -1004,6 +981,7 @@ public class CasoController {
             List<Caso> casos = new ArrayList<Caso>();
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -1142,6 +1120,7 @@ public class CasoController {
         if (estado.equals("ativos")) {
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals("Confinamento Domiciliário")
                         || caso.getEstado_atual().equals("Internado")
                         || caso.getEstado_atual().equals("Cuidados Intensivos")) {
@@ -1152,6 +1131,7 @@ public class CasoController {
         } else {
             for (Paciente paciente : pacientes) {
                 Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+                if (caso==null) continue;
                 if (caso.getEstado_atual().equals(estado) || estado.equals("semestado")) {
                     casos.add(caso);
                 }
@@ -1258,6 +1238,7 @@ public class CasoController {
 
         for (Paciente paciente : pacientes) {
             Caso caso = CasoRepository.findByPacienteId(paciente.getPacienteId());
+            if (caso==null) continue;
             if (caso.getEstado_atual().equals(estado) || estado == null) {
                 casos.add(caso);
             }
