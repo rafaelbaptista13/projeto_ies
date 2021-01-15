@@ -13,20 +13,20 @@
       <li>
         <a routerLink="/statistics">Estatísticas</a>
       </li>
-      <li class="active">
+      <li>
         <a routerLink="/hospital" >Hospitais</a>
       </li>
-      <li>
+      <li class="active">
         <a routerLink="/aboutus">Sobre nós</a>
       </li>
       <li *ngIf="medicoLogado==false" id="logged">
         <a routerLink="/login">Área Reservada</a>
       </li>
       <li *ngIf="medicoLogado" id="nlogged">
-        <button class="dropdown-btn">Área Reservada
+        <button class="dropdown-btn" id = "b_dropdown" (click)="toggleDropdown()">Área Reservada
           <i class="fa fa-caret-down"></i>
         </button>
-        <div class="dropdown-container">
+        <div class="dropdown-container" id="c_dropdown">
           <a class="dropdown-item" routerLink="/homeMedic">Lista Pacientes</a>
           <a class="dropdown-item" routerLink="/pacient">Inserir Paciente</a>
         </div>

@@ -233,7 +233,7 @@ img{
   height: auto;
 }
 
-button{
+div.row > button{
   font-weight: bold;
 }
 

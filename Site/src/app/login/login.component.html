@@ -21,18 +21,6 @@
       <li *ngIf="medicoLogado==false" class="active" id="logged">
         <a routerLink="/login">Área Reservada</a>
       </li>
-      <li *ngIf="medicoLogado" class="active" id="nlogged">
-        <button class="dropdown-btn">Área Reservada
-          <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-container">
-          <a class="dropdown-item" routerLink="/homeMedic">Lista Pacientes</a>
-          <a class="dropdown-item" routerLink="/pacient">Inserir Paciente</a>
-        </div>
-      </li>
-      <li *ngIf="medicoLogado" class="nav-item logout">
-        <a class="nav-link" routerLink="/logout">Logout</a>
-      </li>
     </ul>
   </nav>
 
