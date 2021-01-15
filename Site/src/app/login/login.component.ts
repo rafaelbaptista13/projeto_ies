@@ -14,7 +14,7 @@ declare var jQuery: any;
 
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  logged = false;
+  public medicoLogado: boolean = false;
 
   constructor(private loginService: LoginService, private formBuilder: FormBuilder, private router: Router ) {
 
@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
         });
       });
     })(jQuery);
+
     this.initForm();
   }
 
@@ -44,7 +45,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid){
       // Alteração do valor para o diferente tipo de casos, de acordo com os filtros inseridos
       this.loginService.LoginValidation(this.loginForm.value).
-      subscribe(logged => {console.log(localStorage.getItem('token')); this.router.navigate(['/homeMedic']);  }, error => { this.ngOnInit(); } );
+      subscribe(logged => {console.log(localStorage.getItem('token')); this.router.navigate(['/homeMedic']); this.medicoLogado = true; }, error => { this.ngOnInit(); } );
     }
   }
 }

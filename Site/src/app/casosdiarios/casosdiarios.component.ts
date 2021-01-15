@@ -89,6 +89,21 @@ export class CasosdiariosComponent implements OnInit {
       });
     })(jQuery);
 
+    const dropdown = document.getElementsByClassName('dropdown-btn');
+    let i;
+
+    for (i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener('click', function(): void {
+        this.classList.toggle('active');
+        const dropdownContent = this.nextElementSibling;
+        if (dropdownContent.style.display === 'block') {
+          dropdownContent.style.display = 'none';
+        } else {
+          dropdownContent.style.display = 'block';
+        }
+      });
+    }
+
     //Get Probabilidades idades e chamada da função de criação de charts
     this.casosService.getProbabilidadeGraficoCurvatura('','','','','',
       '','','','').subscribe(prob => { this.probabilidadesGraficoCurva = prob; this.chartCurva(this.probabilidadesGraficoCurva); });

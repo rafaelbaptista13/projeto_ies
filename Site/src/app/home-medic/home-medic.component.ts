@@ -23,6 +23,7 @@ export class HomeMedicComponent implements OnInit {
       this.medicoLogado = true;
       this.medicoId = Number(localStorage.getItem('codigo_acesso'));
     } else {
+      this.medicoLogado = false;
       this.router.navigate(['/login']);
     }
 
@@ -49,6 +50,22 @@ export class HomeMedicComponent implements OnInit {
       error => {
         this.router.navigate(['/login']);
       });
+
+    const dropdown = document.getElementsByClassName('dropdown-btn');
+    let i;
+
+    for (i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener('click', function(): void {
+        this.classList.toggle('active');
+        const dropdownContent = this.nextElementSibling;
+        if (dropdownContent.style.display === 'block') {
+          dropdownContent.style.display = 'none';
+        } else {
+          dropdownContent.style.display = 'block';
+        }
+      });
+    }
+
     this.initForm(true);
   }
   initForm(inicial: boolean): void {

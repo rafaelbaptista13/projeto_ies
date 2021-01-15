@@ -3,7 +3,7 @@
   <nav id="sidebar">
     <h1>Numero medico</h1>
     <div class="sidebar-header">
-      <h3>Covinfo</h3>
+      <h3>CovInfo19</h3>
     </div>
 
     <ul class="list-unstyled components">
@@ -11,7 +11,7 @@
         <a routerLink="/home" >Home</a>
       </li>
       <li>
-        <a routerLink="/statistics">Estatística</a>
+        <a routerLink="/statistics">Estatísticas</a>
       </li>
       <li class="active">
         <a routerLink="/hospital" >Hospitais</a>
@@ -19,11 +19,20 @@
       <li>
         <a routerLink="/aboutus">Sobre nós</a>
       </li>
-      <li>
-        <a routerLink="/login">Área profissionais de saúde</a>
+      <li *ngIf="medicoLogado==false" id="logged">
+        <a routerLink="/login">Área Reservada</a>
       </li>
-      <li>
-        <a routerLink="/homeMedic">Pacientes</a>
+      <li *ngIf="medicoLogado" id="nlogged">
+        <button class="dropdown-btn">Área Reservada
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container">
+          <a class="dropdown-item" routerLink="/homeMedic">Lista Pacientes</a>
+          <a class="dropdown-item" routerLink="/pacient">Inserir Paciente</a>
+        </div>
+      </li>
+      <li *ngIf="medicoLogado" class="nav-item logout">
+        <a class="nav-link" routerLink="/logout">Logout</a>
       </li>
     </ul>
   </nav>
@@ -44,29 +53,29 @@
         <button class="search" id="filterCollapse">Search <i class="fas fa-search"></i></button>
 
 
+
       </div>
     </nav>
 
     <div class="filters" id="filters" style="display: none">
-      <h2 class="filter_title">Filters</h2>
       <form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)">
         <div class="row">
           <div class="col-4">
             <h5 class="num_title">Número Paciente</h5>
             <div class="num_div">
-              <input type="number" id="num" formControlName="num_paciente">
+              <input type="number" class="form-control" id="num" formControlName="num_paciente">
             </div>
           </div>
           <div class="col-4">
             <h5 class="nome_title">Nome</h5>
             <div class="nome_div">
-              <input  id="nome" formControlName="nome" type="text">
+              <input  id="nome" class="form-control" formControlName="nome" type="text">
             </div>
           </div>
           <div class="col-4">
             <h5 class="estado_title">Estado</h5>
             <div class="estado_div">
-              <select name="estado_option" id="s_options" formControlName="estado">
+              <select name="estado_option" class="custom-select" id="s_options" formControlName="estado">
                 <option disabled selected value>Selecionar Opção</option>
                 <option *ngFor="let estado of estados" value="{{estado}}">{{estado}}</option>
                 <!-- NGFOR dos estados -->

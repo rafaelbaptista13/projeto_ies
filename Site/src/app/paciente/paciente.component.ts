@@ -82,6 +82,22 @@ export class PacienteComponent implements OnInit {
         });
       });
     })(jQuery);
+
+    const dropdown = document.getElementsByClassName('dropdown-btn');
+    let i;
+
+    for (i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener('click', function(): void {
+        this.classList.toggle('drop');
+        const dropdownContent = this.nextElementSibling;
+        if (dropdownContent.style.display === 'block') {
+          dropdownContent.style.display = 'none';
+        } else {
+          dropdownContent.style.display = 'block';
+        }
+      });
+    }
+
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id){
       this.pacienteService.getPacientById(this.id).subscribe(
