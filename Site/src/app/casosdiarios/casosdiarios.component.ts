@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {interval, Subscription} from 'rxjs';
 import {CasosService} from '../casos.service';
 import {FormBuilder} from '@angular/forms';
+import {Router} from '@angular/router';
+import {MedicService} from '../medic.service';
 
 declare var jQuery: any;
 declare const CanvasJS: any;
@@ -17,6 +19,7 @@ export class CasosdiariosComponent implements OnInit {
   //Declaração de variáveis
   medicoLogado: boolean;
   medicoId: number;
+  nomeMedico: string;
 
   casosAtivos: number;
   casosRecuperados: number;
@@ -44,7 +47,7 @@ export class CasosdiariosComponent implements OnInit {
   subscription: Subscription;
 
   //Inicialização com todos os filtros vazios
-  constructor(private casosService: CasosService, private formBuilder: FormBuilder) {
+  constructor(private router: Router, private casosService: CasosService, private formBuilder: FormBuilder, private medicoService: MedicService) {
     this.filterForm = this.formBuilder.group({
       idade_min: '',
       idade_max: '',
@@ -67,6 +70,9 @@ export class CasosdiariosComponent implements OnInit {
     if (localStorage.getItem('codigo_acesso') != null) {
       this.medicoLogado = true;
       this.medicoId = Number(localStorage.getItem('codigo_acesso'));
+      this.medicoService.getMedicoById(this.medicoId).subscribe(resultado => {
+        this.nomeMedico = 'Dr. ' + resultado.nome.split(' ')[0] + ' ' + resultado.nome.split(' ')[resultado.nome.split(' ').length - 1];
+      });
     } else {
       this.medicoLogado = false;
     }
@@ -118,7 +124,7 @@ export class CasosdiariosComponent implements OnInit {
         this.casosRecuperados = resultado['Recuperados'];
     });
     const source = interval(10000);
-    this.subscription = source.subscribe(val => {console.log('vou update');this.updateGraficos();});
+    this.subscription = source.subscribe(val => {this.updateGraficos();});
 
   }
 
@@ -159,7 +165,6 @@ export class CasosdiariosComponent implements OnInit {
   }
 
   updateGraficos(): void {
-    console.log("entrei");
     //Inicialização do valor das variáveis sem filtros, com chamada á API para obter os valores
     this.casosService.getNumerosPandemia( this.idademin, this.idademax, this.genero, this.regiao, this.nacionalidade, this.alturamin,
       this.alturamax, this.pesomin, this.pesomax).subscribe(resultado => {
@@ -232,4 +237,11 @@ export class CasosdiariosComponent implements OnInit {
     this.chartCurvaObj.render();
 
   }
+
+  logout(): void {
+    localStorage.removeItem('codigo_acesso');
+    localStorage.removeItem('token');
+    this.router.navigate(['/home']);
+  }
+
 }

@@ -19,6 +19,12 @@ export class MedicService {
   private baseURL = 'http://localhost:8080/api/v1/';
   constructor(private http: HttpClient) { }
 
+
+  getMedicoById(id: number): Observable<any> {
+    let url = this.baseURL + 'private/medicos/' + id;
+    return this.http.get(url, httpOptions);
+  }
+
   getPacientsFilter(medico: string, num: string, nome: string, estado: string): Observable<any> {
     let url = this.baseURL + 'private/pacientesbymedic?medico=' + medico;
 

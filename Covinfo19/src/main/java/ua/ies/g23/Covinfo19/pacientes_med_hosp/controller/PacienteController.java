@@ -64,7 +64,7 @@ public class PacienteController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/pacientesbymedic")
-    public HashMap<Long, List<Object>> getAllByMedico(
+    public ArrayList<Object> getAllByMedico(
         @RequestParam(required = true) Integer medico,
         @RequestParam(required = false) String num_paciente,
         @RequestParam(required = false) String nome,
@@ -83,19 +83,14 @@ public class PacienteController {
                 estado = "%";
             }
             List<Paciente> pacientes = pacienteRepository.findByMedico(String.valueOf(medico), num_paciente, nome);
-            HashMap<Long, List<Object>> retorno = new HashMap<>();
+            ArrayList<Object> retorno = new ArrayList<>();
             for (Paciente p : pacientes) {
-                //Caso caso = casoRepository.findByPacienteId(p.getPacienteId());
                 if (estado.equals("Ativos")) {
                     if (p.getEstado_atual().equals("Confinamento Domiciliário") || p.getEstado_atual().equals("Internado") || p.getEstado_atual().equals("Cuidados Intensivos")) {
-                        List<Object> dados = new ArrayList<>();
-                        dados.add(p);
-                        retorno.put(p.getPacienteId(), dados );
+                        retorno.add(p);
                     }
                 } else if (p.getEstado_atual().equals(estado) || estado.equals("%")) {
-                    List<Object> dados = new ArrayList<>();
-                    dados.add(p);
-                    retorno.put(p.getPacienteId(), dados );
+                    retorno.add(p);
                 }
             }
             return retorno;

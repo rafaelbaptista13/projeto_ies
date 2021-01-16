@@ -12,9 +12,10 @@ import {PacienteService} from '../paciente.service';
 export class HomeMedicComponent implements OnInit {
   medicoLogado: boolean;
   medicoId: number;
+  nomeMedico: string;
   filterForm: FormGroup;
   estados = ['Ativos', 'Confinamento Domiciliário', 'Internado', 'Cuidados Intensivos', 'Recuperado', 'Óbito'];
-  pacientes = {};
+  pacientes = [];
 
   constructor(private router: Router, private medicService: MedicService, private pacienteService: PacienteService) { }
 
@@ -22,6 +23,9 @@ export class HomeMedicComponent implements OnInit {
     if (localStorage.getItem('codigo_acesso') != null) {
       this.medicoLogado = true;
       this.medicoId = Number(localStorage.getItem('codigo_acesso'));
+      this.medicService.getMedicoById(this.medicoId).subscribe(resultado => {
+        this.nomeMedico = 'Dr. ' + resultado.nome.split(' ')[0] + ' ' + resultado.nome.split(' ')[resultado.nome.split(' ').length - 1];
+      });
     } else {
       this.medicoLogado = false;
       this.router.navigate(['/login']);
@@ -46,7 +50,9 @@ export class HomeMedicComponent implements OnInit {
       });
     })(jQuery);
     const medico_id = localStorage.getItem('codigo_acesso');
-    this.medicService.getPacientsFilter(medico_id, '', '', 'Ativos').subscribe(pacientes => {this.pacientes = pacientes; },
+    this.medicService.getPacientsFilter(medico_id, '', '', 'Ativos').subscribe(pacientes => {
+      this.pacientes = pacientes;
+      },
       error => {
         this.router.navigate(['/login']);
       });
@@ -100,4 +106,10 @@ export class HomeMedicComponent implements OnInit {
       });
   }
 
+
+  logout(): void {
+    localStorage.removeItem('codigo_acesso');
+    localStorage.removeItem('token');
+    this.router.navigate(['/home']);
+  }
 }

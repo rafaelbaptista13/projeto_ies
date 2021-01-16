@@ -1,14 +1,17 @@
 <div class="wrapper">
   <!-- Sidebar Holder -->
   <nav id="sidebar">
-    <h1>Numero medico</h1>
+    <p style="font-size: 18px; margin: 10px auto 0px; text-align: center">{{this.nomeMedico}}</p>
     <div class="sidebar-header">
-      <h3>CovInfo19</h3>
+      <h3 style="text-align: center; font-weight: bold">CovInfo19</h3>
     </div>
 
     <ul class="list-unstyled components">
       <li>
         <a routerLink="/home" >Home</a>
+      </li>
+      <li>
+        <a routerLink="/daily">Casos Diários</a>
       </li>
       <li>
         <a routerLink="/statistics">Estatísticas</a>
@@ -32,7 +35,7 @@
         </div>
       </li>
       <li *ngIf="medicoLogado" class="nav-item logout">
-        <a class="nav-link" routerLink="/logout">Logout</a>
+        <a class="nav-link" (click)="logout()">Logout</a>
       </li>
     </ul>
   </nav>
@@ -87,7 +90,7 @@
       </form>
     </div>
 
-    <div *ngIf="(pacientes | json) != ('{}'); then thenBlock4 else elseBlock4"> </div>
+    <div *ngIf="pacientes.length > 0; then thenBlock4 else elseBlock4"> </div>
     <ng-template #thenBlock4>
       <table class="table table-borderless" style="text-align: center;">
         <thead>
@@ -99,13 +102,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let item of pacientes | keyvalue">
-          <th scope="row">{{ item.key }}</th>
-          <td>{{ pacientes[item.key][0].nome }}</td>
-          <td>{{ pacientes[item.key][0].estado_atual }}</td>
+        <tr *ngFor="let paciente of pacientes">
+          <th scope="row">{{ paciente.pacienteId }}</th>
+          <td>{{ paciente.nome }}</td>
+          <td>{{ paciente.estado_atual }}</td>
           <td>
-            <a [routerLink]="['/pacient/', item.key]"><i class="fas fa-user-edit"></i></a>&nbsp;&nbsp;&nbsp;
-            <a (click)="eliminar(item.key)"><i class="fas fa-trash"></i></a></td>
+            <a [routerLink]="['/pacient/', paciente.pacienteId]"><i class="fas fa-user-edit"></i></a>&nbsp;&nbsp;&nbsp;
+            <a (click)="eliminar(paciente.pacienteId)"><i class="fas fa-trash"></i></a></td>
         </tr>
         </tbody>
       </table>

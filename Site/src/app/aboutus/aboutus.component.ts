@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
+import {MedicService} from '../medic.service';
 
 @Component({
   selector: 'app-aboutus',
@@ -8,13 +10,17 @@ import { Component, OnInit } from '@angular/core';
 export class AboutusComponent implements OnInit {
   medicoLogado: boolean;
   medicoId: number;
+  nomeMedico: string;
 
-  constructor() { }
+  constructor(private router: Router, private medicoService: MedicService) { }
 
   ngOnInit(): void {
     if (localStorage.getItem('codigo_acesso') != null) {
       this.medicoLogado = true;
       this.medicoId = Number(localStorage.getItem('codigo_acesso'));
+      this.medicoService.getMedicoById(this.medicoId).subscribe(resultado => {
+        this.nomeMedico = 'Dr. ' + resultado.nome.split(' ')[0] + ' ' + resultado.nome.split(' ')[resultado.nome.split(' ').length - 1];
+      });
     } else {
       this.medicoLogado = false;
       this.medicoLogado = false;
@@ -48,5 +54,11 @@ export class AboutusComponent implements OnInit {
     } else {
       dropdownContent.style.display = 'block';
     }
+  }
+
+  logout(): void {
+    localStorage.removeItem('codigo_acesso');
+    localStorage.removeItem('token');
+    this.router.navigate(['/home']);
   }
 }

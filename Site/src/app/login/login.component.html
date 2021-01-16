@@ -2,12 +2,15 @@
   <!-- Sidebar Holder -->
   <nav id="sidebar">
     <div class="sidebar-header">
-      <h3 style="font-weight: bold">CovInfo19</h3>
+      <h3 style="text-align: center; font-weight: bold">CovInfo19</h3>
     </div>
 
     <ul class="list-unstyled components">
       <li>
         <a routerLink="/home">Home</a>
+      </li>
+      <li>
+        <a routerLink="/daily">Casos Diários</a>
       </li>
       <li>
         <a routerLink="/statistics">Estatísticas</a>
@@ -38,6 +41,10 @@
 
       </div>
     </nav>
+
+    <div *ngIf="erroCredenciais" style="text-align: center; width: 30%; margin: 20px auto" class="alert alert-danger" role="alert">
+      As credênciais inseridas estão incorretas!
+    </div>
 
     <h5 class="card-title text-center" style="font-size: 50px">Área Reservada</h5>
     <div class="row">

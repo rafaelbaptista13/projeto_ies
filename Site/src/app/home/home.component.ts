@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +10,7 @@ export class HomeComponent implements OnInit {
   medicoLogado: boolean;
   medicoId: number;
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     if (localStorage.getItem('codigo_acesso') != null) {
@@ -20,4 +21,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  logout(): void {
+    localStorage.removeItem('codigo_acesso');
+    localStorage.removeItem('token');
+    this.ngOnInit();
+  }
 }

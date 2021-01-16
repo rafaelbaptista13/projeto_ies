@@ -18,6 +18,8 @@ declare const CanvasJS: any;
 export class PacienteComponent implements OnInit {
   medicoLogado: boolean;
   medicoId: number;
+  nomeMedico: string;
+
   regioesError: boolean;
   pessoamasculina: boolean;
   pessoafeminina: boolean;
@@ -60,6 +62,9 @@ export class PacienteComponent implements OnInit {
     if (localStorage.getItem('codigo_acesso') != null) {
       this.medicoLogado = true;
       this.medicoId = Number(localStorage.getItem('codigo_acesso'));
+      this.medicService.getMedicoById(this.medicoId).subscribe(resultado => {
+        this.nomeMedico = 'Dr. ' + resultado.nome.split(' ')[0] + ' ' + resultado.nome.split(' ')[resultado.nome.split(' ').length - 1];
+      });
       this.formReady = false;
     } else {
       this.router.navigate(['/login']);
@@ -197,6 +202,12 @@ export class PacienteComponent implements OnInit {
       error => {
         this.router.navigate(['/homeMedic']);
       });
+  }
+
+  logout(): void {
+    localStorage.removeItem('codigo_acesso');
+    localStorage.removeItem('token');
+    this.router.navigate(['/home']);
   }
 }
 

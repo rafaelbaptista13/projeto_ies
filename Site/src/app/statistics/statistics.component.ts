@@ -3,6 +3,8 @@ import {CasosService} from '../casos.service';
 import {FormBuilder} from '@angular/forms';
 import {filter} from 'rxjs/operators';
 import { interval, Subscription } from 'rxjs';
+import {Router} from '@angular/router';
+import {MedicService} from '../medic.service';
 
 declare var jQuery: any;
 declare const CanvasJS: any;
@@ -17,6 +19,7 @@ export class StatisticsComponent implements OnInit {
   //Declaração de variáveis
   medicoLogado: boolean;
   medicoId: number;
+  nomeMedico: string;
 
   probabilidadesGraficoIdades: number[];
   probabilidadesGraficoRegioes: number[];
@@ -46,7 +49,7 @@ export class StatisticsComponent implements OnInit {
   subscription2: Subscription;
 
   //Inicialização com todos os filtros vazios
-  constructor(private casosService: CasosService, private formBuilder: FormBuilder) {
+  constructor(private router: Router, private casosService: CasosService, private formBuilder: FormBuilder, private medicoService: MedicService) {
     this.filterForm = this.formBuilder.group({
       idade_min: '',
       idade_max: '',
@@ -70,6 +73,9 @@ export class StatisticsComponent implements OnInit {
     if (localStorage.getItem('codigo_acesso') != null) {
       this.medicoLogado = true;
       this.medicoId = Number(localStorage.getItem('codigo_acesso'));
+      this.medicoService.getMedicoById(this.medicoId).subscribe(resultado => {
+        this.nomeMedico = 'Dr. ' + resultado.nome.split(' ')[0] + ' ' + resultado.nome.split(' ')[resultado.nome.split(' ').length - 1];
+      });
     } else {
       this.medicoLogado = false;
     }
@@ -108,7 +114,7 @@ export class StatisticsComponent implements OnInit {
     this.casosService.getProbabilidadeGraficoPeso('','','','','',
       '','','','').subscribe(prob => { this.probabilidadesGraficoPesos = prob; this.chartPesos(this.probabilidadesGraficoPesos); });
 
-    const source2 = interval(15000);
+    const source2 = interval(7000);
     this.subscription2 = source2.subscribe(val => this.updateGraficos2());
 
   }
@@ -378,6 +384,12 @@ export class StatisticsComponent implements OnInit {
     }
     e.chart.render();
 
+  }
+
+  logout(): void {
+    localStorage.removeItem('codigo_acesso');
+    localStorage.removeItem('token');
+    this.router.navigate(['/home']);
   }
 
 }

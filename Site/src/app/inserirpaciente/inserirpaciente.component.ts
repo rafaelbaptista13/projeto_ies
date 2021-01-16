@@ -13,7 +13,7 @@ import {PacienteService} from '../paciente.service';
 export class InserirpacienteComponent implements OnInit {
   medicoLogado: boolean;
   medicoId: number;
-
+  nomeMedico: string;
   formPaciente: FormGroup;
   nacionalidades = ['Alemã', 'Espanhola', 'Francesa', 'Italiana', 'Inglesa', 'Brasileira', 'Belga', 'Russa', 'Americana', 'Chinesa', 'Angolana',
     'Moçambicana', 'Holandesa', 'Polaca', 'Cabo-Verdiana', 'Albanesa', 'Austríaca', 'Búlgara', 'Croata', 'Dinamarquesa', 'Eslovaca',
@@ -27,7 +27,7 @@ export class InserirpacienteComponent implements OnInit {
     "Alcácer do Sal", "Odemira", "Sines", "Aljustrel", "Beja","Ferreira do Alentejo","Mértola","Ourique","Serpa","Azambuja","Almeirim","Benavente","Rio Maior","Santarém","Coruche","Cartaxo","Arronches","Campo Maior","Crato","Elvas","Marvão","Nisa","Portalegre","Estremoz","Évora","Mora","Redondo","Vendas Novas","Reguengos de Monsaraz","Viana do Alentejo",
     "Albufeira","Alcoutim","Aljezur","Castro Marim","Faro","Lagoa","Lagos","Loulé","Monchique","Olhão","Portimão","São Brás de Alportel","Silves","Tavira","Vila do Bispo","Vila Real de Santo António",
     "Vila do Porto","Ponta Delgada","Ribeira Grande","Vila Franca do Campo","Angra do Heroísmo","Vila da Praia da Vitória", "Velas", "Lajes do Pico","São Roque do Pico", "Horta", "Lajes das Flores", "Santa Cruz das Flores", "Corvo",
-    "Câmara de Lobos", "Funchal", "Machico", "Ponta do Sol", "Porto Moniz", "São Vicente", "Santa Cruz", "Porto Santo"];
+    "Câmara de Lobos", "Funchal", "Machico", "Ponta do Sol", "Porto Moniz", "São Vicente", "Santa Cruz", "Porto Santo"].sort();
   generos = ['Masculino', 'Feminino'];
   concelhosdict = {'Norte': ["Caminha","Melgaço","Ponte de Lima","Viana do Castelo","Vila Nova de Cerveira","Monção","Barcelos","Braga","Esposende","Fafe","Guimarães","Vizela","Vila Nova de Famalicão","Arouca","Espinho","Gondomar","Maia","Matosinhos","Porto","Póvoa de Varzim","Santa Maria da Feira","Oliveira de Azeméis","Santo Tirso","São João da Madeira","Trofa","Vila Nova de Gaia","Chaves","Montalegre","Amarante","Celorico de Basto","Lousada","Paços de Ferreira","Penafiel","Lamego","Peso da Régua","Vila Real","Bragança","Miranda do Douro","Mirandela"],
   'Centro': ["Alcobaça","Alenquer","Óbidos","Nazaré","Peniche","Torres Vedras","Águeda","Albergaria-a-Velha","Aveiro","Estarreja","Ílhavo","Ovar","Sever do Vouga","Coimbra","Lousã","Mealhada","Mortágua","Oliveira do Hospital","Batalha","Leiria","Pombal","Mangualde","Nelas","Tondela","Vizeu","Vouzela","Castelo Branco","Oleiros","Abrantes","Entroncamento","Sertã","Tomar","Torres Novas","Vila de Rei","Belmonte","Covilhã","Fundão","Guarda","Manteigas","Seia","Sabugal"],
@@ -44,6 +44,9 @@ export class InserirpacienteComponent implements OnInit {
     if (localStorage.getItem('codigo_acesso') != null) {
       this.medicoLogado = true;
       this.medicoId = Number(localStorage.getItem('codigo_acesso'));
+      this.medicService.getMedicoById(this.medicoId).subscribe(resultado => {
+        this.nomeMedico = 'Dr. ' + resultado.nome.split(' ')[0] + ' ' + resultado.nome.split(' ')[resultado.nome.split(' ').length - 1];
+      });
     } else {
       this.medicoLogado = false;
       this.router.navigate(['/login']);
@@ -118,5 +121,11 @@ export class InserirpacienteComponent implements OnInit {
           });
       }
     }
+  }
+
+  logout(): void {
+    localStorage.removeItem('codigo_acesso');
+    localStorage.removeItem('token');
+    this.router.navigate(['/home']);
   }
 }

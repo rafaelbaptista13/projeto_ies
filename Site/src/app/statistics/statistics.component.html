@@ -1,9 +1,9 @@
 <div class="wrapper">
   <!-- Sidebar Holder -->
   <nav id="sidebar">
-    <h1>Numero Medico</h1>
+    <p style="font-size: 18px; margin: 10px auto 0px; text-align: center">{{this.nomeMedico}}</p>
     <div class="sidebar-header">
-      <h3>CovInfo19</h3>
+      <h3 style="text-align: center; font-weight: bold">CovInfo19</h3>
     </div>
 
     <ul class="list-unstyled components">
@@ -35,7 +35,7 @@
         </div>
       </li>
       <li *ngIf="medicoLogado" class="nav-item logout">
-        <a class="nav-link" routerLink="/logout">Logout</a>
+        <a class="nav-link" (click)="logout()">Logout</a>
       </li>
     </ul>
   </nav>
