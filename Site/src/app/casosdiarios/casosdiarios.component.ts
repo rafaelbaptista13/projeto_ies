@@ -122,6 +122,16 @@ export class CasosdiariosComponent implements OnInit {
 
   }
 
+  toggleDropdown(): void{
+    const dropdownContent = document.getElementById('c_dropdown');
+
+    if (dropdownContent.style.display === 'block') {
+      dropdownContent.style.display = 'none';
+    } else {
+      dropdownContent.style.display = 'block';
+    }
+  }
+
   onSubmit(filterData): void {
     this.idademin = filterData.idade_min;
     this.idademax = filterData.idade_max;

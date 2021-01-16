@@ -10,6 +10,9 @@
         <a class="nav-link" routerLink="/home">Home</a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" routerLink="/daily">Casos Diários</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" routerLink="/statistics">Estatisticas</a>
       </li>
       <li class="nav-item">
@@ -29,8 +32,8 @@
         </div>
       </li>
 
-      <li *ngIf="medicoLogado==false" id="logged">
-        <a routerLink="/login">Área Reservada</a>
+      <li *ngIf="medicoLogado==false" class="nav-item" id="logged">
+        <a class="nav-link" routerLink="/login">Área Reservada</a>
       </li>
       <li *ngIf="medicoLogado" class="nav-item logout">
         <a class="nav-link" routerLink="/logout">Logout</a>
@@ -45,7 +48,7 @@
     <i class="text">A vida pública passou da rua às varandas e também à internet. Não há atividades fora de casa, mas sim nos telemóveis e computadores. Artistas que organizam festivais e fazem concertos a cada hora em direto pelo seu Instagram ou Facebook, treinadores que fazem aulas de desporto, programas de TV que continuam as suas emissões com os apresentadores e colaboradores desde as suas casas para dar exemplo e até o Museu do Prado “abriu” as suas portas online para visitarmos as suas obras desde o sofá. Aulas de todas as temáticas também passaram para a internet: cozinha, yoga, leitura... e, claro, as das escolas e universidades. E com isto, chegou o CovInfo19 onde poderá diariamente acompanhar o estado e evolução do vírus.</i>
     <br>
     <br>
-    <button type="button" class="btn" routerLink="/statistics">Casos diários</button>
+    <button type="button" class="btn" routerLink="/daily">Casos diários</button>
   </div>
   <div class="div_image">
     <img src="assets/Static/images/background.png" class="image">
