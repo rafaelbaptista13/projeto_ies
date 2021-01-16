@@ -215,6 +215,16 @@ public class PacienteController {
         paciente.setAltura(Integer.parseInt(pacient_info.get("altura")));
         paciente.setPeso(Float.parseFloat(pacient_info.get("peso")));
         paciente.setEstado_atual(pacient_info.get("estado"));
+        DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date d2;
+        try {
+            String data = formatter.format(new Date(System.currentTimeMillis()));
+            d2 = df2.parse(data.split(" ")[0] + " " + data.split(" ")[2] );
+            paciente.setData_insercao(d2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         Medico medico = medicoRepository.findById(Long.parseLong(pacient_info.get("medico_numero_medico")))
         .orElseThrow(() -> new ResourceNotFoundException("Medico not found for this id :: " + pacient_info.get("medico_numero_medico")));
         paciente.setMedico(medico);
@@ -225,8 +235,7 @@ public class PacienteController {
         caso.setPaciente_id(paciente.getPacienteId());
         casoRepository.save(caso);
 
-        DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date d2;
+        df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             String data = formatter.format(new Date(System.currentTimeMillis()));
             d2 = df2.parse(data.split(" ")[0] + " " + data.split(" ")[2] );

@@ -55,6 +55,14 @@ public class ReceiverGeracaoDados {
     paciente.setPeso((float) Double.parseDouble(json.getString("peso")));
     paciente.setEstado_atual(json.getString("estado"));
 
+    DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    Date d2;
+    try {
+      d2 = df2.parse(json.getString("time").split(" ")[0] + " " + json.getString("time").split(" ")[2] );
+      paciente.setData_insercao(d2);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
     //Obtenção lista de hospitais da região do paciente utilizada para atribuição medico ao paciente.
     List<Hospital> listaHospitais = hospitalRepository.findAllFilters("%", "%", json.getString("regiao"), "0", "5000", "0", "5000");
     
@@ -145,8 +153,7 @@ public class ReceiverGeracaoDados {
     caso.setPaciente_id(paciente.getPacienteId());
     casoRepository.save(caso);
 
-    DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    Date d2;
+    df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     try {
       d2 = df2.parse(json.getString("time").split(" ")[0] + " " + json.getString("time").split(" ")[2] );
 

@@ -260,23 +260,10 @@ public class CasoController {
 
         List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
                     strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
-        List<Caso> casos_pacientes = new ArrayList<>();
-
-        for (Paciente p: pacientes) {
-            if (p.getEstado_atual().equals("Confinamento Domiciliário")
-                        || p.getEstado_atual().equals("Internado")
-                        || p.getEstado_atual().equals("Cuidados Intensivos")) {
-                Caso caso = CasoRepository.findByPacienteId(p.getPacienteId());
-                if (caso == null) continue;
-                casos_pacientes.add(caso);
-            }
-        }
-
 
         int contador = 0;
-        for (Caso c: casos_pacientes) {
-            Relatorio_Paciente relatorio = relatorioRepository.findRecentByCaso(c.getId());
-            if (relatorio.getData().after(date) && relatorio.getData().before(date_fim)) {
+        for (Paciente p: pacientes) {
+            if (p.getData_insercao().after(date) && p.getData_insercao().before(date_fim)) {
                 contador += 1;
             }
         }
@@ -399,42 +386,23 @@ public class CasoController {
         List<Paciente> pacientes = pacienteRepository.findAllFilters(strgenero, stridademin, stridademax, strconcelho, strregiao,
                     strnacionalidade, stralturamin, stralturamax, strpesomin, strpesomax);
 
-        List<Caso> casos_pacientes = new ArrayList<>();
-        for (Paciente p: pacientes) {
-            if (p.getEstado_atual().equals("Confinamento Domiciliário")
-                        || p.getEstado_atual().equals("Internado")
-                        || p.getEstado_atual().equals("Cuidados Intensivos")) {
-                Caso caso = CasoRepository.findByPacienteId(p.getPacienteId());
-                if (caso == null) continue;
-                casos_pacientes.add(caso);
-            }
-        }
-
-        HashMap<Caso, Relatorio_Paciente> caso_relatorio = new HashMap<>();
-        for (Caso c: casos_pacientes) {
-            Relatorio_Paciente relatorio = relatorioRepository.findRecentByCaso(c.getId());
-            if (relatorio == null) continue;
-            caso_relatorio.put(c, relatorio);
-        }
-
-        List<Caso> casos_verificados = new ArrayList<>();
+        List<Paciente> pacientes_verificados = new ArrayList<>();
         
         for (Date dia : dicionarioDias.keySet()) {
             Date data_fim_dia = dicionarioDias.get(dia);
 
-            List<Caso> casos = new ArrayList<Caso>();
-            for (Caso caso : caso_relatorio.keySet()) {
-                Relatorio_Paciente relatorio = caso_relatorio.get(caso);
-                if (relatorio.getData().after(dia) && relatorio.getData().before(data_fim_dia)) {
-                    casos.add(caso);
-                    casos_verificados.add(caso);
+            int contador = 0;
+            for (Paciente p : pacientes) {
+                if (p.getData_insercao().after(dia) && p.getData_insercao().before(data_fim_dia)) {
+                    contador += 1;
+                    pacientes_verificados.add(p);
                 }
             }
 
-            for (Caso c: casos_verificados) {
-                caso_relatorio.remove(c);
+            for (Paciente p: pacientes_verificados) {
+                pacientes.remove(p);
             }
-            casos_verificados = new ArrayList<>();
+            pacientes_verificados = new ArrayList<>();
 
             String mes = dia.toString().split(" ")[1];
             if (mes.equals("Jan")) {
@@ -465,7 +433,7 @@ public class CasoController {
 
             String chave = dia.toString().split(" ")[5] + "-" + mes + "-" + dia.toString().split(" ")[2];
 
-            dicionarioCasos.put(chave, casos.size());
+            dicionarioCasos.put(chave, contador);
         }
         return dicionarioCasos;
     }
