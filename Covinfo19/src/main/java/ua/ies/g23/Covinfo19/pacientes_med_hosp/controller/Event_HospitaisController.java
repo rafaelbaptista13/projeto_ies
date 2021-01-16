@@ -46,14 +46,9 @@ public class Event_HospitaisController {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/public/event_by_hospital/{id}")
-    public Event_Hospitais getEventByHospitalId(@PathVariable(value = "id") Long eventId)
+    public List<Event_Hospitais> getEventByHospitalId(@PathVariable(value = "id") Long eventId)
         throws ResourceNotFoundException {
-        Event_Hospitais event_hospital = null;
-        try {
-            event_hospital = eventRepository.findByHospitalId(String.valueOf(eventId));
-        } catch (Exception e) {
-            
-        }
+        List<Event_Hospitais> event_hospital = eventRepository.findByHospitalId(String.valueOf(eventId));
         return event_hospital;
     }
 }

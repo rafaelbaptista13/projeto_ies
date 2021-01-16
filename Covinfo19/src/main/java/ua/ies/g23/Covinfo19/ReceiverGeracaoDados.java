@@ -90,6 +90,7 @@ public class ReceiverGeracaoDados {
           paciente.setMedico(medico);
           //Atualização número de camas do hospital
           hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() + 1);
+          System.out.println(hospital);
           hospitalRepository.save(hospital);
           medicoInserido = true;
           break;
@@ -110,6 +111,7 @@ public class ReceiverGeracaoDados {
             Medico medico = listaMedicos.get(indexMedico);
             paciente.setMedico(medico);
             hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() + 1);
+            System.out.println(hospital);
             hospitalRepository.save(hospital);
             medicoInserido = true;
             break;
@@ -129,6 +131,7 @@ public class ReceiverGeracaoDados {
         Medico medico = listaMedicos.get(indexMedico);
         paciente.setMedico(medico);
         hospital.setNumero_camas_ocupadas(hospital.getNumero_camas_ocupadas() + 1);
+        System.out.println(hospital);
         hospitalRepository.save(hospital);
         medicoInserido = true;
       }
