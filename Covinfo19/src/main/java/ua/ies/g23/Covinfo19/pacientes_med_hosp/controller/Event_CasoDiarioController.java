@@ -1,4 +1,4 @@
-package ua.ies.g23.Covinfo19.relatorios.controller;
+package ua.ies.g23.Covinfo19.pacientes_med_hosp.controller;
 
 import java.util.Date;
 import java.util.List;
@@ -18,10 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.ies.g23.Covinfo19.exception.ResourceNotFoundException;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Event_CasoDiario;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.model.Event_Hospitais;
+import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.Event_CasoDiarioRepository;
 import ua.ies.g23.Covinfo19.pacientes_med_hosp.repository.Event_HospitaisRepository;
-import ua.ies.g23.Covinfo19.relatorios.model.Event_CasoDiario;
-import ua.ies.g23.Covinfo19.relatorios.repository.Event_CasoDiarioRepository;
+
 
 @RestController
 @RequestMapping("/api/v1")

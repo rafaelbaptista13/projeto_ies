@@ -376,4 +376,10 @@ export class CasosService {
 
     return this.http.get<number>(url);
   }
+
+  getLastCasosDiariosEvent(): Observable<any> {
+    let url = this.baseURL + 'public/event_casodiario';
+
+    return this.http.get(url, httpOptions);
+  }
 }

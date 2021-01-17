@@ -26,7 +26,7 @@ public class Runner implements CommandLineRunner {
 		mensagem = construcaoMensagem();
 
 		//Atribuição tempo atual à mensagem inserção paciente
-		mensagem.put("time",formatter.format(new Date(System.currentTimeMillis())));
+		mensagem.put("time",formatter.format(new Date(System.currentTimeMillis() )));
 		System.out.println("\n \n--------- Novo Paciente : ---------");
 		for (String item: mensagem.keySet() ) {
 			System.out.println(item + " -> " + mensagem.get(item));

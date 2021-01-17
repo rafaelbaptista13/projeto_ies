@@ -1,4 +1,4 @@
-package ua.ies.g23.Covinfo19.relatorios.model;
+package ua.ies.g23.Covinfo19.pacientes_med_hosp.model;
 
 import java.util.Date;
 
