@@ -18,6 +18,8 @@ export class HospitalComponent implements OnInit {
   filterForm: FormGroup;
   hospitais: {};
 
+  notification_show: boolean;
+  lista_hospitais_notificar= new Set();
 
   nome = '';
   regiao = '';
@@ -32,6 +34,7 @@ export class HospitalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.notification_show = false;
     if (localStorage.getItem('codigo_acesso') != null) {
       this.medicoLogado = true;
       this.medicoId = Number(localStorage.getItem('codigo_acesso'));
@@ -62,13 +65,40 @@ export class HospitalComponent implements OnInit {
     })(jQuery);
     this.initForm();
     this.hospitais = this.hospitalService.getHospitaisFilter('','','','');
-
+    setTimeout(() =>
+      {
+        for (let key in this.hospitais) {
+          if (this.hospitais[key][3] > 80) {
+            // @ts-ignore
+            this.lista_hospitais_notificar.add(this.hospitais[key]);
+          }
+        }
+        if (this.lista_hospitais_notificar.size > 0) {
+          this.notification_show = true;
+        }
+      },
+      2000);
     const source = interval(10000);
-    this.subscription = source.subscribe(val => {this.updateHospitais();});
+    this.subscription = source.subscribe(val => {this.updateHospitais(); });
   }
 
   updateHospitais() {
     this.hospitais = this.hospitalService.getHospitaisFilter(this.nome, this.regiao, this.taxaocupacao_min, this.taxaocupacao_max);
+    setTimeout(() =>
+      {
+        let tamanho = this.lista_hospitais_notificar.size;
+        this.lista_hospitais_notificar = new Set();
+        for (let key in this.hospitais) {
+          if (this.hospitais[key][3] > 80) {
+            // @ts-ignore
+            this.lista_hospitais_notificar.add(this.hospitais[key]);
+          }
+        }
+        if (this.lista_hospitais_notificar.size > tamanho) {
+          this.notification_show = true;
+        }
+      },
+      2000);
   }
 
   toggleDropdown(): void{
@@ -99,6 +129,10 @@ export class HospitalComponent implements OnInit {
     this.taxaocupacao_max = filterData.taxaocupacao_max;
     this.hospitais = this.hospitalService.getHospitaisFilter(filterData.nome, filterData.regiao, filterData.taxaocupacao_min, filterData.taxaocupacao_max);
     this.initForm();
+  }
+
+  close_notification(): void {
+    this.notification_show = false;
   }
 
   logout(): void {

@@ -21,6 +21,9 @@ export class CasosdiariosComponent implements OnInit {
   medicoId: number;
   nomeMedico: string;
 
+  notification_show: boolean;
+  closed: boolean;
+
   casosAtivos: number;
   casosRecuperados: number;
   casosCuidadosIntensivos: number;
@@ -67,6 +70,8 @@ export class CasosdiariosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.notification_show = false;
+    this.closed = false;
     if (localStorage.getItem('codigo_acesso') != null) {
       this.medicoLogado = true;
       this.medicoId = Number(localStorage.getItem('codigo_acesso'));
@@ -123,6 +128,19 @@ export class CasosdiariosComponent implements OnInit {
         this.casosMortos = resultado['Óbitos'];
         this.casosRecuperados = resultado['Recuperados'];
     });
+
+    this.casosService.getLastCasosDiariosEvent().subscribe(result => {
+      let today = new Date();
+      let dd = String(today.getDate()).padStart(2, '0');
+      let mm = String(today.getMonth() + 1).padStart(2, '0');
+      var yyyy = today.getFullYear();
+      let today1 = yyyy +'-'+ mm +'-'+ dd;
+      if (result.data.split('T')[0] === today1) {
+        this.notification_show = true;
+      }
+
+    });
+
     const source = interval(10000);
     this.subscription = source.subscribe(val => {this.updateGraficos();});
 
@@ -182,6 +200,17 @@ export class CasosdiariosComponent implements OnInit {
       this.chartCurvaObj.render();
     });
 
+    this.casosService.getLastCasosDiariosEvent().subscribe(result => {
+      let today = new Date();
+      let dd = String(today.getDate()).padStart(2, '0');
+      let mm = String(today.getMonth() + 1).padStart(2, '0');
+      var yyyy = today.getFullYear();
+      let today1 = yyyy +'-'+ mm +'-'+ dd;
+      if (result.data.split('T')[0] === today1 && this.closed === false) {
+        this.notification_show = true;
+      }
+
+    });
   }
 
   //Função para especificar valores dos charts
@@ -236,6 +265,11 @@ export class CasosdiariosComponent implements OnInit {
     });
     this.chartCurvaObj.render();
 
+  }
+
+  close_notification(): void {
+    this.notification_show = false;
+    this.closed = true;
   }
 
   logout(): void {

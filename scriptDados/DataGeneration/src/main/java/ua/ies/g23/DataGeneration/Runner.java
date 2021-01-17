@@ -22,11 +22,11 @@ public class Runner implements CommandLineRunner {
 	HashMap<String, Object> mensagem = new HashMap<String, Object>();
 	
 	// Construção 10 Mensagens Novos Pacientes Distintos
-	for (int i = 0; i<= 500; i++) {
+	for (int i = 0; i<= 5000; i++) {
 		mensagem = construcaoMensagem();
 
 		//Atribuição tempo atual à mensagem inserção paciente
-		mensagem.put("time",formatter.format(new Date(System.currentTimeMillis())));
+		mensagem.put("time",formatter.format(new Date(System.currentTimeMillis() )));
 		System.out.println("\n \n--------- Novo Paciente : ---------");
 		for (String item: mensagem.keySet() ) {
 			System.out.println(item + " -> " + mensagem.get(item));

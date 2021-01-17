@@ -119,6 +119,9 @@
       </form>
     </div>
 
+    <div *ngIf="notification_show" style="width: 41%; margin: auto" class="alert alert-danger" role="alert">
+      <p style="display: inline">O número de novas de infeções do dia de hoje é >10% superior ao do dia anterior. A pandemia está numa fase crescente. Tenha cuidado e siga as instruções da DGS! &nbsp; &nbsp; <span style="display: inline" (click)="close_notification()"><i class="fas fa-times-circle"></i> </span> </p>
+    </div>
 
     <div class="row">
       <div class="col-2">

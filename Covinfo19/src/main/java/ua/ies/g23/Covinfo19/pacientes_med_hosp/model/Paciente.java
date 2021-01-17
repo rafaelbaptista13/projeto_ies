@@ -1,5 +1,7 @@
 package ua.ies.g23.Covinfo19.pacientes_med_hosp.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -44,7 +46,9 @@ public class Paciente {
     @Column(name = "estado_atual", nullable = false)
     private String estado_atual;
     
-
+    @Column(name = "data_insercao", nullable = false)
+    private Date data_insercao;
+    
     // é acompanhado por um medico
     @ManyToOne
     private Medico medico;
@@ -54,7 +58,7 @@ public class Paciente {
 
     }
 
-    public Paciente(long paciente_id, String nome, String genero, int idade, String concelho, String regiao, String nacionalidade, int altura, float peso, String estado_atual, Medico medico) {
+    public Paciente(long paciente_id, String nome, String genero, int idade, String concelho, String regiao, String nacionalidade, int altura, float peso, String estado_atual, Date data_insercao, Medico medico) {
         this.paciente_id = paciente_id;
         this.nome = nome;
         this.genero = genero;
@@ -66,6 +70,7 @@ public class Paciente {
         this.peso = peso;
         this.estado_atual = estado_atual;
         this.medico = medico;
+        this.data_insercao = data_insercao;
     }
  
     
@@ -144,6 +149,15 @@ public class Paciente {
         this.estado_atual = estado_atual;
     }
 
+    
+    public Date getData_insercao() {
+        return data_insercao;
+    }
+
+    public void setData_insercao(Date data_insercao) {
+        this.data_insercao = data_insercao;
+    }
+
     public Medico getMedico() {
         return medico;
     }
@@ -158,5 +172,6 @@ public class Paciente {
                 + ", Nacionalidade=" + nacionalidade + ", Altura=" + altura + ", Peso=" + peso
                 + ", Medico=" + medico +"]";
     }
+
  
 }

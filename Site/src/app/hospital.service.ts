@@ -37,8 +37,8 @@ export class HospitalService {
     } else {
       taxaocupacao_max = parseFloat(taxaocupacao_max);
     }
-    let retorno = {};
     let hospitais;
+    let retorno = {};
     this.http.get(url).subscribe(result => {hospitais = result;
       hospitais.forEach((element) => {
         let urlci = this.baseURL + 'public/casos/count?estado=Cuidados Intensivos';
