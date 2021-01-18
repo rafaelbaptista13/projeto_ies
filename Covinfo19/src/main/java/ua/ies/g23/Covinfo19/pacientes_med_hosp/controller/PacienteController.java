@@ -68,7 +68,13 @@ public class PacienteController {
         @RequestParam(required = true) Integer medico,
         @RequestParam(required = false) String num_paciente,
         @RequestParam(required = false) String nome,
-        @RequestParam(required = false) String estado ) {
+        @RequestParam(required = false) String estado,
+        @RequestParam(required = false) Integer page,
+        @RequestParam(required = false) Integer size) {
+            if (page==null) page=0;
+            if (size==null) size=30;
+            PageRequest pageRequest = PageRequest.of(page, size);
+            
             if (num_paciente == null) {
                 num_paciente = "%";
             }

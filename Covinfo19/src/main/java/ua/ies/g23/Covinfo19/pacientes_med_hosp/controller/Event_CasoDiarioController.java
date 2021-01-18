@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,9 +34,14 @@ public class Event_CasoDiarioController {
 
     @CrossOrigin(origins = "http://192.168.160.215:4200")
     @GetMapping("/public/allevent_casodiario")
-    public ResponseEntity<List<Event_CasoDiario>> getEventById()
+    public ResponseEntity<Page<Event_CasoDiario>> getAllEvents(@RequestParam(required = false) Integer page,
+    @RequestParam(required = false) Integer size)
         throws ResourceNotFoundException {
-        List<Event_CasoDiario> event_CasoDiario = eventRepository.findAll();
+        if (page==null) page=0;
+        if (size==null) size=30;
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        Page<Event_CasoDiario> event_CasoDiario = eventRepository.findAll(pageRequest);
         return ResponseEntity.ok().body(event_CasoDiario);
     }
 

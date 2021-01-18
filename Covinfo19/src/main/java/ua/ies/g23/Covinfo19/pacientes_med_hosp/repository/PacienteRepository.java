@@ -31,7 +31,7 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long>{
                 @Param("strnacionalidade") String strnacionalidade,@Param("stralturamin") String stralturamin,@Param("stralturamax") String stralturamax,@Param("strpesomin") String strpesomin,@Param("strpesomax") String strpesomax,@Param("strmedico") List<String> strmedico);
     
         //Seleção de pacientes através do num medico
-    @Query(value = "Select * from pacientes where medico_numero_medico = :strmedico and nome like :strnome and paciente_id like :strnum_paciente ", nativeQuery = true)
+    @Query(value = "Select * from pacientes where medico_numero_medico = :strmedico and nome like :strnome and paciente_id like :strnum_paciente", nativeQuery = true)
     List<Paciente> findByMedico(@Param("strmedico") String strmedico, @Param("strnum_paciente") String strnum_paciente, @Param("strnome") String strnome);
     
 }

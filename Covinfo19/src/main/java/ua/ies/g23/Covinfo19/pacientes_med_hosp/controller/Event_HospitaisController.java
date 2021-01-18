@@ -3,6 +3,7 @@ package ua.ies.g23.Covinfo19.pacientes_med_hosp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,9 +30,13 @@ public class Event_HospitaisController {
 
     @CrossOrigin(origins = "http://192.168.160.215:4200")
     @GetMapping("/public/event_hospitais")
-    public ResponseEntity<List<Event_Hospitais>> getAllEvents()
+    public ResponseEntity<Page<Event_Hospitais>> getAllEvents(@RequestParam(required = false) Integer page,
+    @RequestParam(required = false) Integer size)
         throws ResourceNotFoundException {
-        List<Event_Hospitais> event_hospital = eventRepository.findAll();
+        if (page==null) page=0;
+        if (size==null) size=30;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Event_Hospitais> event_hospital = eventRepository.findAll(pageRequest);
         return ResponseEntity.ok().body(event_hospital);
     }
 
