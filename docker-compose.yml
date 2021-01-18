@@ -67,5 +67,5 @@ services:
       context: ./Site
       dockerfile: Dockerfile
     ports:
-      - "4200:80"
+      - "80:80"
     restart: always
