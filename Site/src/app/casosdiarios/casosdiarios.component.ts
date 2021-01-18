@@ -141,7 +141,7 @@ export class CasosdiariosComponent implements OnInit {
 
     });
 
-    const source = interval(10000);
+    const source = interval(4000);
     this.subscription = source.subscribe(val => {this.updateGraficos();});
 
   }

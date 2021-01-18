@@ -42,9 +42,13 @@ public class Relatorio_PacienteController {
     }
 
     @GetMapping("/relatorio_pacientes_bycaso/{id}")
-    public List<Relatorio_Paciente> getRelatorioPacienteByCaso(@PathVariable(value = "id") Long casoId)
+    public Page<Relatorio_Paciente> getRelatorioPacienteByCaso(@PathVariable(value = "id") Long casoId, @RequestParam(required = false) Integer page,
+    @RequestParam(required = false) Integer size)
         throws ResourceNotFoundException {
-        List<Relatorio_Paciente> relatorios_Paciente = relatorio_PacienteRepository.findAllByCaso(casoId);
+        if (page==null) page=0;
+        if (size==null) size=30;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Relatorio_Paciente> relatorios_Paciente = relatorio_PacienteRepository.findAllByCaso(casoId, pageRequest);
 
         return relatorios_Paciente;
     }
