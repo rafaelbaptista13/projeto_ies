@@ -62,7 +62,7 @@ public class PacienteController {
 
     public static final SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/pacientesbymedic")
     public ArrayList<Object> getAllByMedico(
         @RequestParam(required = true) Integer medico,
@@ -207,7 +207,7 @@ public class PacienteController {
         return ResponseEntity.ok().body(paciente);
     }
     
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @PostMapping("/pacientes")
     public Paciente createPaciente(@Valid @RequestBody Map<String, String> pacient_info)
             throws NumberFormatException, ResourceNotFoundException {
@@ -266,7 +266,7 @@ public class PacienteController {
         return paciente;
     }
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @PutMapping("/pacientes/{id}")
     public ResponseEntity<Paciente> updatePaciente(@Valid @RequestBody Map<String, String> pacient_info) throws ResourceNotFoundException {
         

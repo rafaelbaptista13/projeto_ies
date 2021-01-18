@@ -28,7 +28,7 @@ public class Event_HospitaisController {
     @Autowired
     private Event_HospitaisRepository eventRepository;
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/event_hospitais")
     public ResponseEntity<Page<Event_Hospitais>> getAllEvents(@RequestParam(required = false) Integer page,
     @RequestParam(required = false) Integer size)
@@ -40,7 +40,7 @@ public class Event_HospitaisController {
         return ResponseEntity.ok().body(event_hospital);
     }
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/event_hospitais/{id}")
     public ResponseEntity<Event_Hospitais> getEventById(@PathVariable(value = "id") Long eventId)
         throws ResourceNotFoundException {
@@ -49,7 +49,7 @@ public class Event_HospitaisController {
         return ResponseEntity.ok().body(event_hospital);
     }
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/event_by_hospital/{id}")
     public List<Event_Hospitais> getEventByHospitalId(@PathVariable(value = "id") Long eventId)
         throws ResourceNotFoundException {

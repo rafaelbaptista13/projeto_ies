@@ -48,7 +48,7 @@ public class CasoController {
     private MedicoRepository medicoRepository;
 
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/casos/numerospandemia")
     public HashMap<String,Integer> getNumerosPandemia(
             @RequestParam(required = false) String genero, @RequestParam(required = false) Integer idademax,
@@ -161,7 +161,7 @@ public class CasoController {
     }
 
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/casos/grafico/curva_diaria/daily")
     public Integer getDailyCasosGraficoCurvaEvolucao(@RequestParam(required = false) String genero,
             @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
@@ -272,7 +272,7 @@ public class CasoController {
     }
 
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/casos/grafico/curva_diaria")
     public Map<String, Integer> getAllCasosGraficoCurvaEvolucao(@RequestParam(required = false) String genero,
             @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
@@ -438,7 +438,7 @@ public class CasoController {
         return dicionarioCasos;
     }
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/casos/grafico/peso")
     public List<Double> getAllCasosGraficoPeso(@RequestParam(required = false) String genero,
             @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
@@ -564,7 +564,7 @@ public class CasoController {
         return listaPesosPercentagem;
     }
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/casos/grafico/altura")
     public List<Double> getAllCasosGraficoAltura(@RequestParam(required = false) String genero,
             @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
@@ -687,7 +687,7 @@ public class CasoController {
         return listaAlturasPercentagem;
     }
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/casos/grafico/genero")
     public List<Double> getAllCasosGraficoGenero(@RequestParam(required = false) String genero,
             @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
@@ -810,7 +810,7 @@ public class CasoController {
         return listaCasosGeneroPercentagem;
     }
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/casos/grafico/regiao")
     public List<Double> getAllCasosGraficoRegiao(@RequestParam(required = false) String genero,
             @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
@@ -938,7 +938,7 @@ public class CasoController {
         return listaCasosRegioesPercentagem;
     }
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/casos/grafico/idade")
     public List<Double> getAllCasosGraficoIdade(@RequestParam(required = false) String genero,
             @RequestParam(required = false) Integer idademax, @RequestParam(required = false) Integer idademin,
@@ -1060,7 +1060,7 @@ public class CasoController {
         return listaIdadesPercentagem;
     }
 
-    @CrossOrigin(origins = "http://192.168.160.215:80")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/casos/count")
     public int getAllCasosCount(@RequestParam(required = false) String estado,
             @RequestParam(required = false) String genero, @RequestParam(required = false) Integer idademax,
