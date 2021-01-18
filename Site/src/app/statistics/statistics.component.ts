@@ -114,7 +114,7 @@ export class StatisticsComponent implements OnInit {
     this.casosService.getProbabilidadeGraficoPeso('','','','','',
       '','','','').subscribe(prob => { this.probabilidadesGraficoPesos = prob; this.chartPesos(this.probabilidadesGraficoPesos); });
 
-    const source2 = interval(7000);
+    const source2 = interval(4000);
     this.subscription2 = source2.subscribe(val => this.updateGraficos2());
 
   }
