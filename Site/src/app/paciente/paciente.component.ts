@@ -100,8 +100,11 @@ export class PacienteComponent implements OnInit {
           }
           this.casoService.getCasoByPaciente(this.paciente_atual.pacienteId).subscribe(result2 => {
             this.caso_atual = result2;
+		console.log(this.caso_atual);
             this.relatorioService.getRelatoriosByCaso(this.caso_atual.id).subscribe(result3 => {
-              this.relatorios = result3;
+		console.log(result3);
+              this.relatorios = result3.content;
+		console.log(this.relatorios);
               this.editPaciente();
             },
               error => {
