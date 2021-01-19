@@ -1,5 +1,22 @@
-# projeto_ies
-docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
-docker run --name mysql5 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=demo -e MYSQL_USER=demo -e MYSQL_PASSWORD=password -p 3306:3306 -d mysql/mysql-server:5.7
-docker run --name mysql5_2 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=demo -e MYSQL_USER=demo -e MYSQL_PASSWORD=password -p 3307:3306 -d mysql/mysql-server:5.7
-guia spring+rabbitmq -> https://spring.io/guides/gs/messaging-rabbitmq/
+# Projeto Covinfo19
+
+## Para correr:
+    1 - executar o comando "mvn install -DskipTests" no diretório Covinfo19
+    2 - executar o docker-compose que se encontra no diretório raiz
+    3 - inserir configurações presentes no ficheiro ConfiguraçõesBD.txt na base de dados mysql5_2_1
+    4 - executar o script presente no diretório scriptHospitalMedicos para inserir hospitais/medicos
+
+## Para inserir pacientes:
+    1 - executar script presente no diretório scriptDados
+
+## Para atualizar pacientes:
+    1 - executar script presente no diretório scriptDadosPrincipal
+
+## Credenciais:
+    - Para efetuar login na conta de médicos possui algumas credenciais no ficheiro accounts.txt
+
+## Projeto realizado por:
+    -Diogo Carvalho -> Team Manager/Developer
+    -Pedro Amaral -> Architect/Developer
+    -Rafael Baptista -> DevOps Master/Developer
+    -Ricardo Cruz -> Product Owner/Developer
