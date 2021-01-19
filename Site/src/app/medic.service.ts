@@ -6,7 +6,7 @@ import {Observable} from 'rxjs/internal/Observable';
 let httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-    'access-control-allow-origin': 'http://localhost:8080/',
+    'access-control-allow-origin': 'http://192.168.160.215:8080/',
   })
 };
 
@@ -16,7 +16,7 @@ let httpOptions = {
 export class MedicService {
 
   //URL inicial da api
-  private baseURL = 'http://localhost:8080/api/v1/';
+  private baseURL = 'http://192.168.160.215:8080/api/v1/';
   constructor(private http: HttpClient) { }
 
 

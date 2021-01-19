@@ -7,7 +7,7 @@ import {Paciente} from './paciente';
 let httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': 'http://localhost:8080/',
+    'Access-Control-Allow-Origin': 'http://192.168.160.215:8080/',
   })
 };
 
@@ -18,7 +18,7 @@ let httpOptions = {
 export class PacienteService {
 
   //URL inicial da api
-  private baseURL = 'http://localhost:8080/api/v1/';
+  private baseURL = 'http://192.168.160.215:8080/api/v1/';
   constructor(private http: HttpClient) { }
 
   getPacientById(paciente_id: string): Observable<Paciente> {

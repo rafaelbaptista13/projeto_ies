@@ -32,7 +32,7 @@ public class Event_CasoDiarioController {
     @Autowired
     private Event_CasoDiarioRepository eventRepository;
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/allevent_casodiario")
     public ResponseEntity<Page<Event_CasoDiario>> getAllEvents(@RequestParam(required = false) Integer page,
     @RequestParam(required = false) Integer size)
@@ -45,7 +45,7 @@ public class Event_CasoDiarioController {
         return ResponseEntity.ok().body(event_CasoDiario);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/event_casodiario")
     public Event_CasoDiario getRecentEvent()
         throws ResourceNotFoundException {

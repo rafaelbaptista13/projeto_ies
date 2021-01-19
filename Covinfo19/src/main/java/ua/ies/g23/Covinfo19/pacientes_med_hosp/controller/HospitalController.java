@@ -32,7 +32,7 @@ public class HospitalController {
     @Autowired
     private HospitalRepository hospitalRepository;
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/hospitais")
     public List<Hospital> getAllHospitals(
         @RequestParam(required = false) String nome,
