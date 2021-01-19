@@ -1,0 +1,47 @@
+------------------------------------------//------------------------------------------
+ALTER TABLE demo.`event_hospitais` 
+CHANGE COLUMN id
+id BIGINT(20) NOT NULL AUTO_INCREMENT ;
+
+------------------------------------------//------------------------------------------
+delimiter $$
+
+create trigger demo.eventosCasosDiarios
+	after insert
+	on demo.pacientes for each row
+begin
+	declare casosOntem INTEGER;
+    declare casosHoje INTEGER;
+	select count(*) as c into casosOntem from demo.pacientes where DATE(data_insercao) = DATE(SUBDATE(new.data_insercao,1));
+	select count(*) as c into casosHoje from demo.pacientes where DATE(data_insercao) = DATE(new.data_insercao);
+	if (casosHoje >= casosOntem*1.1) then
+		begin
+			declare eventExists BOOLEAN;
+			select exists(select * from demo.event_casodiario where DATE(data) = DATE(new.data_insercao)) into eventExists;
+			if (not eventExists) then
+				begin
+					insert into demo.event_casodiario (numero_casos, data) values (casosHoje, new.data_insercao);
+				end;
+            end if;
+		end;
+    end if;
+end$$
+
+delimiter ;
+
+------------------------------------------//------------------------------------------
+delimiter $$
+
+create trigger demo.eventosHospitais
+	after update
+	on demo.hospitais for each row
+begin
+	if (new.numero_camas_ocupadas/new.numero_camas >= 0.8 and (new.numero_camas_ocupadas - 1 )/ new.numero_camas < 0.8) then
+		begin
+			insert into demo.event_hospitais (hospital_id, data) values (new.id, now());
+		end;
+    end if;
+end$$
+
+delimiter ;
+------------------------------------------//------------------------------------------

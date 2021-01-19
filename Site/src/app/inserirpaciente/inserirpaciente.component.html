@@ -1,0 +1,220 @@
+<div class="wrapper">
+  <!-- Sidebar Holder -->
+  <nav id="sidebar">
+    <p style="font-size: 18px; margin: 10px auto 0px; text-align: center">{{this.nomeMedico}}</p>
+    <div class="sidebar-header">
+      <h3 style="text-align: center; font-weight: bold">CovInfo19</h3>
+    </div>
+
+    <ul class="list-unstyled components">
+      <li>
+        <a routerLink="/home" >Home</a>
+      </li>
+      <li>
+        <a routerLink="/daily">Casos Diários</a>
+      </li>
+      <li>
+        <a routerLink="/statistics">Estatísticas</a>
+      </li>
+      <li>
+        <a routerLink="/hospital" >Hospitais</a>
+      </li>
+      <li>
+        <a routerLink="/aboutus">Sobre nós</a>
+      </li>
+      <li *ngIf="medicoLogado==false" id="logged">
+        <a routerLink="/login">Área Reservada</a>
+      </li>
+      <li *ngIf="medicoLogado" id="nlogged">
+        <button class="dropdown-btn" id = "b_dropdown" (click)="toggleDropdown()">Área Reservada
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container" id="c_dropdown">
+          <a class="dropdown-item" routerLink="/homeMedic">Lista Pacientes</a>
+          <a class="dropdown-item" routerLink="/pacient">Inserir Paciente</a>
+        </div>
+      </li>
+      <li *ngIf="medicoLogado" class="nav-item logout">
+        <a class="nav-link" (click)="logout()">Logout</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Page Content Holder -->
+  <div id="content">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <button type="button" id="sidebarCollapse" class="navbar-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="main-body">
+        <div class="row gutters-sm">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+                  <img src="assets/Static/images/icons/account.png" alt="Admin" class="rounded-circle" width="150">
+                </div>
+                <div class="atributes">
+                  <form [formGroup]="formPaciente" (ngSubmit)="inserir()">
+                    <div class="row">
+                      <div class="col-sm-2">
+
+                      </div>
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Nome</h6>
+                      </div>
+                      <div class="col-sm-5 text-secondary">
+                        <input formControlName="nome" id="nome" type="text" class="form-control" placeholder="Name" aria-label="name" aria-describedby="basic-addon1">
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-2">
+
+                      </div>
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Idade</h6>
+                      </div>
+                      <div class="col-sm-5 text-secondary">
+                        <input formControlName="idade" type="number" min="0" class="form-control" placeholder="Idade" aria-label="name" aria-describedby="basic-addon1">
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-2">
+
+                      </div>
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Género</h6>
+                      </div>
+                      <div class="col-sm-5 text-secondary">
+                        <!-- select com ngfor -->
+                        <select  class="custom-select" formControlName="genero">
+                          <option disabled>--Selecione--</option>
+                          <option *ngFor="let genero of generos" [value]="genero">{{ genero }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-2">
+
+                      </div>
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Nacionalidade</h6>
+                      </div>
+                      <div class="col-sm-5 text-secondary">
+                        <!-- select com ngfor -->
+                        <select  class="custom-select" formControlName="nacionalidade">
+                          <option disabled>--Selecione--</option>
+                          <option *ngFor="let nacionalidade of nacionalidades" [value]="nacionalidade">{{ nacionalidade }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-2">
+
+                      </div>
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Região</h6>
+                      </div>
+                      <div class="col-sm-5 text-secondary">
+                        <!-- sleect com ng for -->
+                        <select  class="custom-select" formControlName="regiao">
+                          <option disabled>--Selecione--</option>
+                          <option *ngFor="let regiao of regioes" [value]="regiao">{{ regiao }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-2">
+
+                      </div>
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Concelho</h6>
+                      </div>
+                      <div class="col-sm-5 text-secondary">
+                        <!-- select com ngfor -->
+                        <select  class="custom-select" formControlName="concelho">
+                          <option disabled>--Selecione--</option>
+                          <option *ngFor="let concelho of concelhos" [value]="concelho">{{ concelho }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-2">
+
+                      </div>
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Peso</h6>
+                      </div>
+                      <div class="col-sm-5 text-secondary">
+                        <input formControlName="peso" type="number" class="form-control" placeholder="Peso" aria-label="name" aria-describedby="basic-addon1">
+                      </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                      <div class="col-sm-2">
+
+                      </div>
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Altura</h6>
+                      </div>
+                      <div class="col-sm-5 text-secondary">
+                        <input formControlName="altura" type="number" class="form-control" placeholder="Altura" aria-label="name" aria-describedby="basic-addon1">
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-2">
+
+                      </div>
+                      <div class="col-sm-3">
+                        <h6 class="mb-0">Estado</h6>
+                      </div>
+                      <div class="col-sm-5 text-secondary">
+                        <!-- select com ngfor -->
+                        <select  class="custom-select" formControlName="estado">
+                          <option disabled>--Selecione--</option>
+                          <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                      <div class="col-sm-5">
+
+                      </div>
+                      <div class="col-sm-6">
+                        <button type="submit" class="btn btn-success">Confirm</button>
+                      </div>
+                      <div class="col-sm-1">
+
+                      </div>
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>

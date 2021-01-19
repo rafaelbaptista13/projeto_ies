@@ -6,7 +6,7 @@ import {CasosService} from './casos.service';
 
 //Define mensagem em JSON e o URL é de segurança
 const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json', 'access-control-allow-origin': 'http://localhost:8080/'})
+  headers: new HttpHeaders({'Content-Type': 'application/json', 'access-control-allow-origin': 'http://192.168.160.215:8080/'})
 };
 
 @Injectable({
@@ -15,7 +15,7 @@ const httpOptions = {
 export class HospitalService {
 
   //URL inicial da api
-  private baseURL = 'http://localhost:8080/api/v1/';
+  private baseURL = 'http://192.168.160.215:8080/api/v1/';
 
   constructor(private http: HttpClient, private casosService: CasosService) { }
 
@@ -37,8 +37,8 @@ export class HospitalService {
     } else {
       taxaocupacao_max = parseFloat(taxaocupacao_max);
     }
-    let retorno = {};
     let hospitais;
+    let retorno = {};
     this.http.get(url).subscribe(result => {hospitais = result;
       hospitais.forEach((element) => {
         let urlci = this.baseURL + 'public/casos/count?estado=Cuidados Intensivos';
@@ -49,11 +49,11 @@ export class HospitalService {
           this.http.get(urlint).subscribe(result2 => {
             let taxaocupacao: number = (element.numero_camas_ocupadas / element.numero_camas) * 100;
             if (taxaocupacao_min < taxaocupacao && taxaocupacao < taxaocupacao_max) {
-              retorno[element.id] = [element.nome, result1, result2, ((element.numero_camas_ocupadas / element.numero_camas) * 100).toFixed(2)];
+              retorno[element.id] = [element.nome, result2, result1, ((element.numero_camas_ocupadas / element.numero_camas) * 100).toFixed(2)];
             }
-          })
-        })
-      } )
+          });
+        });
+      } );
     });
     return retorno;
   }

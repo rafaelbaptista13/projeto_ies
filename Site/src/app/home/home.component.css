@@ -1,62 +1,73 @@
-body{
-  background: #1c92d2; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #1c92d2, #f2fcfe); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #1c92d2, #f2fcfe); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */;
-}
-
 /* --------------------------------------------
     NAVBAR
 --------------------------------------------- */
-
-#navbar {
-  width: 100%;
-  background: #7386D5;
-  color: #fff;
-  transition: 0.2s;
-  transform-origin: bottom left;
-  display: inline-block;
-}
 
 #navbar .active {
   opacity: 85%;
 }
 
-#navbar .col-md-2, .col-md-4{
-  margin: 2% 0 2% 0;
+nav.navbar.navbar-expand-lg.navbar-light.bg-light{
+  background: #7386D5 !important;
+  box-shadow: 0 0 0 3px white;
 }
 
-#navbar .col-md-2:hover, .col-md-4:hover{
-  transform: scale(1.2);
+.navbar-light .navbar-brand{
+  color: white;
+}
+
+.navbar-light .navbar-nav .active > .nav-link{
+  color: #fff;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #fff;
+}
+
+.mr-auto{
+  width: 100%;
+}
+
+li.nav-item:hover{
+  transform: scale(1.1);
   -webkit-transition: transform 0.2s ease;
 }
 
-
-#navbar a {
-  font-size: 1.1em;
-  width: 100%;
+li.nav-item.active {
+  margin-left: 5%;
+  opacity: 50%;
 }
 
-#navbar a.active, a[aria-expanded="true"] {
-  color: #fff;
+li.nav-item{
+  margin-left:3%;
 }
+
 
 a {
-  width: 100%;
-  font-size: 20px !important;
+  font-size: 25px;
   font-weight: bold;
-  padding-left: 10% !important;
+}
 
-  text-decoration: none;
-  color: #fff;
+a.navbar-brand{
+  float: left;
+  font-size: 50px;
+}
+
+.vertical {
+  border-left: 3px solid white;
+  opacity: 20%;
+  height: 100%;
+  position:absolute;
+  left: 270px;
+}
+
+div.div_image{
+  float: right;
+  width: 29%;
+  margin: 1% 4% 0 5%;
 }
 
 .image{
-  float: right;
-  width: 29%;
-  height: auto;
-  margin-left: 5%;
-  margin-right: 5%;
-  margin-top : 1%;
+  width: 100%;
 }
 
 .all{
@@ -74,8 +85,9 @@ a {
   font-size: 150px;
   text-align: center;
   margin-top: 10%;
-  font-family: sans-serif;
-  color: white;
+  margin-bottom: 10%;
+  font-family: 'poppins', sans-serif;
+  color: #737373;
 }
 
 .leftside .text{
@@ -83,15 +95,21 @@ a {
   margin-top: 100px;
 }
 
-.btn.btn-info{
+.btn{
   width: 25%;
-  font-size: 40px;
+  height: auto;
+  font-size: 30px;
+  font-weight: bold;
   margin-left: 37.5%;
   margin-right: 37.5%;
   margin-top: 100px;
   color: white;
-  border-radius: 40px;
-  height: auto;
-
+  border-radius: 30px;
+  background-color: #6d7fcc;
+  border: none;
 }
 
+.btn:hover{
+  transform: scale(1.1);
+  -webkit-transition: transform 0.2s ease;
+}

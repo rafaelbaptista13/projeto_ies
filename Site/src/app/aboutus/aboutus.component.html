@@ -1,0 +1,115 @@
+<div class="wrapper">
+  <!-- Sidebar Holder -->
+  <nav id="sidebar">
+    <p style="font-size: 18px; margin: 10px auto 0px; text-align: center">{{this.nomeMedico}}</p>
+    <div class="sidebar-header">
+      <h3 style="text-align: center; font-weight: bold">CovInfo19</h3>
+    </div>
+
+    <ul class="list-unstyled components">
+      <li>
+        <a routerLink="/home" >Home</a>
+      </li>
+      <li>
+        <a routerLink="/daily">Casos Diários</a>
+      </li>
+      <li>
+        <a routerLink="/statistics">Estatísticas</a>
+      </li>
+      <li>
+        <a routerLink="/hospital" >Hospitais</a>
+      </li>
+      <li class="active">
+        <a routerLink="/aboutus">Sobre nós</a>
+      </li>
+      <li *ngIf="medicoLogado==false" id="logged">
+        <a routerLink="/login">Área Reservada</a>
+      </li>
+      <li *ngIf="medicoLogado" id="nlogged">
+        <button class="dropdown-btn" id = "b_dropdown" (click)="toggleDropdown()">Área Reservada
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container" id="c_dropdown">
+          <a class="dropdown-item" routerLink="/homeMedic">Lista Pacientes</a>
+          <a class="dropdown-item" routerLink="/pacient">Inserir Paciente</a>
+        </div>
+      </li>
+      <li *ngIf="medicoLogado" class="nav-item logout">
+        <a class="nav-link" (click)="logout()">Logout</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Page Content Holder -->
+  <div id="content">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+
+        <button type="button" id="sidebarCollapse" class="navbar-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row">
+        <div class="structure">
+          <div class="card">
+            <div class="card-body">
+              <img src="assets/Static/images/diogo.jpg" alt="diogo" class="image">
+            </div>
+            <div class="d-flex flex-column align-items-center text-center">
+              <div class="content">
+                <h1 class="name">Diogo Carvalho</h1>
+                <i class="role">Team manager & Developer</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="structure">
+          <div class="card">
+            <div class="card-body">
+              <img src="assets/Static/images/cruz.jpg" alt="ricardo" class="image ric">
+            </div>
+            <div class="d-flex flex-column align-items-center text-center">
+              <div class="content">
+                <h1 class="name">Ricardo Cruz</h1>
+                <i class="role">Product owner & Developer</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="structure">
+          <div class="card">
+            <div class="card-body">
+              <img src="assets/Static/images/amaral.jpg" alt="pedro" class="image">
+            </div>
+            <div class="d-flex flex-column align-items-center text-center">
+              <div class="content">
+                <h1 class="name">Pedro Amaral</h1>
+                <i class="role">Architect & Developer</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="structure">
+          <div class="card">
+            <div class="card-body">
+              <img src="assets/Static/images/rafa.jpg" alt="rafael" class="image">
+            </div>
+            <div class="d-flex flex-column align-items-center text-center">
+              <div class="content">
+                <h1 class="name">Rafael Baptista</h1>
+                <i class="role">DevOps master & Developer</i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -45,62 +45,64 @@ public class Runner implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    HttpResponse<String> response;
-    int contador = 0;
+      for (int l = 0; l<20; l++) {
+        HttpResponse<String> response;
+        int contador = 0;
 
-    //Execução Pedido HTTP de um paciente segundo conjunto filtros (estado_paciente, regiao_paciente, idademin e idademax) até que o pedido devolta um paciente com um limite de 10 pedidos.
-    while (true) {
-      //Definição aleatório dos campos utilizados nos filtros
-      String estado_paciente = getEstadoValido();
-      String regiao_paciente = getRegiaoValida();
-      int idade_paciente = getIdadeValida();
-      int idademin = idade_paciente-5;
-      int idademax = idade_paciente+5;
+        //Execução Pedido HTTP de um paciente segundo conjunto filtros (estado_paciente, regiao_paciente, idademin e idademax) até que o pedido devolta um paciente com um limite de 10 pedidos.
+        while (true) {
+          //Definição aleatório dos campos utilizados nos filtros
+          String estado_paciente = getEstadoValido();
+          String regiao_paciente = getRegiaoValida();
+          int idade_paciente = getIdadeValida();
+          int idademin = idade_paciente-5;
+          int idademax = idade_paciente+5;
 
-      //Criação URL para pedido http
-      String url = "http://localhost:8080/api/v1/casos?estado="+estado_paciente+"&regiao="+regiao_paciente+"&idademin="+idademin+"&idademax="+idademax;
-      url = url.replace(" ", "+");
-      HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).setHeader("User-Agent", "Java 11 HttpClient Bot").build();
+          //Criação URL para pedido http
+          String url = "http://localhost:8080/api/v1/public/casos?estado="+estado_paciente+"&regiao="+regiao_paciente+"&idademin="+idademin+"&idademax="+idademax;
+          url = url.replace(" ", "+");
+          HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).setHeader("User-Agent", "Java 11 HttpClient Bot").build();
 
-      response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-      
-      //Verificação pedido contêm um caso
-      if (response.body().equals("[]")) {
-        contador += 1;
+          response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+          
+          //Verificação pedido contêm um caso
+          if (response.body().equals("[]")) {
+            contador += 1;
 
-        //Implementação limite 10 pedidos
-        if (contador >= 10) {
-          System.exit(1);
+            //Implementação limite 10 pedidos
+            if (contador >= 10) {
+              System.exit(1);
+            }
+          } else {
+            break;
+          }
+        } 
+        
+        // Conversão resposta http num arraylist de objetos JSON (1 para cada paciente/caso)
+        String[] texto = response.body().split("\\{");
+        ArrayList<JSONObject> jsonPacientes = new ArrayList<JSONObject>();
+        for (int i = 1; i<texto.length; i++) {
+          String novotexto = '{'+texto[i];
+          novotexto = novotexto.substring(0, novotexto.length()-1);
+          JSONObject myPacient = new JSONObject(novotexto);
+          jsonPacientes.add(myPacient);
         }
-      } else {
-        break;
+        
+        HashMap<String, Object> mensagem = new HashMap<String, Object>();
+        //Criação nova mensagem. Utilização do paciente indice 0 do arrayobjetos.
+        mensagem = construcaoMensagem(jsonPacientes.get(0));
+
+        //Atribuição tempo atual á mensagem
+        mensagem.put("time", formatter.format(new Date(System.currentTimeMillis())));
+        System.out.println("\n \n--------- Nova Mensagem : ---------");
+        for (String item : mensagem.keySet()) {
+          System.out.println(item + " -> " + mensagem.get(item));
+        }
+        JSONObject json = new JSONObject(mensagem);
+
+        //Envio da mensagem
+        rabbitTemplate.convertAndSend(DataUpdateApplication.topicExchangeName, "filaupdate", json.toString());
       }
-    } 
-    
-    // Conversão resposta http num arraylist de objetos JSON (1 para cada paciente/caso)
-    String[] texto = response.body().split("\\{");
-    ArrayList<JSONObject> jsonPacientes = new ArrayList<JSONObject>();
-    for (int i = 1; i<texto.length; i++) {
-      String novotexto = '{'+texto[i];
-      novotexto = novotexto.substring(0, novotexto.length()-1);
-      JSONObject myPacient = new JSONObject(novotexto);
-      jsonPacientes.add(myPacient);
-    }
-    
-    HashMap<String, Object> mensagem = new HashMap<String, Object>();
-    //Criação nova mensagem. Utilização do paciente indice 0 do arrayobjetos.
-    mensagem = construcaoMensagem(jsonPacientes.get(0));
-
-    //Atribuição tempo atual á mensagem
-    mensagem.put("time", formatter.format(new Date(System.currentTimeMillis())));
-    System.out.println("\n \n--------- Nova Mensagem : ---------");
-    for (String item : mensagem.keySet()) {
-      System.out.println(item + " -> " + mensagem.get(item));
-    }
-    JSONObject json = new JSONObject(mensagem);
-
-    //Envio da mensagem
-    rabbitTemplate.convertAndSend(DataUpdateApplication.topicExchangeName, "filaupdate", json.toString());
   }
 
 
