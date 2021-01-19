@@ -45,7 +45,6 @@ public class Runner implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    while (true) {
       for (int l = 0; l<20; l++) {
         HttpResponse<String> response;
         int contador = 0;
@@ -104,8 +103,6 @@ public class Runner implements CommandLineRunner {
         //Envio da mensagem
         rabbitTemplate.convertAndSend(DataUpdateApplication.topicExchangeName, "filaupdate", json.toString());
       }
-      Thread.sleep(30000);
-    }
   }
 
 
