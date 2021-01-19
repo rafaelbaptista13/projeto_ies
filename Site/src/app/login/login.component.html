@@ -2,24 +2,27 @@
   <!-- Sidebar Holder -->
   <nav id="sidebar">
     <div class="sidebar-header">
-      <h3>Covinfo</h3>
+      <h3 style="text-align: center; font-weight: bold">CovInfo19</h3>
     </div>
 
     <ul class="list-unstyled components">
       <li>
-        <a routerLink="/home" >Home</a>
+        <a routerLink="/home">Home</a>
       </li>
       <li>
-        <a routerLink="/statistics">Estatística</a>
+        <a routerLink="/daily">Casos Diários</a>
       </li>
       <li>
-        <a href="/hospital" >Hospitals</a>
+        <a routerLink="/statistics">Estatísticas</a>
       </li>
       <li>
-        <a href="about.html">Sobre nós</a>
+        <a routerLink="/hospital">Hospitais</a>
       </li>
-      <li  class="active">
-        <a routerLink="/login">Área profissionais de saúde</a>
+      <li>
+        <a routerLink="/aboutus">Sobre nós</a>
+      </li>
+      <li *ngIf="medicoLogado==false" class="active" id="logged">
+        <a routerLink="/login">Área Reservada</a>
       </li>
     </ul>
   </nav>
@@ -39,20 +42,22 @@
       </div>
     </nav>
 
+    <div *ngIf="erroCredenciais" style="text-align: center; width: 30%; margin: 20px auto" class="alert alert-danger" role="alert">
+      As credênciais inseridas estão incorretas!
+    </div>
 
+    <h5 class="card-title text-center" style="font-size: 50px">Área Reservada</h5>
     <div class="row">
-      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+      <div class="col-sm-12 col-md-9 col-lg-7 mx-auto">
         <div class="card card-signin my-5">
           <div class="card-body">
-            <h5 class="card-title text-center">Log In</h5>
+            <img class="image" src="assets/Static/images/medic.png" alt="login">
             <form class="form-signin" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
               <div class="form-label-group">
                 <input type="text" id="inputNumero" formControlName="numero_medico" class="form-control" placeholder="Numero médico" required>
-                <label for="inputNumero">Numero Médico</label>
               </div>
               <div class="form-label-group">
                 <input type="password" id="inputCode" formControlName="codigo_acesso" class="form-control" placeholder="Codigo de acesso" required autofocus>
-                <label for="inputCode">Código de acesso</label>
               </div>
               <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Log in</button>
             </form>

@@ -1,5 +1,6 @@
 package ua.ies.g23.Covinfo19.pacientes_med_hosp.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +32,7 @@ public class HospitalController {
     @Autowired
     private HospitalRepository hospitalRepository;
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://192.168.160.215")
     @GetMapping("/public/hospitais")
     public List<Hospital> getAllHospitals(
         @RequestParam(required = false) String nome,
@@ -39,9 +41,19 @@ public class HospitalController {
         @RequestParam(required = false) Integer numero_camasmin,
         @RequestParam(required = false) Integer numero_camasmax,
         @RequestParam(required = false) Integer numero_camas_ocupadasmin,
-        @RequestParam(required = false) Integer numero_camas_ocupadasmax ) {
+        @RequestParam(required = false) Integer numero_camas_ocupadasmax,
+        @RequestParam(required = false) Integer page,
+        @RequestParam(required = false) Integer size) {
+        
+        if (page==null) page=0;
+        if (size==null) size=30;
+        PageRequest pageRequest = PageRequest.of(page, size);
         if (nome == null && concelho == null && regiao == null && numero_camasmin == null && numero_camasmax == null && numero_camas_ocupadasmin == null && numero_camas_ocupadasmax == null) {
-            return hospitalRepository.findAll();
+            List<Hospital> l = new ArrayList<>();
+            for (Hospital h: hospitalRepository.findAll(pageRequest)) {
+                l.add(h);
+            }
+            return l;
         }
         
         String strnome = "";
@@ -93,7 +105,7 @@ public class HospitalController {
             strnumero_camas_ocupadasmax = "5000";
         }
 
-        return hospitalRepository.findAllFilters(strnome, strconcelho, strregiao, strnumero_camasmin, strnumero_camasmax, strnumero_camas_ocupadasmin, strnumero_camas_ocupadasmax);
+        return hospitalRepository.findAllFilters(strnome, strconcelho, strregiao, strnumero_camasmin, strnumero_camasmax, strnumero_camas_ocupadasmin, strnumero_camas_ocupadasmax, pageRequest);
     }
 
     @GetMapping("/public/hospitais/{id}")

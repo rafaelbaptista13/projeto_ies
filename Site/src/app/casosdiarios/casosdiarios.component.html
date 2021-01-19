@@ -1,0 +1,183 @@
+<div class="wrapper">
+  <!-- Sidebar Holder -->
+  <nav id="sidebar">
+    <p style="font-size: 18px; margin: 10px auto 0px; text-align: center">{{this.nomeMedico}}</p>
+    <div class="sidebar-header">
+      <h3 style="text-align: center; font-weight: bold">CovInfo19</h3>
+    </div>
+
+    <ul class="list-unstyled components">
+      <li>
+        <a routerLink="/home" >Home</a>
+      </li>
+      <li class="active">
+        <a routerLink="/daily">Casos Diários</a>
+      </li>
+      <li>
+        <a routerLink="/statistics">Estatísticas</a>
+      </li>
+      <li>
+        <a routerLink="/hospital">Hospitais</a>
+      </li>
+      <li>
+        <a routerLink="/aboutus">Sobre nós</a>
+      </li>
+      <li *ngIf="medicoLogado==false" id="logged">
+        <a routerLink="/login">Área Reservada</a>
+      </li>
+      <li *ngIf="medicoLogado" id="nlogged">
+        <button class="dropdown-btn" id = "b_dropdown" (click)="toggleDropdown()">Área Reservada
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container" id="c_dropdown">
+          <a class="dropdown-item" routerLink="/homeMedic">Lista Pacientes</a>
+          <a class="dropdown-item" routerLink="/pacient">Inserir Paciente</a>
+        </div>
+      </li>
+      <li *ngIf="medicoLogado" class="nav-item logout">
+        <a class="nav-link" (click)="logout()">Logout</a>
+      </li>
+    </ul>
+  </nav>
+
+
+  <!-- Page Content Holder -->
+  <div id="content">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+
+        <button type="button" id="sidebarCollapse" class="navbar-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <button class="search" id="filterCollapse">Filters <i class="fas fa-search"></i></button>
+
+      </div>
+    </nav>
+
+    <div class="filters" id="filters" style="display: none">
+      <form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)">
+        <div class="row">
+          <div class="col-2">
+            <h5 class="idade_title">Idade</h5>
+            <div class="idade_div">
+              <input placeholder="min" class="form-control" min="0" id="idade_min" formControlName="idade_min" type="number">
+              <input placeholder="max" class="form-control" min="0" id="idade_max" formControlName="idade_max" type="number">
+            </div>
+          </div>
+          <div class="col-2">
+            <h5 class="genero_title">Género</h5>
+            <div class="genero_div">
+              <select name="genero_option" class="custom-select" id="g_options" formControlName="genero">
+                <option hidden disabled selected value>Selecionar Opção</option>
+                <option value=""></option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-2">
+            <h5 class="regiao_title">Região</h5>
+            <div class="regiao_div">
+              <select name="regiao_option" class="custom-select" id="r_options" formControlName="regiao">
+                <option hidden disabled selected value>Selecionar Opção</option>
+                <option value=""></option>
+                <option *ngFor="let regiao of regioes" value="{{regiao}}">{{regiao}}</option>
+                <!-- NGFOR das regioes -->
+              </select>
+            </div>
+          </div>
+          <div class="col-2">
+            <h5 class="nacionalidade_title">Nacionalidade</h5>
+            <div class="nacionalidade_div">
+              <select name="nacionalidade_option" class="custom-select" id="n_options" formControlName="nacionalidade">
+                <option hidden disabled selected value>Selecionar Opção</option>
+                <option value=""></option>
+                <option *ngFor="let nacionalidade of nacionalidades" value="{{nacionalidade}}">{{nacionalidade}}</option>
+                <!-- NGFOR das nacionalidades -->
+              </select>
+            </div>
+          </div>
+          <div class="col-2">
+            <h5 class="altura_title">Altura</h5>
+            <div class="altura_div">
+              <input placeholder="min" class="form-control" min="0" formControlName="altura_min" type="number">
+              <input placeholder="max" class="form-control" min="0" formControlName="altura_max" type="number">
+            </div>
+          </div>
+          <div class="col-2">
+            <h5 class="peso_title">Peso</h5>
+            <div class="peso_div">
+              <input placeholder="min" class="form-control" min="0" formControlName="peso_min" type="number">
+              <input placeholder="max" class="form-control" min="0" formControlName="peso_max" type="number">
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-light" type="submit">Aplicar</button>
+      </form>
+    </div>
+
+    <div *ngIf="notification_show" style="width: 41%; margin: auto" class="alert alert-danger" role="alert">
+      <p style="display: inline">O número de novas de infeções do dia de hoje é >10% superior ao do dia anterior. A pandemia está numa fase crescente. Tenha cuidado e siga as instruções da DGS! &nbsp; &nbsp; <span style="display: inline" (click)="close_notification()"><i class="fas fa-times-circle"></i> </span> </p>
+    </div>
+
+    <div class="row">
+      <div class="col-2">
+        <div class="card card-signin">
+          <div style="text-align: center;" class="card-body">
+            <h3>Casos ativos</h3>
+            <h4>{{casosAtivos}}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card card-signin">
+          <div style="text-align: center;" class="card-body">
+            <h3>Casos recuperados</h3>
+            <h4>{{casosRecuperados}}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="card card-signin">
+          <div style="text-align: center;" class="card-body">
+            <h3>Internados</h3>
+            <h4>{{casosInternados}}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="card card-signin">
+          <div style="text-align: center;" class="card-body">
+            <h3>Cuidados Intensivos</h3>
+            <h4>{{casosCuidadosIntensivos}}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="card card-signin">
+          <div style="text-align: center;" class="card-body">
+            <h3>Mortos</h3>
+            <h4>{{casosMortos}}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card card-signin">
+          <div class="card-body">
+            <h2 style="text-align: center;">Número de casos diários de infeções de covid-19</h2>
+            <div id="allcasesgraph" style="height: 370px; width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+  </div>
+</div>

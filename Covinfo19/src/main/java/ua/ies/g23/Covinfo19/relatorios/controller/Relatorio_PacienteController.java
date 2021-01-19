@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.ies.g23.Covinfo19.relatorios.model.Relatorio_Paciente;
@@ -30,12 +33,28 @@ public class Relatorio_PacienteController {
 
 
     @GetMapping("/relatorio_pacientes")
-    public List<Relatorio_Paciente> getAllRelatorio_Pacientes() {
-        return relatorio_PacienteRepository.findAll();
+    public Page<Relatorio_Paciente> getAllRelatorio_Pacientes(@RequestParam(required = false) Integer page,
+        @RequestParam(required=false) Integer size) {
+        if (page==null) page=0;
+        if (size==null) size=30;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return relatorio_PacienteRepository.findAll(pageRequest);
+    }
+
+    @GetMapping("/relatorio_pacientes_bycaso/{id}")
+    public Page<Relatorio_Paciente> getRelatorioPacienteByCaso(@PathVariable(value = "id") Long casoId, @RequestParam(required = false) Integer page,
+    @RequestParam(required = false) Integer size)
+        throws ResourceNotFoundException {
+        if (page==null) page=0;
+        if (size==null) size=30;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Relatorio_Paciente> relatorios_Paciente = relatorio_PacienteRepository.findAllByCaso(casoId, pageRequest);
+
+        return relatorios_Paciente;
     }
 
     @GetMapping("/relatorio_pacientes/{id}")
-    public ResponseEntity<Relatorio_Paciente> getHospitalById(@PathVariable(value = "id") Long relatorio_pacienteId)
+    public ResponseEntity<Relatorio_Paciente> getRelatorioById(@PathVariable(value = "id") Long relatorio_pacienteId)
         throws ResourceNotFoundException {
         Relatorio_Paciente relatorio_Paciente = relatorio_PacienteRepository.findById(relatorio_pacienteId)
           .orElseThrow(() -> new ResourceNotFoundException("Relatorio_Paciente not found for this id :: " + relatorio_pacienteId));
@@ -58,7 +77,6 @@ public class Relatorio_PacienteController {
     
             relatorio_Paciente.setEstado(Relatorio_PacienteDetails.getEstado());
             relatorio_Paciente.setData(Relatorio_PacienteDetails.getData());
-            //relatorio_Paciente.setPaciente(Relatorio_PacienteDetails.getPaciente());
             final Relatorio_Paciente updatedRelatorio_Paciente = relatorio_PacienteRepository.save(relatorio_Paciente);
             return ResponseEntity.ok(updatedRelatorio_Paciente);
     }

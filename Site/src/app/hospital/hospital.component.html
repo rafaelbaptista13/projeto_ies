@@ -1,8 +1,9 @@
 <div class="wrapper">
   <!-- Sidebar Holder -->
   <nav id="sidebar">
+    <p style="font-size: 18px; margin: 10px auto 0px; text-align: center">{{this.nomeMedico}}</p>
     <div class="sidebar-header">
-      <h3>Covinfo</h3>
+      <h3 style="text-align: center; font-weight: bold">CovInfo19</h3>
     </div>
 
     <ul class="list-unstyled components">
@@ -10,16 +11,31 @@
         <a routerLink="/home" >Home</a>
       </li>
       <li>
-        <a routerLink="/statistics">Estatística</a>
+        <a routerLink="/daily">Casos Diários</a>
+      </li>
+      <li>
+        <a routerLink="/statistics">Estatísticas</a>
       </li>
       <li class="active">
         <a routerLink="/hospital" >Hospitais</a>
       </li>
       <li>
-        <a href="about.html">Sobre nós</a>
+        <a routerLink="/aboutus">Sobre nós</a>
       </li>
-      <li>
-        <a routerLink="/login">Área profissionais de saúde</a>
+      <li *ngIf="medicoLogado==false" id="logged">
+        <a routerLink="/login">Área Reservada</a>
+      </li>
+      <li *ngIf="medicoLogado" id="nlogged">
+        <button class="dropdown-btn" id = "b_dropdown" (click)="toggleDropdown()">Área Reservada
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-container" id="c_dropdown">
+          <a class="dropdown-item" routerLink="/homeMedic">Lista Pacientes</a>
+          <a class="dropdown-item" routerLink="/pacient">Inserir Paciente</a>
+        </div>
+      </li>
+      <li *ngIf="medicoLogado" class="nav-item logout">
+        <a class="nav-link" (click)="logout()">Logout</a>
       </li>
     </ul>
   </nav>
@@ -36,26 +52,25 @@
           <span></span>
         </button>
 
-        <button class="search" id="filterCollapse">Search<i class="fas fa-search"></i></button>
+        <button class="search" id="filterCollapse">Filtros <i class="fas fa-search"></i></button>
 
 
       </div>
     </nav>
 
     <div class="filters" id="filters" style="display: none">
-      <h2 class="filter_title">Filters</h2>
-      <form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)">
+      <form [formGroup]="filterForm" (ngSubmit)="onSubmit(filterForm.value)" class="form">
         <div class="row">
           <div class="col-4">
             <h5 class="nome_title">Nome</h5>
             <div class="nome_div">
-              <input id="nome" formControlName="nome">
+              <input id="nome" class="form-control" formControlName="nome" class="form-control">
             </div>
           </div>
           <div class="col-4">
             <h5 class="regiao_title">Região</h5>
             <div class="regiao_div">
-              <select name="regiao_option" id="r_options" formControlName="regiao">
+              <select name="regiao_option" class="custom-select" id="r_options" formControlName="regiao">
                 <option hidden disabled selected value>Selecionar Opção</option>
                 <option value=""></option>
                 <option *ngFor="let regiao of regioes" value="{{regiao}}">{{regiao}}</option>
@@ -66,8 +81,8 @@
           <div class="col-4">
             <h5 class="taxaocupacao_title">Taxa Ocupação</h5>
             <div class="taxaocupacao_div">
-              <input placeholder="min" min="0" id="taxaocupacao_min" formControlName="taxaocupacao_min" type="number">
-              <input placeholder="max" min="0" id="taxaocupacao_max" formControlName="taxaocupacao_max" type="number">
+              <input placeholder="min" class="form-control" min="0" id="taxaocupacao_min" formControlName="taxaocupacao_min" type="number">
+              <input placeholder="max" class="form-control" min="0" id="taxaocupacao_max" formControlName="taxaocupacao_max" type="number">
             </div>
           </div>
         </div>
@@ -75,11 +90,20 @@
       </form>
     </div>
 
+    <div *ngIf="notification_show" style="width: 41%; margin: auto" class="alert alert-danger" role="alert">
+      <p style="display: inline">Os seguintes hospitais encontram-se com uma taxa de ocupação superior a 80%: &nbsp; &nbsp; <span style="display: inline" (click)="close_notification()"><i class="fas fa-times-circle"></i> </span> </p>
+
+      <span *ngFor="let hospital of lista_hospitais_notificar">
+        <br>
+        - {{ hospital[0] }}
+      </span>
+    </div>
+
     <div *ngIf="(hospitais | json) != ('{}'); then thenBlock4 else elseBlock4"> </div>
     <ng-template #thenBlock4>
-      <table class="table table-borderless">
+      <table  class="table table-borderless">
         <thead>
-        <tr>
+        <tr style="text-align: center">
           <th scope="col">Nome</th>
           <th scope="col">Internados</th>
           <th scope="col">Cuidados Intensivos</th>
@@ -89,9 +113,9 @@
         <tbody>
         <tr *ngFor="let item of hospitais | keyvalue">
           <th scope="row">{{ hospitais[item.key][0] }}</th>
-          <td>{{ hospitais[item.key][1] }}</td>
-          <td>{{ hospitais[item.key][2] }}</td>
-          <td>{{ hospitais[item.key][3] }}</td>
+          <td style="text-align: center">{{ hospitais[item.key][1] }}</td>
+          <td style="text-align: center">{{ hospitais[item.key][2] }}</td>
+          <td [ngStyle]="{ 'color':  hospitais[item.key][3]  > 80 ? 'red' : 'black' }" style="text-align: center">{{ hospitais[item.key][3] }}</td>
         </tr>
         </tbody>
       </table>

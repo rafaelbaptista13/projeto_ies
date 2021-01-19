@@ -13,8 +13,9 @@ declare var jQuery: any;
 })
 
 export class LoginComponent implements OnInit {
+  erroCredenciais: boolean;
   loginForm: FormGroup;
-  logged = false;
+  public medicoLogado: boolean = false;
 
   constructor(private loginService: LoginService, private formBuilder: FormBuilder, private router: Router ) {
 
@@ -27,6 +28,7 @@ export class LoginComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    this.erroCredenciais = false;
     // Função para colapsar navbar
     (function($) {
       $(document).ready(function () {
@@ -36,6 +38,7 @@ export class LoginComponent implements OnInit {
         });
       });
     })(jQuery);
+
     this.initForm();
   }
 
@@ -44,7 +47,13 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid){
       // Alteração do valor para o diferente tipo de casos, de acordo com os filtros inseridos
       this.loginService.LoginValidation(this.loginForm.value).
-      subscribe(logged => {console.log(logged); this.router.navigate(['/home']);  }, error => { this.ngOnInit(); } );
+      subscribe(logged => {console.log(localStorage.getItem('token')); this.router.navigate(['/homeMedic']); this.medicoLogado = true; }, error => {this.erroCredenciais = true; this.initForm(); } );
     }
+  }
+
+  logout(): void {
+    localStorage.removeItem('codigo_acesso');
+    localStorage.removeItem('token');
+    this.router.navigate(['/home']);
   }
 }

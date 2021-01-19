@@ -1,6 +1,6 @@
 //Model Caso
 export class Caso {
   id: number;
-  estadoAtual: string;
+  estado_atual: string;
   pacienteId: number;
 }
